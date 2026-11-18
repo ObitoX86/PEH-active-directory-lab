@@ -1,0 +1,23 @@
+# Sensitive or disposable materials — do not commit
+.env
+.env.*
+*.key
+*.pem
+*.pfx
+*.kirbi
+*.ccache
+*.dmp
+*.pcap
+*.pcapng
+*.log
+*.zip
+*.7z
+*.ova
+*.ovf
+*.vmdk
+*.vdi
+*.vmem
+*.vmss
+.DS_Store
+Thumbs.db
+__pycache__/
