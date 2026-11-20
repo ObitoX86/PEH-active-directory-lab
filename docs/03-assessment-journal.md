@@ -449,6 +449,34 @@ Get-ADObject -SearchBase "OU=Groups,DC=MARVEL,DC=local" -SearchScope OneLevel -F
 
 ---
 
+## 2026-11-20 — Domain Admins direct membership inventory
+
+**Task:** List the direct members of the `Domain Admins` group in the `MARVEL.local` lab.
+
+**Command:**
+
+```powershell
+Get-ADGroupMember -Identity "Domain Admins" |
+    Select-Object Name, ObjectClass
+```
+
+**Observed result:**
+
+```text
+Name          ObjectClass
+Administrator user
+Tony Stark    user
+SQL Service   user
+```
+
+**Analysis:** Three user objects were confirmed as direct members of a privileged group. The account called `SQL Service` warrants a least-privilege review, but its name alone does not prove it is used as a service identity. No account compromise, SPN or Kerberoasting precondition has been verified.
+
+**Evidence:** Screenshot supplied in the conversation on 2026-11-20; screenshot not yet committed to `evidence/`.
+
+**Next step:** Inspect the `SQL Service` account's `SamAccountName` and `ServicePrincipalName` using a read-only PowerShell query. 
+
+---
+
 ## New entry template
 
 **Date:** YYYY-MM-DD  
