@@ -876,6 +876,35 @@ netsh interface ipv4 set address name="Ethernet0" static 192.168.158.130 255.255
 
 ---
 
+## 2026-11-20 — THEPUNISHER after isolated LAN migration
+
+**Task:** Change the powered-off THEPUNISHER VMware network adapter from NAT to the private `PEH-AD-Isolated` LAN segment, boot Windows, and verify that the intended static addressing persisted.
+
+**Reported action:** User followed the segment migration instructions and supplied a fresh PowerShell screenshot after boot. The selected VMware LAN segment was not separately verified from an adapter-settings screenshot.
+
+**Command:** `ipconfig /all` on THEPUNISHER.
+
+**Screenshot-verified post-migration output:**
+
+| Property | Observed value |
+| --- | --- |
+| Hostname | `THEPUNISHER` |
+| Primary DNS suffix | `MARVEL.local` |
+| Adapter | `Ethernet0` |
+| DHCP | `No` |
+| IPv4 address | `192.168.158.130` (Preferred) |
+| Subnet mask | `255.255.255.0` |
+| Default gateway | Empty |
+| DNS server | `192.168.158.128` |
+
+**Interpretation:** The guest preserved its static IP, mask, lack of gateway and correct DC DNS after the user-reported LAN change. Along with earlier verified Kali and HYDRA-DC settings, three machines are now reported moved to the isolated segment. However, post-migration reachability or successful domain authentication from THEPUNISHER has **not** yet been demonstrated. SPIDERMAN remains to be migrated.
+
+**Evidence:** Screenshot supplied in conversation 2026-11-20; image not yet uploaded to GitHub.
+
+**Next step:** Check THEPUNISHER's TCP connectivity to the controller's LDAP port `192.168.158.128:389`. Only after confirming the link should we prepare the last client.
+
+---
+
 ## New entry template
 
 **Date:** YYYY-MM-DD  
