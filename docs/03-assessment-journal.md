@@ -607,7 +607,25 @@ eth0   UP       192.168.158.131/24  fe80::5e29:65cd:2a93:70b9/64
 
 **Analysis:** The lab owner has now confirmed baseline snapshots for all four VMs: Kali, HYDRA-DC, THEPUNISHER, and SPIDERMAN. The SPIDERMAN snapshot preserves the known unresolved domain secure-channel issue; it does **not** remediate the trust. Snapshots are local recovery points, not standalone AD backups, and restoring an older domain-controller snapshot independently can produce domain state inconsistencies.
 
-**Next step:** Verify snapshot names and visibility in VMware Snapshot Manager for all four guests before any network reconfiguration or attack simulation; then plan a contained training segment separate from uncontrolled traffic.
+**Next step:** The user subsequently confirmed all four baselines are visible in Snapshot Manager. Prepare a contained training network before active testing.
+
+---
+
+## 2026-11-20 — All four baseline snapshots checked in Snapshot Manager
+
+**Task:** Verify the presence of the pre-attack VMware recovery points.
+
+**Reported result:** User replied **Done** after being asked to inspect each VM's Snapshot Manager for the following snapshots:
+- `PEH-Kali-Baseline-Before-Attacks`
+- `PEH-HYDRA-DC-Baseline-Before-Attacks`
+- `PEH-THEPUNISHER-Baseline-Before-Attacks`
+- `PEH-SPIDERMAN-Baseline-Before-Attacks`
+
+**Verification level:** User-confirmed visual check; no Snapshot Manager screenshots or restore tests were provided. No claim is made that backups were verified by performing a restore.
+
+**Security/safety context:** VMnet8 is the current NAT network. A NAT adapter can enable outbound connectivity, so do not conduct name-resolution poisoning or traffic interception before creating a suitably contained testing segment.
+
+**Next planned configuration:** Create a new VMware LAN segment named `PEH-AD-Isolated` **without moving any virtual machines onto it yet**. Unlike VMware NAT and host-only networks, LAN segments do not supply DHCP automatically. Plan guest IPv4 settings, the domain controller's DNS role and all network dependencies before migration. No attack has been run.
 
 ---
 
