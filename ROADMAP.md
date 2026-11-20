@@ -12,6 +12,7 @@ Each phase remains **not verified** until relevant lab evidence is recorded.
 - [x] Verify SPIDERMAN's configured domain membership in `MARVEL.local` using `Win32_ComputerSystem` (`PartOfDomain=True`), 2026-11-20.
 - [x] Verify HYDRA-DC VMware Network Adapter is NAT, connected and enabled at power-on (VMware Settings screenshot, 2026-11-20).
 - [x] Record user confirmation that THEPUNISHER and SPIDERMAN VMware adapters use NAT (2026-11-20; separate client Settings screenshots not supplied).
+- [x] Upload 14 redacted lab baseline screenshots and verify all are present in `evidence/` (2026-11-20).
 - [ ] Assess NAT network containment before intrusive testing; NAT is not fully isolated.
 - [x] Verify THEPUNISHER resolves `HYDRA-DC.MARVEL.local` to `192.168.158.128` (DNS A answer, TTL 3600), 2026-11-20.
 - [x] Test THEPUNISHER to HYDRA-DC TCP port 389 connectivity (`TcpTestSucceeded=True`, 2026-11-20).
