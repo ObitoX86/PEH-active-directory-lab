@@ -34,9 +34,11 @@ eth0   UP       192.168.158.131/24  fe80::5e29:65cd:2a93:70b9/64
 
 **Verified:** `eth0` is UP with IPv4 address `192.168.158.131/24`. This falls within the same calculated IPv4 subnet as the three Windows lab guests. `lo` is the loopback interface.
 
-**VMware adapter verification (2026-11-20):** VMware Workstation Settings > Network Adapter screenshot shows **NAT** selected for Kali; **Connected** and **Connect at power on** are checked. The screenshot also shows 8 GB allocated RAM and 4 processors. **Still not verified:** the precise VMnet/switch identity, Kali DNS/gateway, actual Kali-to-Windows connectivity, snapshots, and whether this NAT segment is suitably contained for network-poisoning exercises. This screenshot confirms the tester's OS environment, but does not show it in the earlier three-VM VMware inventory.
+**VMware adapter verification (2026-11-20):** VMware Workstation Settings > Network Adapter screenshot shows **NAT** selected for Kali; **Connected** and **Connect at power on** are checked. The screenshot also shows 8 GB allocated RAM and 4 processors. **Still not verified at that step:** the precise VMnet/switch identity (resolved in the subsequent Virtual Network Editor screenshot), Kali DNS/gateway, actual Kali-to-Windows connectivity, snapshots, and whether this NAT segment is suitably contained for network-poisoning exercises. This screenshot confirms the tester's OS environment, but does not show it in the earlier three-VM VMware inventory.
 
-**Evidence:** Kali terminal and VMware Network Adapter screenshots supplied on 2026-11-20. Redacted images have not yet been committed to the repository. 
+**Virtual Network Editor verification (2026-11-20):** VMnet8 is listed as NAT with subnet address `192.168.158.0`, host connection Connected and DHCP Enabled. VMnet1 is a separate host-only network with subnet address `192.168.125.0`, host connection Connected and DHCP Enabled. All four VMs have previously reported NAT adapter modes and `192.168.158.x/24` IPs. No network settings were changed; NAT does not guarantee safe containment for poisoning tests.
+
+**Evidence:** Kali terminal, VMware Network Adapter and Virtual Network Editor screenshots supplied on 2026-11-20. Redacted images have not yet been committed to the repository. 
 
 All observations above must be interpreted as configuration facts, not as evidence of an attack.
 
