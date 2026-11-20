@@ -831,6 +831,24 @@ Ethernet0  Up      Intel(R) 82574L Gigabit Network Connection
 
 ---
 
+## 2026-11-20 — THEPUNISHER static IP command user-confirmed
+
+**Task:** Convert THEPUNISHER's `Ethernet0` from NAT DHCP to a manually configured address, preserving its existing IP.
+
+**Command requested:**
+
+```powershell
+netsh interface ipv4 set address name="Ethernet0" static 192.168.158.130 255.255.255.0 none
+```
+
+**Reported result:** User replied **Done**. The command has not yet been verified by a post-change network status screenshot or terminal output.
+
+**Interpretation:** Intended static IPv4 `192.168.158.130/24`, no gateway. The command changes IPv4 address assignment but does not explicitly set the DNS server. Do not assume DNS remains configured as `192.168.158.128`; check it separately. User asked whether to repeat the action on HYDRA-DC: not necessary because an earlier post-migration `ipconfig /all` screenshot verified HYDRA-DC was already static at `192.168.158.128/24`, with no gateway and loopback DNS.
+
+**Next step:** On THEPUNISHER, run `ipconfig /all` to verify the new address, DHCP status, gateway and DNS before moving the VMware NIC to the isolated LAN.
+
+---
+
 ## New entry template
 
 **Date:** YYYY-MM-DD  
