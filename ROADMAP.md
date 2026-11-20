@@ -73,7 +73,8 @@ Each phase remains **not verified** until relevant lab evidence is recorded.
 - [x] Screenshot-verify SPIDERMAN-to-HYDRA-DC TCP 389 connection after isolated-LAN migration: `SourceAddress=192.168.158.129`, `RemoteAddress=192.168.158.128`, `InterfaceAlias=Ethernet0`, `TcpTestSucceeded=True` (2026-11-20). Transport only, not an authenticated LDAP bind.
 - [x] Screenshot-verify SPIDERMAN's isolated-LAN DNS A query: `Resolve-DnsName HYDRA-DC.MARVEL.local -Server 192.168.158.128 -Type A` returned `192.168.158.128`, TTL 3600, Answer (2026-11-20). Confirms direct A lookup only; secure-channel issue remains separate.
 - [x] Screenshot-verify SPIDERMAN's AD LDAP discovery SRV query `_ldap._tcp.dc._msdcs.MARVEL.local` to DNS `192.168.158.128`: target `hydra-dc.marvel.local`, port 389, priority 0, weight 100, TTL 600, and additional A record `192.168.158.128` TTL 3600 (2026-11-20).
-- [ ] Test Windows DC locator from SPIDERMAN using `nltest /dsgetdc:MARVEL.local /force` (discovery only, not proof of secure-channel health).
+- [x] Screenshot-verify SPIDERMAN's forced DC locator: `nltest /dsgetdc:MARVEL.local /force` returned `\\HYDRA-DC.MARVEL.local`, `\\192.168.158.128`, forest/domain `MARVEL.local`, site `Default-First-Site-Name`, flags including PDC/GC/LDAP/KDC/DNS_DC/WRITABLE, and `The command completed successfully` (2026-11-20). DC discovery works; client computer secure-channel remains separately unresolved.
+- [ ] Verify Kali has only intended IPv4/IPv6 routes and no external default route before declaring lab containment, then assess any other virtual NIC paths.
 - [ ] Verify all four VMs operate correctly on the isolated LAN; do not infer AD authentication from network settings alone.
 - [ ] Verify guest isolation, correct IP/DNS and scoped connectivity on LAN segment before any traffic-interception test.
 - [ ] Verify containment and approved scope before active attack simulation.
