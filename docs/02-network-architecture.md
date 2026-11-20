@@ -423,6 +423,23 @@ Kali is deliberately shown without a connection arrow because no Kali-to-Windows
 
 Both clients are configured to use HYDRA-DC for DNS; THEPUNISHER also has a separate successful DNS A-record lookup. DHCP for both clients is reported as `192.168.158.254`, and the configured default gateway is `192.168.158.2`. These network services are not drawn as independently verified infrastructure machines.
 
+## Planned isolated PEH LAN segment (user-confirmed creation, 2026-11-20)
+
+The user reports having created a separate VMware LAN segment named `PEH-AD-Isolated`. Its creation has not been confirmed from a screenshot and no VM network adapter has yet been verified as moved.
+
+**Planned addressing (not observed on the LAN segment yet):**
+
+| Machine | Existing / planned IPv4 | Planned method | DNS and gateway |
+| --- | --- | --- | --- |
+| HYDRA-DC | `192.168.158.128/24` | Retain existing static IPv4 | Existing DNS loopback; no default gateway |
+| SPIDERMAN | `192.168.158.129/24` | Set static after disconnection from NAT DHCP | DNS HYDRA-DC `.128`; no gateway |
+| THEPUNISHER | `192.168.158.130/24` | Set static after disconnection from NAT DHCP | DNS HYDRA-DC `.128`; no gateway |
+| Kali | `192.168.158.131/24` | Configure static on LAN segment | DNS `.128` when AD resolution needed; no gateway |
+
+VMware LAN segments do not provide DHCP automatically; the existing NAT DHCP lease behaviour cannot be relied upon after migration. The `192.168.158.0/24` address range may be reused on a **separate isolated network** because the original NICs should be moved, not connected to both networks simultaneously. Until migration and reachability checks complete, this is only a proposal—not proof of IP retention or isolation.
+
+**Sequence:** With backups in place, move the powered-off HYDRA-DC VM first because its IPv4 was already static; boot to check `.128`. Then move and configure Kali and clients individually with matching static addresses and DNS, test lab-only connectivity and verify no NAT bridge/extra NIC remains. Client-to-server connectivity can be interrupted during partial migration.
+
 ## Details to confirm
 
 1. Installed operating systems and purposes for each of the three VMs.
