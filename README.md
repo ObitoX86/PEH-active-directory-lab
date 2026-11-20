@@ -32,6 +32,11 @@ This project documents the design, administration and authorised security testin
 - [`docs/04-finding-template.md`](docs/04-finding-template.md) — reusable security finding template.
 - [`docs/05-mitigation-mapping.md`](docs/05-mitigation-mapping.md) — planned attack-to-defence notes.
 - [`evidence/README.md`](evidence/README.md) — safe evidence-capture and redaction conventions.
+- [`evidence/INDEX.md`](evidence/INDEX.md) — verified index of all 14 uploaded, redacted lab screenshots, each linked to its corresponding PNG.
+
+## Screenshot evidence
+
+**14 of 14 lab setup and verification screenshots are in GitHub.** Browse the [evidence register](evidence/INDEX.md) for direct links to VM inventory, IP and DNS configuration, domain membership, network tests, and the unresolved secure-channel diagnostic.
 
 ## Ethics and scope
 
