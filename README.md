@@ -17,6 +17,7 @@ This project documents the design, administration and authorised security testin
 | Network topology diagram | Documented (Mermaid) | All three machines use NAT (server screenshot, clients user-confirmed); the two clients each reached HYDRA-DC TCP/389 |
 | DNS, LDAP transport and DC discovery | Verified for tested functions | THEPUNISHER resolved HYDRA-DC; both clients reached TCP 389; SPIDERMAN successfully located HYDRA-DC with `nltest /dsgetdc`; subsequent `Test-ComputerSecureChannel` returned **False**; LDAP authentication not yet tested |
 | SPIDERMAN secure-channel diagnostics | Mixed results — investigation pending | `Test-ComputerSecureChannel` remained `False` when repeated elevated (user-reported); `nltest /sc_query` previously showed last-used `NERR_Success`. Unresolved, deferred; see [issue #1](https://github.com/ObitoX86/PEH-active-directory-lab/issues/1) |
+| Active Directory OU inventory | Documented | Two OUs returned by PowerShell: `Domain Controllers` and `Groups`; contents, users, groups and GPOs remain to be inspected |
 | Initial attack vectors | To verify | Attach lab-only observations and redacted screenshots |
 | Post-compromise enumeration | To verify | Document commands, authorised scope and results |
 | Post-compromise attacks | To verify | Record only exercises personally reproduced |
@@ -31,6 +32,7 @@ This project documents the design, administration and authorised security testin
 - [`docs/03-assessment-journal.md`](docs/03-assessment-journal.md) — evidence-based lab log.
 - [`docs/04-finding-template.md`](docs/04-finding-template.md) — reusable security finding template.
 - [`docs/05-mitigation-mapping.md`](docs/05-mitigation-mapping.md) — planned attack-to-defence notes.
+- [`docs/06-active-directory-structure.md`](docs/06-active-directory-structure.md) — OU inventory and directory-structure evidence.
 - [`evidence/README.md`](evidence/README.md) — safe evidence-capture and redaction conventions.
 - [`evidence/INDEX.md`](evidence/INDEX.md) — verified index of all 14 uploaded, redacted lab screenshots, each linked to its corresponding PNG.
 
@@ -64,4 +66,4 @@ For each exercise, capture: **objective, authorised targets, method, observed ou
 
 ## Next milestone
 
-Begin the PEH Active Directory initial attack-vector exercises by identifying the authorised testing VM and confirming lab isolation. SPIDERMAN's unresolved secure-channel result is tracked in [issue #1](https://github.com/ObitoX86/PEH-active-directory-lab/issues/1) and will be revisited if an exercise depends on it.
+Finish read-only directory object enumeration (starting with the `Groups` OU), then identify the authorised testing VM and confirm lab isolation before attack-vector exercises. SPIDERMAN's unresolved secure-channel result is tracked in [issue #1](https://github.com/ObitoX86/PEH-active-directory-lab/issues/1) and will be revisited if an exercise depends on it.
