@@ -67,4 +67,4 @@ For each exercise, capture: **objective, authorised targets, method, observed ou
 
 ## Next milestone
 
-VMnet8 NAT is identified; next take clean VM snapshots and establish a safely contained attack-simulation network before proceeding with network poisoning exercises. The deliberately privileged, SPN-bearing `SQLService` account is documented as a lab prerequisite, not as a completed compromise. SPIDERMAN's unresolved secure-channel result is tracked in [issue #1](https://github.com/ObitoX86/PEH-active-directory-lab/issues/1) and will be revisited if an exercise depends on it.
+VMnet8 NAT is identified; Kali's snapshot `PEH-Kali-Baseline-Before-Attacks` is user-confirmed. Next preserve the Windows domain controller and clients, then establish a safely contained attack-simulation network before proceeding with network poisoning exercises. The deliberately privileged, SPN-bearing `SQLService` account is documented as a lab prerequisite, not as a completed compromise. SPIDERMAN's unresolved secure-channel result is tracked in [issue #1](https://github.com/ObitoX86/PEH-active-directory-lab/issues/1) and will be revisited if an exercise depends on it.
