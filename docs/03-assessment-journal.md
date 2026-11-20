@@ -132,7 +132,21 @@ SPIDERMAN   MARVEL.local  True
 
 **Analysis:** Local CIM results identify SPIDERMAN as a domain-joined computer in `MARVEL.local`. Together with the previous results for THEPUNISHER and HYDRA-DC, this completes verification of the intended domain roles and configured membership of the two clients. Live service availability, client-to-controller authentication, name resolution and VMware network-mode mapping remain untested.
 
-**Follow-up:** Verify VMware network adapter modes for all three VMs, then validate basic live DNS/domain controller discovery.
+**Follow-up:** HYDRA-DC's adapter mode was verified as NAT in the next entry; verify client adapter modes, then test DNS/domain controller discovery.
+
+---
+
+## 2026-11-20 — HYDRA-DC VMware network adapter mode
+
+**Task:** Inspect the VMware Workstation VM Settings > Hardware > Network Adapter page for the Windows Server 2022 VM.
+
+**Evidence:** VMware Settings screenshot supplied in the chat on 2026-11-20. No image uploaded to the repository yet.
+
+**Observed result:** `NAT: Used to share the host's IP address` is selected; `Connected` and `Connect at power on` are checked. The VM guest was previously identified as `HYDRA-DC`.
+
+**Analysis:** This records the hypervisor network mode for the server and is consistent with the observed VMware-style NAT gateway/DHCP subnet. NAT can allow outbound connectivity through the host; it does not prove a fully isolated lab. The corresponding VMware settings for both Windows client VMs have not yet been verified.
+
+**Follow-up:** Inspect the Network Adapter settings on THEPUNISHER and SPIDERMAN; confirm all intended test machines and their network boundaries before any disruptive exercises.
 
 ---
 
