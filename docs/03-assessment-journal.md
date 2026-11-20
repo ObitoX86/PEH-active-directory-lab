@@ -646,7 +646,36 @@ eth0   UP       192.168.158.131/24  fe80::5e29:65cd:2a93:70b9/64
 
 **Network safety:** LAN segments do not automatically provide a DHCP service, default gateway or routed internet access. No default gateway is required for this contained lab network. Keeping the original addresses on a distinct network is possible, but all participating guests must be migrated; do not leave simultaneous overlapping `192.168.158.0/24` adapters connected to both NAT and the LAN segment. Current VMnet8 remains the documented working baseline, preserved in snapshots. An actual isolation/connectivity check must follow.
 
-**Next step:** With HYDRA-DC powered off, change only its VMware Network Adapter to LAN Segment `PEH-AD-Isolated`; then boot and confirm that its existing static IPv4 remains `192.168.158.128/24`. Expect temporary loss of connectivity to clients still on NAT, until they are migrated.
+**Next step:** The HYDRA-DC migration and preserved static IP were subsequently user-reported/screenshot-verified in the next entry.
+
+---
+
+## 2026-11-20 — HYDRA-DC moved to isolated LAN; static IP verified
+
+**Task:** Switch the powered-off domain controller from NAT to LAN Segment `PEH-AD-Isolated` while preserving its existing network configuration.
+
+**Reported action:** User followed VMware adapter-switch instructions and started HYDRA-DC. The selected LAN segment in VMware Settings was not separately shown in a screenshot.
+
+**Command:** `ipconfig /all` on HYDRA-DC.
+
+**Observed screenshot output:**
+
+| Field | Value |
+| --- | --- |
+| Host Name | `HYDRA-DC` |
+| Primary DNS Suffix | `MARVEL.local` |
+| Ethernet adapter | `Ethernet0` |
+| DHCP Enabled | `No` |
+| IPv4 Address | `192.168.158.128` (Preferred) |
+| Subnet Mask | `255.255.255.0` |
+| Default Gateway | Blank |
+| DNS Servers | `::1`, `127.0.0.1` |
+
+**Analysis:** HYDRA-DC retains its static IP address, local DNS resolver settings and domain suffix after the user-reported move to the private LAN segment. `ipconfig /all` confirms guest addressing, **not** the VMware virtual network selection or reachability from other guests. Other clients and Kali have not yet been confirmed migrated; temporary domain communication failures across segments are expected. The `Autoconfiguration Enabled: Yes` field does not contradict `DHCP Enabled: No`.
+
+**Evidence:** Terminal screenshot supplied in conversation on 2026-11-20; a redacted PNG has not yet been uploaded to GitHub.
+
+**Next step:** Check Kali's active NetworkManager connection profile so a persistent `192.168.158.131/24` static configuration can be prepared without relying on NAT DHCP; then switch to the isolated LAN.
 
 ---
 
