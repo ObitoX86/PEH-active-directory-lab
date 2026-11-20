@@ -901,7 +901,36 @@ netsh interface ipv4 set address name="Ethernet0" static 192.168.158.130 255.255
 
 **Evidence:** Screenshot supplied in conversation 2026-11-20; image not yet uploaded to GitHub.
 
-**Next step:** Check THEPUNISHER's TCP connectivity to the controller's LDAP port `192.168.158.128:389`. Only after confirming the link should we prepare the last client.
+**Next step:** A later `Test-NetConnection` screenshot verified TCP 389 success (see next entry). Prepare SPIDERMAN as the final Windows client.
+
+---
+
+## 2026-11-20 — THEPUNISHER to HYDRA-DC TCP 389 after isolated LAN migration
+
+**Task:** Confirm the Windows client can establish a TCP connection to the domain controller's LDAP port after migration to the dedicated PEH LAN segment.
+
+**PowerShell command on THEPUNISHER:**
+
+```powershell
+Test-NetConnection 192.168.158.128 -Port 389
+```
+
+**Screenshot-verified output:**
+
+```text
+ComputerName     : 192.168.158.128
+RemoteAddress    : 192.168.158.128
+RemotePort       : 389
+InterfaceAlias   : Ethernet0
+SourceAddress    : 192.168.158.130
+TcpTestSucceeded : True
+```
+
+**Analysis:** The test succeeded using source `192.168.158.130` and destination `192.168.158.128:389`. This demonstrates transport connectivity from THEPUNISHER to the controller's LDAP port after the user-reported isolated-LAN migration. It does **not** prove an LDAP bind, domain authentication, Kerberos availability, group policy processing, or complete network containment. No offensive simulation was run.
+
+**Evidence:** Screenshot uploaded in the conversation on 2026-11-20; redacted PNG is not yet committed to GitHub.
+
+**Next step:** Inspect SPIDERMAN's active interface name with `Get-NetAdapter | Select-Object Name, Status, InterfaceDescription`; then plan static `192.168.158.129/24` addressing and DNS `192.168.158.128` before moving SPIDERMAN to `PEH-AD-Isolated`.
 
 ---
 
