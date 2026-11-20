@@ -320,7 +320,23 @@ The command completed successfully
 
 **Action taken:** No repair, rejoin or reset performed.
 
-**Follow-up:** Re-run `Test-ComputerSecureChannel -Verbose` on SPIDERMAN in a known elevated Windows PowerShell session, capture the complete result and interpret it before changing configuration.
+**Follow-up:** User reran `Test-ComputerSecureChannel -Verbose` as Administrator and reported `False` again (see next entry). User chose to defer repair and proceed with the PEH lab.
+
+---
+
+## 2026-11-20 — SPIDERMAN repeated elevated secure-channel check
+
+**Task:** Rule out a non-elevated PowerShell session as the explanation for the earlier failure.
+
+**Action:** User explicitly confirmed rerunning `Test-ComputerSecureChannel -Verbose` in an elevated administrator session on SPIDERMAN.
+
+**Reported result:** `False` again. No new screenshot of the elevated repetition was supplied; this result is based on user confirmation.
+
+**Interpretation:** The earlier failure persists despite elevation; normal domain membership, controller discovery, TCP/389 reachability and the prior successful last-used `nltest /sc_query` status do not establish secure-channel health. Root cause remains unknown.
+
+**Decision:** User elected to move on to the PEH Active Directory exercises. Do **not** describe the trust as repaired or healthy, and do not treat this as a proven exploit. Revisit before an exercise dependent on SPIDERMAN's computer trust, domain logon or Group Policy. No repair, reset or domain rejoin performed.
+
+**Tracking issue:** [Investigate SPIDERMAN computer secure channel](https://github.com/ObitoX86/PEH-active-directory-lab/issues/1).
 
 ---
 
