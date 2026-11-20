@@ -525,7 +525,11 @@ The user reported switching SPIDERMAN's VMware adapter to the dedicated `PEH-AD-
 
 **Verified:** Guest addressing and DNS remain as planned after the reported migration. The migration of all four intended VMs is now **user-confirmed**, with address configurations observed afterward. The screenshot itself does not prove VMware's selected segment or current connectivity between SPIDERMAN and HYDRA-DC, and does not resolve the pre-existing computer secure-channel failure. The prior NAT diagram is historical and should not be presented as the current topology.
 
-**Next read-only test:** `Test-NetConnection 192.168.158.128 -Port 389` on SPIDERMAN, followed by controlled DNS and network isolation checks.
+**Post-migration connectivity result (2026-11-20):** A new SPIDERMAN PowerShell screenshot for `Test-NetConnection 192.168.158.128 -Port 389` shows `SourceAddress=192.168.158.129`, `InterfaceAlias=Ethernet0`, `RemoteAddress=192.168.158.128`, `RemotePort=389` and `TcpTestSucceeded=True`. This independently verifies a TCP connection from SPIDERMAN to HYDRA-DC's LDAP port after the reported migration, but **not** an authenticated LDAP bind or the restoration of the client's existing broken computer trust relationship.
+
+**Network milestone:** All four intended guests retain their originally documented IPv4 addresses after user-reported migration. Kali to HYDRA-DC ICMP passed (4/4); both Windows clients to HYDRA-DC TCP 389 passed. These successful paths do not prove complete network isolation, DNS health, Kerberos authentication or a healthy secure channel.
+
+**Next read-only test:** From SPIDERMAN, query `HYDRA-DC.MARVEL.local` as an A record with `Resolve-DnsName HYDRA-DC.MARVEL.local -Server 192.168.158.128 -Type A`, then proceed to network isolation checks.
 
 **Evidence:** SPIDERMAN post-boot `ipconfig /all` screenshot received 2026-11-20; redacted PNG pending GitHub upload.
 
