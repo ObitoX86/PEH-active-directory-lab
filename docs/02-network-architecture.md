@@ -2,6 +2,8 @@
 
 ## Observed machines
 
+**Screenshot evidence:** [2026-11-20_01-vmware-inventory.png](../evidence/2026-11-20_01-vmware-inventory.png).
+
 The VMware Workstation inventory screenshot (2026-11-20) contains three display names:
 
 ```text
@@ -14,6 +16,8 @@ VMware Workstation — My Computer
 The displayed names alone do not prove host roles, domain membership or network links.
 
 ## Verified server network configuration — `ipconfig /all` screenshot, 2026-11-20
+
+**Screenshot evidence:** [2026-11-20_02-hydra-dc-ipconfig.png](../evidence/2026-11-20_02-hydra-dc-ipconfig.png).
 
 | Field | Observed value |
 | --- | --- |
@@ -35,6 +39,8 @@ The displayed names alone do not prove host roles, domain membership or network 
 
 ## Verified VMware adapter mode — HYDRA-DC (VMware Settings screenshot, 2026-11-20)
 
+**Screenshot evidence:** [2026-11-20_08-hydra-dc-vmware-nat.png](../evidence/2026-11-20_08-hydra-dc-vmware-nat.png).
+
 | Property | Verified setting |
 | --- | --- |
 | VM display name | Windows Server 2022 (guest: `HYDRA-DC`) |
@@ -48,6 +54,8 @@ The displayed names alone do not prove host roles, domain membership or network 
 
 ## Verified AD domain controller identity — PowerShell screenshot, 2026-11-20
 
+**Screenshot evidence:** [2026-11-20_03-hydra-dc-ad-identity.png](../evidence/2026-11-20_03-hydra-dc-ad-identity.png).
+
 ```powershell
 Get-ADDomainController -Identity HYDRA-DC |
     Select-Object HostName, Domain, IPv4Address, IsGlobalCatalog
@@ -60,9 +68,11 @@ Get-ADDomainController -Identity HYDRA-DC |
 | IPv4Address | `192.168.158.128` |
 | IsGlobalCatalog | `True` |
 
-**Interpretation:** The successful query establishes that Active Directory recognises `HYDRA-DC` as a domain controller with the Global Catalog flag enabled. It is not a substitute for client DNS, logon or service-health testing. Evidence screenshot remains in the chat pending redacted upload.
+**Interpretation:** The successful query establishes that Active Directory recognises `HYDRA-DC` as a domain controller with the Global Catalog flag enabled. It is not a substitute for client DNS, logon or service-health testing. The evidence screenshot is linked above.
 
 ## Verified client network configuration — THEPUNISHER (`ipconfig /all` screenshot, 2026-11-20)
+
+**Screenshot evidence:** [2026-11-20_04-thepunisher-ipconfig.png](../evidence/2026-11-20_04-thepunisher-ipconfig.png).
 
 | Field | Observed value |
 | --- | --- |
@@ -82,6 +92,8 @@ Get-ADDomainController -Identity HYDRA-DC |
 
 ## Verified THEPUNISHER domain membership — PowerShell screenshot, 2026-11-20
 
+**Screenshot evidence:** [2026-11-20_05-thepunisher-domain-membership.png](../evidence/2026-11-20_05-thepunisher-domain-membership.png).
+
 ```powershell
 Get-CimInstance Win32_ComputerSystem |
     Select-Object Name, Domain, PartOfDomain
@@ -96,6 +108,8 @@ Get-CimInstance Win32_ComputerSystem |
 **Interpretation:** The client computer reports that it is joined to the `MARVEL.local` domain. This verifies configured domain membership; active communication with the domain controller, live authentication and current Group Policy operation require further testing.
 
 ## Verified SPIDERMAN network configuration — `ipconfig /all` screenshot, 2026-11-20
+
+**Screenshot evidence:** [2026-11-20_06-spiderman-ipconfig.png](../evidence/2026-11-20_06-spiderman-ipconfig.png).
 
 | Field | Observed value |
 | --- | --- |
@@ -115,6 +129,8 @@ Get-CimInstance Win32_ComputerSystem |
 
 ## Verified SPIDERMAN domain membership — PowerShell screenshot, 2026-11-20
 
+**Screenshot evidence:** [2026-11-20_07-spiderman-domain-membership.png](../evidence/2026-11-20_07-spiderman-domain-membership.png).
+
 ```powershell
 Get-CimInstance Win32_ComputerSystem |
     Select-Object Name, Domain, PartOfDomain
@@ -126,9 +142,11 @@ Get-CimInstance Win32_ComputerSystem |
 | Domain | `MARVEL.local` |
 | PartOfDomain | `True` |
 
-**Interpretation:** The local Windows computer reports that SPIDERMAN is joined to the `MARVEL.local` domain. This demonstrates configured membership, not a fresh successful domain authentication. Screenshot was supplied in the project conversation, not committed as an image.
+**Interpretation:** The local Windows computer reports that SPIDERMAN is joined to the `MARVEL.local` domain. This demonstrates configured membership, not a fresh successful domain authentication. The screenshot is linked above.
 
 ## Verified DNS name resolution from THEPUNISHER — PowerShell screenshot, 2026-11-20
+
+**Screenshot evidence:** [2026-11-20_09-thepunisher-dns-lookup.png](../evidence/2026-11-20_09-thepunisher-dns-lookup.png).
 
 **Command executed on THEPUNISHER:**
 
@@ -146,9 +164,11 @@ Resolve-DnsName HYDRA-DC.MARVEL.local
 | TTL | `3600` seconds |
 | IPAddress | `192.168.158.128` |
 
-**Interpretation:** The client successfully resolved HYDRA-DC's fully qualified hostname to the domain controller's previously recorded IPv4 address. The client was configured to use `192.168.158.128` as DNS in the earlier `ipconfig /all` output. This demonstrates successful name resolution for this record but does not independently verify Kerberos/LDAP operation, current domain authentication, or connectivity to every server service. The screenshot was provided in the conversation; an image copy has not been committed.
+**Interpretation:** The client successfully resolved HYDRA-DC's fully qualified hostname to the domain controller's previously recorded IPv4 address. The client was configured to use `192.168.158.128` as DNS in the earlier `ipconfig /all` output. This demonstrates successful name resolution for this record but does not independently verify Kerberos/LDAP operation, current domain authentication, or connectivity to every server service. The screenshot is linked above.
 
 ## Verified TCP connectivity to LDAP port — THEPUNISHER (PowerShell screenshot, 2026-11-20)
+
+**Screenshot evidence:** [2026-11-20_10-thepunisher-ldap-tcp389.png](../evidence/2026-11-20_10-thepunisher-ldap-tcp389.png).
 
 **Command run on THEPUNISHER:**
 
@@ -167,11 +187,13 @@ SourceAddress    : 192.168.158.130
 TcpTestSucceeded : True
 ```
 
-**Interpretation:** TCP connection from `192.168.158.130` to `192.168.158.128:389` succeeded. Port 389 is commonly associated with LDAP. This confirms reachability to a TCP listener on that port, but does not prove an LDAP bind, directory query, user authentication, or the health of every Active Directory service. Evidence is currently in the conversation; no screenshot file has been uploaded to the repository.
+**Interpretation:** TCP connection from `192.168.158.130` to `192.168.158.128:389` succeeded. Port 389 is commonly associated with LDAP. This confirms reachability to a TCP listener on that port, but does not prove an LDAP bind, directory query, user authentication, or the health of every Active Directory service. The screenshot is linked above.
 
 **Next check:** Compare the TCP result against SPIDERMAN, then verify domain controller discovery and authentication independently.
 
 ## Verified TCP connectivity to LDAP port — SPIDERMAN (PowerShell screenshot, 2026-11-20)
+
+**Screenshot evidence:** [2026-11-20_11-spiderman-ldap-tcp389.png](../evidence/2026-11-20_11-spiderman-ldap-tcp389.png).
 
 **Command run on SPIDERMAN:**
 
@@ -190,9 +212,11 @@ SourceAddress    : 192.168.158.129
 TcpTestSucceeded : True
 ```
 
-**Interpretation:** A TCP connection from SPIDERMAN (`192.168.158.129`) to HYDRA-DC (`192.168.158.128`) port 389 succeeded. This is the same outcome already observed from THEPUNISHER. The hostname was resolved as part of the connection test, but a standalone SPIDERMAN DNS query has not been recorded. Neither test is evidence of a successful LDAP bind, Kerberos authentication or domain logon. The screenshot remains in the conversation; it is not yet stored in the repository.
+**Interpretation:** A TCP connection from SPIDERMAN (`192.168.158.129`) to HYDRA-DC (`192.168.158.128`) port 389 succeeded. This is the same outcome already observed from THEPUNISHER. The hostname was resolved as part of the connection test, but a standalone SPIDERMAN DNS query has not been recorded. Neither test is evidence of a successful LDAP bind, Kerberos authentication or domain logon. The screenshot is linked above.
 
 ## Verified domain controller discovery — SPIDERMAN (`nltest` screenshot, 2026-11-20)
+
+**Screenshot evidence:** [2026-11-20_12-spiderman-dc-discovery.png](../evidence/2026-11-20_12-spiderman-dc-discovery.png).
 
 **Command executed on SPIDERMAN:**
 
@@ -213,11 +237,13 @@ nltest /dsgetdc:MARVEL.local
 
 **Interpretation:** From SPIDERMAN, Windows successfully located a domain controller for `MARVEL.local`, returning the expected hostname and IPv4 address. Flags describe advertised domain-controller roles and capabilities, including Global Catalog, Kerberos KDC, LDAP and PDC emulator. A successful `nltest /dsgetdc` lookup does **not** verify a computer secure channel, a fresh authenticated user session or every advertised service.
 
-**Evidence:** Screenshot provided in the conversation on 2026-11-20; no screenshot image has been committed to GitHub. The domain GUID is omitted from this public-facing record because it is not necessary to explain the result.
+**Evidence:** Screenshot linked above and indexed in the evidence register. The domain GUID is omitted from this public-facing record because it is not necessary to explain the result.
 
 **Next verification:** SPIDERMAN ran the non-repairing `Test-ComputerSecureChannel -Verbose` command; it reported `False` (see diagnostic entry below).
 
 ## SPIDERMAN domain secure-channel check — failed (PowerShell screenshot, 2026-11-20)
+
+**Screenshot evidence:** [2026-11-20_13-spiderman-secure-channel-failure.png](../evidence/2026-11-20_13-spiderman-secure-channel-failure.png).
 
 **Command run on SPIDERMAN:**
 
@@ -239,9 +265,11 @@ VERBOSE: The secure channel between the local computer and the domain MARVEL.loc
 
 **Next step:** The user ran `nltest /sc_query:MARVEL.local`, which returned `NERR_Success` (see below). Because `/sc_query` reports last-used secure-channel status rather than necessarily performing a fresh verification, rerun `Test-ComputerSecureChannel -Verbose` in an elevated PowerShell session before interpreting the discrepancy.
 
-**Evidence:** Screenshot supplied in the conversation; no image uploaded to GitHub.
+**Evidence:** Screenshot linked above.
 
 ## SPIDERMAN Netlogon secure-channel status query — success (screenshot, 2026-11-20)
+
+**Screenshot evidence:** [2026-11-20_14-spiderman-netlogon-sc-query.png](../evidence/2026-11-20_14-spiderman-netlogon-sc-query.png).
 
 **Command run on SPIDERMAN:**
 
@@ -262,7 +290,7 @@ The command completed successfully
 
 **Follow-up result:** The user reported rerunning `Test-ComputerSecureChannel -Verbose` as Administrator on SPIDERMAN; it **still returned `False`**. Root cause remains unverified. Repair is deferred while the course continues. See [tracking issue #1](https://github.com/ObitoX86/PEH-active-directory-lab/issues/1). The repeated output was reported in chat, not screenshot-submitted.
 
-**Evidence:** Screenshot supplied in the conversation. This entry includes only the relevant result, not a committed image.
+**Evidence:** Screenshot linked above; this entry includes only the relevant observations.
 
 ## Verified connection from earlier troubleshooting
 
