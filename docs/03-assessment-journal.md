@@ -92,7 +92,21 @@ THEPUNISHER   MARVEL.local  True
 
 **Analysis:** Local Windows CIM data reports THEPUNISHER belongs to the `MARVEL.local` domain. This verifies domain membership configuration, but this command alone does not demonstrate live domain controller connectivity or successful domain authentication.
 
-**Follow-up:** Collect SPIDERMAN's network settings, then its domain membership status.
+**Follow-up:** SPIDERMAN's network settings were collected in the following entry; verify its domain membership next.
+
+---
+
+## 2026-11-20 — SPIDERMAN network configuration baseline
+
+**Task:** Record the third VM's `ipconfig /all` settings and compare them with the two existing lab machines.
+
+**Evidence:** Screenshot supplied in the chat on 2026-11-20; a redacted copy has not yet been uploaded to the repository. Local user-profile path, interface MAC, and DHCP client identifiers are not reproduced here.
+
+**Observed result:** Host name `SPIDERMAN`; primary DNS suffix `MARVEL.local`; IPv4 `192.168.158.129` with mask `255.255.255.0`; DHCP enabled with server `192.168.158.254`; default gateway `192.168.158.2`; DNS server `192.168.158.128`; connection-specific DNS suffix `localdomain`.
+
+**Analysis:** All three VMs have IP settings in the `192.168.158.0/24` subnet. The two Windows clients are configured to use HYDRA-DC for DNS and receive their IP configurations from a separate DHCP server. Domain suffix configuration does not by itself prove that SPIDERMAN is domain-joined or that connectivity is functioning.
+
+**Follow-up:** On SPIDERMAN, run `Get-CimInstance Win32_ComputerSystem | Select-Object Name, Domain, PartOfDomain` to verify its domain membership.
 
 ---
 
