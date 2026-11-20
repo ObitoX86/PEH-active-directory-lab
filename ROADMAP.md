@@ -52,8 +52,10 @@ Each phase remains **not verified** until relevant lab evidence is recorded.
 - [x] User confirmed powered-off VMware snapshot `PEH-THEPUNISHER-Baseline-Before-Attacks` for THEPUNISHER (2026-11-20; not independently inspected).
 - [x] User confirmed powered-off VMware snapshot `PEH-SPIDERMAN-Baseline-Before-Attacks` for SPIDERMAN (2026-11-20; not independently inspected; existing secure-channel problem retained).
 - [x] User verified all four expected baseline snapshots are visible in VMware Snapshot Manager (2026-11-20; user-confirmed, no manager screenshots).
-- [ ] Create a dedicated private VMware LAN segment for PEH testing (without switching existing VMs yet).
-- [ ] Plan guest IP/DNS configuration for LAN segment (VMware does not automatically supply DHCP), verify guest isolation and scope, then migrate only when ready.
+- [x] User confirmed creation of VMware LAN segment `PEH-AD-Isolated` on 2026-11-20; no screenshot verification or VM migration yet.
+- [x] Draft guest-address preservation plan for `PEH-AD-Isolated`: HYDRA-DC `.128`, SPIDERMAN `.129`, THEPUNISHER `.130`, Kali `.131`, all `/24`; preserve HYDRA-DC DNS for clients; no gateway needed in contained LAN.
+- [ ] Move HYDRA-DC first (its current address is static), confirm that its IP stays `.128`; then plan client DHCP-to-static changes and migrate clients and Kali one at a time. No VMs confirmed migrated yet.
+- [ ] Verify guest isolation, correct IP/DNS and scoped connectivity on LAN segment before any traffic-interception test.
 - [ ] Verify containment and approved scope before active attack simulation.
 - [ ] Study LLMNR/NBT-NS poisoning prerequisites and mitigations before running Responder in an isolated lab.
 - [ ] Keep SPIDERMAN trust-status anomaly separate from attack findings; investigate only if a lab depends on healthy computer trust.
