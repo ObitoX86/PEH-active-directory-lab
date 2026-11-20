@@ -47,7 +47,9 @@ Each phase remains **not verified** until relevant lab evidence is recorded.
 - [x] Identify Kali Linux as intended authorised tester at `192.168.158.131/24`.
 - [x] Confirm Kali's hypervisor Network Adapter is NAT (screenshot).
 - [x] Identify VMnet8 as the NAT subnet (VMware Virtual Network Editor screenshot).
-- [ ] Verify containment and approved scope; take recoverable VM snapshots before active attack simulation.
+- [x] User confirmed creating VMware snapshot `PEH-Kali-Baseline-Before-Attacks` for Kali Linux (2026-11-20; confirmation in conversation, snapshot not independently inspected).
+- [ ] Create baseline snapshots of HYDRA-DC, THEPUNISHER and SPIDERMAN and check they appear in VMware Snapshot Manager.
+- [ ] Verify containment and approved scope before active attack simulation.
 - [ ] Study LLMNR/NBT-NS poisoning prerequisites and mitigations before running Responder in an isolated lab.
 - [ ] Keep SPIDERMAN trust-status anomaly separate from attack findings; investigate only if a lab depends on healthy computer trust.
 
