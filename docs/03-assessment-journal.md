@@ -146,7 +146,21 @@ SPIDERMAN   MARVEL.local  True
 
 **Analysis:** This records the hypervisor network mode for the server and is consistent with the observed VMware-style NAT gateway/DHCP subnet. NAT can allow outbound connectivity through the host; it does not prove a fully isolated lab. The corresponding VMware settings for both Windows client VMs have not yet been verified.
 
-**Follow-up:** Inspect the Network Adapter settings on THEPUNISHER and SPIDERMAN; confirm all intended test machines and their network boundaries before any disruptive exercises.
+**Follow-up:** The user subsequently confirmed both clients use NAT. Validate DNS resolution and inter-VM communication before further security exercises.
+
+---
+
+## 2026-11-20 — NAT settings confirmed for both Windows clients
+
+**Task:** Establish hypervisor network mode across all three visible Active Directory lab VMs.
+
+**Evidence:** User explicitly confirmed in the project conversation that all three VMs use NAT; the server's NAT selection was independently screenshot-verified earlier. Separate client VMware Settings screenshots were not supplied.
+
+**Observed / reported result:** HYDRA-DC, THEPUNISHER and SPIDERMAN are all configured for NAT according to the user. HYDRA-DC screenshot also confirms its adapter was connected and set to connect at power-on; equivalent client checkboxes have not been checked.
+
+**Analysis:** The reported modes are consistent with the machines' `192.168.158.0/24` address settings. NAT is not proof of full containment, and the hypervisor's specific virtual switch and live packet connectivity have not yet been verified. Do not mark outbound access or inter-VM connectivity as tested.
+
+**Follow-up:** Run a targeted DNS lookup from THEPUNISHER for `HYDRA-DC.MARVEL.local`; record output and then test connection to the domain controller.
 
 ---
 
