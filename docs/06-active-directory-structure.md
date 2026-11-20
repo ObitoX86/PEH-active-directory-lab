@@ -78,14 +78,37 @@ Get-ADObject -SearchBase "OU=Groups,DC=MARVEL,DC=local" -SearchScope OneLevel -F
 
 **Evidence:** Screenshot submitted in the conversation on 2026-11-20; redacted PNG not yet committed to the GitHub evidence folder.
 
-## Next step — inspect direct membership of Domain Admins
+## Domain Admins — verified direct membership (2026-11-20)
+
+**Command executed on HYDRA-DC:**
 
 ```powershell
 Get-ADGroupMember -Identity "Domain Admins" |
     Select-Object Name, ObjectClass
 ```
 
-This is a read-only query listing direct members. It does not recursively expand nested group membership.
+**Observed result: 3 direct members, all `user` objects.**
+
+| Name | ObjectClass |
+| --- | --- |
+| `Administrator` | `user` |
+| `Tony Stark` | `user` |
+| `SQL Service` | `user` |
+
+**Interpretation:** The named accounts are direct members of `Domain Admins`, a highly privileged AD group. This result does **not** show the accounts' `SamAccountName` values, their actual usage, whether they are enabled, group nesting elsewhere, active logons, or any service principal names (SPNs).
+
+**Security observation — requires investigation:** An account named `SQL Service` has direct membership of `Domain Admins`. If it is indeed being used by a SQL Server service, this may represent excessive privilege. The name alone does not prove it is a service account. Kerberoasting applicability would require verifying an SPN and other relevant conditions. Do not label this a confirmed vulnerability or exploitation outcome based solely on the output.
+
+**Evidence:** PowerShell screenshot supplied in the PEH project conversation on 2026-11-20; a redacted image copy is not yet in GitHub.
+
+## Next read-only verification — SQL Service account properties
+
+```powershell
+Get-ADUser -Filter 'Name -eq "SQL Service"' -Properties ServicePrincipalName |
+    Select-Object Name, SamAccountName, ServicePrincipalName
+```
+
+This inspects the named account's logon name and any registered SPNs, without changing account settings. No passwords or authentication material are requested.
 
 ## Screenshot evidence
 
