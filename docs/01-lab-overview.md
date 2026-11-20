@@ -34,9 +34,9 @@ eth0   UP       192.168.158.131/24  fe80::5e29:65cd:2a93:70b9/64
 
 **Verified:** `eth0` is UP with IPv4 address `192.168.158.131/24`. This falls within the same calculated IPv4 subnet as the three Windows lab guests. `lo` is the loopback interface.
 
-**Not yet verified:** Kali's hypervisor network mode, virtual network identity, DNS/gateway, actual connectivity to the Windows machines, and whether Kali's networking is suitably contained for the upcoming lab exercises. This screenshot confirms the tester's OS environment, but does not show it in the earlier three-VM VMware inventory.
+**VMware adapter verification (2026-11-20):** VMware Workstation Settings > Network Adapter screenshot shows **NAT** selected for Kali; **Connected** and **Connect at power on** are checked. The screenshot also shows 8 GB allocated RAM and 4 processors. **Still not verified:** the precise VMnet/switch identity, Kali DNS/gateway, actual Kali-to-Windows connectivity, snapshots, and whether this NAT segment is suitably contained for network-poisoning exercises. This screenshot confirms the tester's OS environment, but does not show it in the earlier three-VM VMware inventory.
 
-**Evidence:** Kali terminal screenshot supplied in the conversation on 2026-11-20. Redacted image has not yet been committed to the repository. 
+**Evidence:** Kali terminal and VMware Network Adapter screenshots supplied on 2026-11-20. Redacted images have not yet been committed to the repository. 
 
 All observations above must be interpreted as configuration facts, not as evidence of an attack.
 
