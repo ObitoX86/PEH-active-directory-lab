@@ -21,7 +21,8 @@ Each phase remains **not verified** until relevant lab evidence is recorded.
 - [x] Document domain controller and both visible clients (hostnames, addresses, AD membership) from supplied evidence.
 - [ ] Verify whether a separate testing VM is used and document its scope if applicable.
 - [x] Create a Mermaid network topology with verified IP addresses, domain roles and both tested TCP 389 paths (2026-11-20).
-- [ ] Confirm domain controller discovery and secure channel / live authentication separately.
+- [x] Confirm domain controller discovery from SPIDERMAN using `nltest /dsgetdc:MARVEL.local` (returned HYDRA-DC at `192.168.158.128`, 2026-11-20).
+- [ ] Verify computer secure-channel health and live authentication separately; domain controller discovery is not proof of either.
 - [x] Establish at least one successful client-to-server file-sharing connection by direct UNC path (observed during prior lab troubleshooting).
 
 ## Phase 2 — Reconnaissance and enumeration
