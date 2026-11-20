@@ -214,7 +214,36 @@ TcpTestSucceeded : True
 
 **Analysis:** The successful TCP connection demonstrates network reachability from THEPUNISHER to a listener on HYDRA-DC port 389. It supports the network baseline but is **not** proof of a valid LDAP bind, AD authentication, or complete directory-service health.
 
-**Follow-up:** Run the same targeted TCP test from SPIDERMAN to HYDRA-DC, and record the outcome.
+**Follow-up:** The matching SPIDERMAN TCP test was successful, as documented in the next entry.
+
+---
+
+## 2026-11-20 — SPIDERMAN TCP connectivity to domain controller LDAP port
+
+**Task:** Confirm SPIDERMAN can reach the same domain controller LDAP TCP port as THEPUNISHER.
+
+**Command (SPIDERMAN):**
+
+```powershell
+Test-NetConnection HYDRA-DC.MARVEL.local -Port 389
+```
+
+**Evidence:** User-provided PowerShell screenshot in the conversation on 2026-11-20; image not yet committed to GitHub.
+
+**Observed result:**
+
+```text
+ComputerName     : HYDRA-DC.MARVEL.local
+RemoteAddress    : 192.168.158.128
+RemotePort       : 389
+InterfaceAlias   : Ethernet0
+SourceAddress    : 192.168.158.129
+TcpTestSucceeded : True
+```
+
+**Analysis:** A TCP handshake to port 389 on HYDRA-DC succeeded from SPIDERMAN. Both domain-joined clients now have demonstrated transport connectivity to this port. This does not independently verify LDAP binding, Kerberos authentication, Group Policy or service health.
+
+**Follow-up:** Test domain controller discovery from a client, then test secure-channel or authenticated domain operations separately.
 
 ---
 
