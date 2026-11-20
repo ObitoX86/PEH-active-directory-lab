@@ -11,7 +11,27 @@ VMware Workstation — My Computer
   - SPIDERMAN
 ```
 
-The displayed names alone do not prove host roles, IP configuration, domain membership or network links.
+The displayed names alone do not prove host roles, domain membership or network links.
+
+## Verified server network configuration — `ipconfig /all` screenshot, 2026-11-20
+
+| Field | Observed value |
+| --- | --- |
+| VMware display name | Windows Server 2022 |
+| Windows host name | `HYDRA-DC` |
+| Primary DNS suffix | `MARVEL.local` |
+| Ethernet adapter description | Intel(R) 82574L Gigabit Network Connection |
+| IPv4 address | `192.168.158.128` (preferred) |
+| Subnet mask | `255.255.255.0` (`/24`) |
+| IPv4 network | `192.168.158.0/24` (calculated from mask) |
+| DHCP enabled | No |
+| Default gateway | None shown |
+| DNS servers | `::1` and `127.0.0.1` (loopback) |
+| IP routing enabled | No |
+
+**Interpretation:** DHCP is disabled; an IPv4 address is configured. The DNS servers are loopback addresses. The domain suffix and host name fit the intended lab design, but they do not verify that AD DS or DNS services are running. The VMware virtual switch mode and which clients are on the same subnet are still unknown.
+
+**Prior observation caveat:** An earlier troubleshooting session used a direct UNC path to `192.168.10.10`, whereas the current screenshot reports `192.168.158.128` for `HYDRA-DC`. Do not assume these are the same host/interface or that the network was changed without confirming the configuration.
 
 ## Verified connection from earlier troubleshooting
 
@@ -20,9 +40,10 @@ A Windows client referred to as **Punisher** accessed a lab Windows server using
 ## Proposed diagram (pending verified topology)
 
 ```text
-[Windows Server 2022]   [THEPUNISHER]   [SPIDERMAN]
-         |                   |                |
-  Network adapter, host role, IP and connectivity: TO VERIFY
+[Windows Server 2022]         [THEPUNISHER]       [SPIDERMAN]
+ host: HYDRA-DC                    ?                    ?
+ 192.168.158.128/24                ?                    ?
+        Network type, client IPs and connectivity: TO VERIFY
 ```
 
 No connections are drawn until their configuration is confirmed.
