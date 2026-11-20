@@ -487,7 +487,7 @@ eth0     UP       192.168.158.131/24  fe80::5e29:65cd:2a93:70b9/64
 
 **Evidence:** Kali terminal screenshot supplied 2026-11-20, pending redacted PNG upload.
 
-**THEPUNISHER NIC identified (2026-11-20):** The user ran `Get-NetAdapter | Select-Object Name, Status, InterfaceDescription`, returning `Ethernet0` / `Up` / `Intel(R) 82574L Gigabit Network Connection`. This identifies the intended interface for its forthcoming DHCP-to-static change; no changed IP or LAN segment attachment is yet verified. **Next:** Set THEPUNISHER's IP to static `192.168.158.130/24` without a default gateway and preserve DNS `192.168.158.128` before migration.
+**THEPUNISHER NIC identified (2026-11-20):** The user ran `Get-NetAdapter | Select-Object Name, Status, InterfaceDescription`, returning `Ethernet0` / `Up` / `Intel(R) 82574L Gigabit Network Connection`. This identifies the intended interface for its forthcoming DHCP-to-static change; the next screenshot verifies its new static IP configuration, but **LAN segment attachment is not yet verified**. **Static IPv4 baseline verified:** The user supplied post-change `ipconfig /all` on THEPUNISHER showing hostname `THEPUNISHER`, primary suffix `MARVEL.local`, adapter `Ethernet0`, `DHCP Enabled: No`, `192.168.158.130/24`, blank default gateway and DNS `192.168.158.128`. This preserves its IPv4 and DNS settings without a further DNS change. **Next:** Move the powered-off VM adapter to `PEH-AD-Isolated`, boot, and validate post-migration settings and DC connectivity.
 
 ## Details to confirm
 
