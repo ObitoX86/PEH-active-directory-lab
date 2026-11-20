@@ -473,7 +473,30 @@ SQL Service   user
 
 **Evidence:** Screenshot supplied in the conversation on 2026-11-20; screenshot not yet committed to `evidence/`.
 
-**Next step:** Inspect the `SQL Service` account's `SamAccountName` and `ServicePrincipalName` using a read-only PowerShell query. 
+**Next step:** The account's SamAccountName and SPN were verified in the next journal entry. 
+
+---
+
+## 2026-11-20 — SQL Service SPN and intentional privileged-account configuration
+
+**Task:** Inspect the `SQL Service` user account for a registered Service Principal Name.
+
+**Command:**
+
+```powershell
+Get-ADUser -Filter 'Name -eq "SQL Service"' -Properties ServicePrincipalName |
+    Select-Object Name, SamAccountName, ServicePrincipalName
+```
+
+**Observed result:** `Name=SQL Service`; `SamAccountName=SQLService`; `ServicePrincipalName={HYDRA-DC/SQLService.MARVEL.local:60111}`.
+
+**Context from lab owner:** This account was deliberately configured for attack practice in the TCM Security PEH Active Directory lab.
+
+**Analysis:** The user account has an SPN and was previously verified to be a direct member of `Domain Admins`. This combination establishes an intentionally risky Kerberoasting-related lab configuration. It does not demonstrate an actual Kerberos ticket request, cracked password, domain compromise, or a running Microsoft SQL Server service. The custom SPN is not in the standard `MSSQLSvc/` format.
+
+**Evidence:** PowerShell screenshot supplied in the conversation on 2026-11-20. An individual PNG has not yet been committed to `evidence/`.
+
+**Next step:** Document the authorised Kali test machine and isolate the environment before proceeding to the offensive exercises. No attack or repair was performed during this step.
 
 ---
 
