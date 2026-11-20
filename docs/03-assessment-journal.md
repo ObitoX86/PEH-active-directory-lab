@@ -802,7 +802,32 @@ ping -c 4 192.168.158.128
 
 **Evidence:** User-provided Kali terminal screenshot dated 2026-11-20; redacted PNG not yet committed to GitHub.
 
-**Next step:** On THEPUNISHER, inspect the active Windows network interface name using a read-only PowerShell command. Plan to preserve its existing `192.168.158.130/24` IPv4 and `192.168.158.128` DNS when replacing NAT DHCP with a manual address and moving it to `PEH-AD-Isolated`.
+**Next step:** THEPUNISHER's network interface was identified in the subsequent journal entry. Prepare its static IPv4 migration.
+
+---
+
+## 2026-11-20 — THEPUNISHER network adapter identified
+
+**Task:** Identify THEPUNISHER's connected Windows network interface before replacing its NAT DHCP settings with fixed lab addressing.
+
+**Command executed in PowerShell:**
+
+```powershell
+Get-NetAdapter | Select-Object Name, Status, InterfaceDescription
+```
+
+**Screenshot-verified output:**
+
+```text
+Name       Status  InterfaceDescription
+Ethernet0  Up      Intel(R) 82574L Gigabit Network Connection
+```
+
+**Analysis:** THEPUNISHER reports its network adapter as `Ethernet0`, with status `Up`, on an Intel 82574L virtual NIC. The command does not establish current IP or DNS settings or prove VMware attachment to the isolated LAN. Earlier evidence separately recorded DHCP address `192.168.158.130/24` and DNS `192.168.158.128` on this machine. The user was instructed to leave the adapter on NAT for this identification step.
+
+**Evidence:** PowerShell screenshot supplied in conversation on 2026-11-20. Redacted PNG not yet in GitHub.
+
+**Next step:** Set `Ethernet0` to static IPv4 `192.168.158.130/24` without a default gateway, then ensure DNS `192.168.158.128` remains configured. Expect interruption to the NAT/internet route until migration is complete.
 
 ---
 
