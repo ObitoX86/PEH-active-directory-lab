@@ -10,7 +10,9 @@ Each phase remains **not verified** until relevant lab evidence is recorded.
 - [x] Verify THEPUNISHER's domain membership in `MARVEL.local` using `Win32_ComputerSystem` (`PartOfDomain=True`), 2026-11-20.
 - [x] Record SPIDERMAN's IP, DNS, DHCP, gateway and hostname from `ipconfig /all` (2026-11-20).
 - [x] Verify SPIDERMAN's configured domain membership in `MARVEL.local` using `Win32_ComputerSystem` (`PartOfDomain=True`), 2026-11-20.
-- [ ] Verify guest operating systems, other VM roles, individual service health and hypervisor network modes.
+- [x] Verify HYDRA-DC VMware Network Adapter is NAT, connected and enabled at power-on (VMware Settings screenshot, 2026-11-20).
+- [ ] Verify THEPUNISHER and SPIDERMAN VMware network adapter modes; check lab isolation before intrusive testing.
+- [ ] Verify guest operating systems, other VM roles and individual service health.
 - [x] Document domain controller and both visible clients (hostnames, addresses, AD membership) from supplied evidence.
 - [ ] Verify whether a separate testing VM is used and document its scope if applicable.
 - [ ] Produce a network topology diagram using confirmed details.
