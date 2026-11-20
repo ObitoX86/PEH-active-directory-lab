@@ -2,7 +2,9 @@
 
 ## Observed machines
 
-**Screenshot evidence:** [2026-11-20_01-vmware-inventory.png](../evidence/2026-11-20_01-vmware-inventory.png).
+**Screenshot evidence:**
+
+![VMware inventory showing three virtual machines](../evidence/2026-11-20_01-vmware-inventory.png)
 
 The VMware Workstation inventory screenshot (2026-11-20) contains three display names:
 
@@ -17,7 +19,9 @@ The displayed names alone do not prove host roles, domain membership or network 
 
 ## Verified server network configuration — `ipconfig /all` screenshot, 2026-11-20
 
-**Screenshot evidence:** [2026-11-20_02-hydra-dc-ipconfig.png](../evidence/2026-11-20_02-hydra-dc-ipconfig.png).
+**Screenshot evidence:**
+
+![HYDRA-DC network configuration](../evidence/2026-11-20_02-hydra-dc-ipconfig.png)
 
 | Field | Observed value |
 | --- | --- |
@@ -39,7 +43,9 @@ The displayed names alone do not prove host roles, domain membership or network 
 
 ## Verified VMware adapter mode — HYDRA-DC (VMware Settings screenshot, 2026-11-20)
 
-**Screenshot evidence:** [2026-11-20_08-hydra-dc-vmware-nat.png](../evidence/2026-11-20_08-hydra-dc-vmware-nat.png).
+**Screenshot evidence:**
+
+![HYDRA-DC VMware NAT settings](../evidence/2026-11-20_08-hydra-dc-vmware-nat.png)
 
 | Property | Verified setting |
 | --- | --- |
@@ -54,7 +60,9 @@ The displayed names alone do not prove host roles, domain membership or network 
 
 ## Verified AD domain controller identity — PowerShell screenshot, 2026-11-20
 
-**Screenshot evidence:** [2026-11-20_03-hydra-dc-ad-identity.png](../evidence/2026-11-20_03-hydra-dc-ad-identity.png).
+**Screenshot evidence:**
+
+![HYDRA-DC domain controller identity and Global Catalog](../evidence/2026-11-20_03-hydra-dc-ad-identity.png)
 
 ```powershell
 Get-ADDomainController -Identity HYDRA-DC |
@@ -72,7 +80,9 @@ Get-ADDomainController -Identity HYDRA-DC |
 
 ## Verified client network configuration — THEPUNISHER (`ipconfig /all` screenshot, 2026-11-20)
 
-**Screenshot evidence:** [2026-11-20_04-thepunisher-ipconfig.png](../evidence/2026-11-20_04-thepunisher-ipconfig.png).
+**Screenshot evidence:**
+
+![THEPUNISHER network configuration](../evidence/2026-11-20_04-thepunisher-ipconfig.png)
 
 | Field | Observed value |
 | --- | --- |
@@ -92,7 +102,9 @@ Get-ADDomainController -Identity HYDRA-DC |
 
 ## Verified THEPUNISHER domain membership — PowerShell screenshot, 2026-11-20
 
-**Screenshot evidence:** [2026-11-20_05-thepunisher-domain-membership.png](../evidence/2026-11-20_05-thepunisher-domain-membership.png).
+**Screenshot evidence:**
+
+![THEPUNISHER domain membership](../evidence/2026-11-20_05-thepunisher-domain-membership.png)
 
 ```powershell
 Get-CimInstance Win32_ComputerSystem |
@@ -109,7 +121,9 @@ Get-CimInstance Win32_ComputerSystem |
 
 ## Verified SPIDERMAN network configuration — `ipconfig /all` screenshot, 2026-11-20
 
-**Screenshot evidence:** [2026-11-20_06-spiderman-ipconfig.png](../evidence/2026-11-20_06-spiderman-ipconfig.png).
+**Screenshot evidence:**
+
+![SPIDERMAN network configuration](../evidence/2026-11-20_06-spiderman-ipconfig.png)
 
 | Field | Observed value |
 | --- | --- |
@@ -129,7 +143,9 @@ Get-CimInstance Win32_ComputerSystem |
 
 ## Verified SPIDERMAN domain membership — PowerShell screenshot, 2026-11-20
 
-**Screenshot evidence:** [2026-11-20_07-spiderman-domain-membership.png](../evidence/2026-11-20_07-spiderman-domain-membership.png).
+**Screenshot evidence:**
+
+![SPIDERMAN domain membership](../evidence/2026-11-20_07-spiderman-domain-membership.png)
 
 ```powershell
 Get-CimInstance Win32_ComputerSystem |
@@ -146,7 +162,9 @@ Get-CimInstance Win32_ComputerSystem |
 
 ## Verified DNS name resolution from THEPUNISHER — PowerShell screenshot, 2026-11-20
 
-**Screenshot evidence:** [2026-11-20_09-thepunisher-dns-lookup.png](../evidence/2026-11-20_09-thepunisher-dns-lookup.png).
+**Screenshot evidence:**
+
+![THEPUNISHER DNS resolution of HYDRA-DC](../evidence/2026-11-20_09-thepunisher-dns-lookup.png)
 
 **Command executed on THEPUNISHER:**
 
@@ -168,7 +186,9 @@ Resolve-DnsName HYDRA-DC.MARVEL.local
 
 ## Verified TCP connectivity to LDAP port — THEPUNISHER (PowerShell screenshot, 2026-11-20)
 
-**Screenshot evidence:** [2026-11-20_10-thepunisher-ldap-tcp389.png](../evidence/2026-11-20_10-thepunisher-ldap-tcp389.png).
+**Screenshot evidence:**
+
+![THEPUNISHER TCP connectivity to LDAP port 389](../evidence/2026-11-20_10-thepunisher-ldap-tcp389.png)
 
 **Command run on THEPUNISHER:**
 
@@ -193,7 +213,9 @@ TcpTestSucceeded : True
 
 ## Verified TCP connectivity to LDAP port — SPIDERMAN (PowerShell screenshot, 2026-11-20)
 
-**Screenshot evidence:** [2026-11-20_11-spiderman-ldap-tcp389.png](../evidence/2026-11-20_11-spiderman-ldap-tcp389.png).
+**Screenshot evidence:**
+
+![SPIDERMAN TCP connectivity to LDAP port 389](../evidence/2026-11-20_11-spiderman-ldap-tcp389.png)
 
 **Command run on SPIDERMAN:**
 
@@ -216,7 +238,9 @@ TcpTestSucceeded : True
 
 ## Verified domain controller discovery — SPIDERMAN (`nltest` screenshot, 2026-11-20)
 
-**Screenshot evidence:** [2026-11-20_12-spiderman-dc-discovery.png](../evidence/2026-11-20_12-spiderman-dc-discovery.png).
+**Screenshot evidence:**
+
+![SPIDERMAN domain controller discovery](../evidence/2026-11-20_12-spiderman-dc-discovery.png)
 
 **Command executed on SPIDERMAN:**
 
@@ -243,7 +267,9 @@ nltest /dsgetdc:MARVEL.local
 
 ## SPIDERMAN domain secure-channel check — failed (PowerShell screenshot, 2026-11-20)
 
-**Screenshot evidence:** [2026-11-20_13-spiderman-secure-channel-failure.png](../evidence/2026-11-20_13-spiderman-secure-channel-failure.png).
+**Screenshot evidence:**
+
+![SPIDERMAN failed secure-channel check](../evidence/2026-11-20_13-spiderman-secure-channel-failure.png)
 
 **Command run on SPIDERMAN:**
 
@@ -269,7 +295,9 @@ VERBOSE: The secure channel between the local computer and the domain MARVEL.loc
 
 ## SPIDERMAN Netlogon secure-channel status query — success (screenshot, 2026-11-20)
 
-**Screenshot evidence:** [2026-11-20_14-spiderman-netlogon-sc-query.png](../evidence/2026-11-20_14-spiderman-netlogon-sc-query.png).
+**Screenshot evidence:**
+
+![SPIDERMAN Netlogon last-used secure-channel status](../evidence/2026-11-20_14-spiderman-netlogon-sc-query.png)
 
 **Command run on SPIDERMAN:**
 
