@@ -461,6 +461,24 @@ The user followed the instructions to move **HYDRA-DC** to LAN segment `PEH-AD-I
 
 **Evidence:** `ipconfig /all` screenshot supplied on 2026-11-20; image not yet committed to `evidence/`.
 
+## Kali isolated LAN attachment — live IP and routing verified (2026-11-20)
+
+The user selected VMware **LAN Segment: `PEH-AD-Isolated`** for the Kali adapter, kept `Connect at power on` checked, started Kali and supplied the following command output:
+
+```bash
+ip -br addr && ip route
+```
+
+```text
+lo       UNKNOWN  127.0.0.1/8  ::1/128
+eth0     UP       192.168.158.131/24  fe80::5e29:65cd:2a93:70b9/64
+192.168.158.0/24 dev eth0 proto kernel scope link src 192.168.158.131 metric 100
+```
+
+**Verified:** Kali's `eth0` is UP and retains its static `192.168.158.131/24` IPv4 address after reboot; it has a directly connected route to the lab subnet and no IPv4 default route in the `ip route` output. The VMware segment selection was shown before boot. The route table does **not** prove HYDRA-DC is reachable or establish total absence of other possible IPv6 network paths. The Windows clients have not been migrated yet.
+
+**Next:** Test only the known lab controller `192.168.158.128`, then review the Windows clients' DHCP-to-static settings before moving them.
+
 ## Details to confirm
 
 1. Installed operating systems and purposes for each of the three VMs.
