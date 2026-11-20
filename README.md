@@ -39,7 +39,7 @@ This project documents the design, administration and authorised security testin
 
 ## Screenshot evidence
 
-**14 of 14 lab setup and verification screenshots are in GitHub.** Selected evidence is displayed below. The [complete evidence gallery](evidence/INDEX.md) displays all 14 images directly, and the [network architecture document](docs/02-network-architecture.md) embeds them beside the corresponding test results.
+**14 original lab setup and verification screenshots are in GitHub.** A second batch of **26** network-migration and AD-verification screenshots has been organised and is [pending upload](evidence/UPLOAD-PLAN-2026-11-20.md); these images are not yet embedded or present on GitHub. Selected evidence is displayed below. The [complete evidence gallery](evidence/INDEX.md) displays all 14 images directly, and the [network architecture document](docs/02-network-architecture.md) embeds them beside the corresponding test results.
 
 ### Virtual machines
 
