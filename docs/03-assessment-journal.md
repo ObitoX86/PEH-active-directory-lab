@@ -1029,7 +1029,42 @@ netsh interface ipv4 set address name="Ethernet0" static 192.168.158.129 255.255
 
 **Evidence:** PowerShell screenshot supplied on 2026-11-20; the redacted image has not yet been committed to GitHub.
 
-**Next step:** Run `Test-NetConnection 192.168.158.128 -Port 389` on SPIDERMAN and record whether its IPv4 source `.129` can establish a TCP connection to the controller. Continue with DNS and isolation checks before any offensive tests.
+**Next step:** The user subsequently verified TCP 389 connectivity from SPIDERMAN to HYDRA-DC; see following entry. Continue with DNS and isolation checks before any offensive tests.
+
+---
+
+## 2026-11-20 — SPIDERMAN to HYDRA-DC TCP 389 after isolated LAN migration
+
+**Task:** Verify SPIDERMAN can establish a TCP connection to the domain controller's LDAP port following the user-reported LAN segment migration.
+
+**PowerShell command:**
+
+```powershell
+Test-NetConnection 192.168.158.128 -Port 389
+```
+
+**Screenshot-verified result:**
+
+```text
+ComputerName     : 192.168.158.128
+RemoteAddress    : 192.168.158.128
+RemotePort       : 389
+InterfaceAlias   : Ethernet0
+SourceAddress    : 192.168.158.129
+TcpTestSucceeded : True
+```
+
+**Analysis:** The Windows client `SPIDERMAN` (`192.168.158.129`) successfully reached HYDRA-DC (`192.168.158.128`) over TCP 389 using `Ethernet0`. Together with prior tests, both Windows clients reached the domain controller's LDAP TCP port and Kali reached it by ICMP after migrating to the user-reported isolated network. A successful TCP handshake **does not verify LDAP authentication, domain trust, Kerberos, DNS, Group Policy or full network isolation**. SPIDERMAN's failed secure-channel diagnostic remains unresolved in issue #1.
+
+**Evidence:** User-provided PowerShell screenshot on 2026-11-20; screenshot is not yet uploaded as a redacted PNG in the repository.
+
+**Next step:** On SPIDERMAN, test resolution of the domain controller's A record directly through the intended DNS server:
+
+```powershell
+Resolve-DnsName HYDRA-DC.MARVEL.local -Server 192.168.158.128 -Type A
+```
+
+Then verify scope/isolation and relevant authenticated services before offensive exercises.
 
 ---
 
