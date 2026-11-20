@@ -14,7 +14,9 @@ Each phase remains **not verified** until relevant lab evidence is recorded.
 - [x] Record user confirmation that THEPUNISHER and SPIDERMAN VMware adapters use NAT (2026-11-20; separate client Settings screenshots not supplied).
 - [ ] Assess NAT network containment before intrusive testing; NAT is not fully isolated.
 - [x] Verify THEPUNISHER resolves `HYDRA-DC.MARVEL.local` to `192.168.158.128` (DNS A answer, TTL 3600), 2026-11-20.
-- [ ] Test live service connectivity from THEPUNISHER to HYDRA-DC; then test SPIDERMAN.
+- [x] Test THEPUNISHER to HYDRA-DC TCP port 389 connectivity (`TcpTestSucceeded=True`, 2026-11-20).
+- [ ] Test SPIDERMAN to HYDRA-DC TCP port 389 connectivity.
+- [ ] Confirm authenticated Active Directory service operation separately; TCP connectivity is not authentication.
 - [ ] Verify guest operating systems, other VM roles and individual service health.
 - [x] Document domain controller and both visible clients (hostnames, addresses, AD membership) from supplied evidence.
 - [ ] Verify whether a separate testing VM is used and document its scope if applicable.
