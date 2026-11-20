@@ -569,6 +569,20 @@ eth0   UP       192.168.158.131/24  fe80::5e29:65cd:2a93:70b9/64
 
 ---
 
+## 2026-11-20 — HYDRA-DC baseline snapshot user-confirmed
+
+**Task:** Preserve a pre-attack recovery point for the Active Directory domain controller.
+
+**Requested procedure:** Shut down Windows Server cleanly; while the VM is powered off, take a VMware snapshot named `PEH-HYDRA-DC-Baseline-Before-Attacks`.
+
+**Reported result:** User replied **Done** to the procedure. Snapshot creation is confirmed by the user, not independently inspected via Snapshot Manager or screenshot.
+
+**Analysis:** Baseline snapshots are now user-confirmed for Kali and HYDRA-DC. The two domain-joined Windows clients still need recovery points. Domain controller snapshots are not a substitute for supported AD backups; avoid restoring an old DC in isolation while the rest of a functioning domain has continued to change.
+
+**Next step:** Shut down THEPUNISHER cleanly and create a snapshot called `PEH-THEPUNISHER-Baseline-Before-Attacks`; then preserve SPIDERMAN.
+
+---
+
 ## New entry template
 
 **Date:** YYYY-MM-DD  
