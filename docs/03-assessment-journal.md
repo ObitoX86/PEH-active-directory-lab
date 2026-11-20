@@ -754,7 +754,35 @@ ipv4.never-default:  yes
 
 **Evidence:** Kali terminal screenshot supplied in the conversation on 2026-11-20; PNG not yet committed to `evidence/`.
 
-**Next step:** Shut down Kali, attach its sole VMware network adapter to `PEH-AD-Isolated`, boot, and verify the active interface IP plus routes before testing connectivity to HYDRA-DC.
+**Next step:** The user subsequently moved Kali to the LAN segment and provided a live interface/route screenshot; see next entry.
+
+---
+
+## 2026-11-20 — Kali isolated LAN attachment and live IPv4 routing
+
+**Task:** Migrate Kali's VMware network adapter to the already-created `PEH-AD-Isolated` LAN segment and verify post-boot interface addressing and IPv4 routes.
+
+**Observed VMware configuration:** The user showed the VMware Network Adapter settings with `LAN Segment` selected as `PEH-AD-Isolated` and `Connect at power on` checked; the `Connected` checkbox was unchecked/disabled while the VM was off, as expected. The user subsequently booted Kali and supplied a terminal screenshot.
+
+**Command:**
+
+```bash
+ip -br addr && ip route
+```
+
+**Screenshot-verified result:**
+
+```text
+lo       UNKNOWN  127.0.0.1/8  ::1/128
+eth0     UP       192.168.158.131/24  fe80::5e29:65cd:2a93:70b9/64
+192.168.158.0/24 dev eth0 proto kernel scope link src 192.168.158.131 metric 100
+```
+
+**Analysis:** Kali has its intended local IPv4 address and a directly connected route for `192.168.158.0/24`. No IPv4 default route is present in the displayed `ip route` output, consistent with the saved no-gateway profile and LAN segment configuration. This does **not yet establish** successful communication with HYDRA-DC, full isolation or the absence of IPv6 routing/other attached networks. The Windows clients are not yet reported migrated.
+
+**Evidence:** VMware adapter settings and Kali terminal screenshots supplied in the conversation on 2026-11-20. Neither screenshot has yet been uploaded to GitHub.
+
+**Next step:** Check connectivity from Kali to the lab domain controller `192.168.158.128` before migrating any Windows clients. No attack simulation has been performed.
 
 ---
 
