@@ -1083,13 +1083,38 @@ HYDRA-DC.MARVEL.local  A    3600 Answer  192.168.158.128
 
 **Evidence:** PowerShell screenshot provided in the PEH conversation on 2026-11-20; not yet uploaded as a redacted PNG to GitHub.
 
-**Next step:** Check the SRV record that Active Directory uses for domain controller discovery:
+**Next step:** The user subsequently verified the required AD SRV record; see the following entry. Continue with Windows DC locator and scope checks before offensive exercises.
+
+---
+
+## 2026-11-20 — Active Directory LDAP SRV service-discovery record verified
+
+**Task:** Check that SPIDERMAN can retrieve the domain controller's LDAP SRV service-location record from HYDRA-DC's DNS service after isolated-network migration.
+
+**PowerShell command executed on SPIDERMAN:**
 
 ```powershell
 Resolve-DnsName _ldap._tcp.dc._msdcs.MARVEL.local -Server 192.168.158.128 -Type SRV
 ```
 
-Continue with network isolation and trust/AD functionality checks before running poisoning or other offensive exercises.
+**Screenshot-verified response:**
+
+```text
+Name                              Type TTL Section NameTarget           Priority Weight Port
+_ldap._tcp.dc._msdcs.MARVEL.local SRV  600 Answer  hydra-dc.marvel.local 0        100    389
+
+Name      : hydra-dc.marvel.local
+QueryType : A
+TTL       : 3600
+Section   : Additional
+IPAddress : 192.168.158.128
+```
+
+**Interpretation:** The DNS server at `192.168.158.128` advertises `hydra-dc.marvel.local` as an LDAP domain-controller service endpoint on port `389`, with priority `0`, weight `100`, and TTL `600`. The Additional A record resolves this target to `192.168.158.128`. This validates a central AD DNS discovery prerequisite but does not establish an authenticated LDAP bind, secure channel, successful domain logon, KDC health or complete network isolation.
+
+**Evidence:** SPIDERMAN PowerShell screenshot supplied in the project conversation on 2026-11-20; redacted PNG not yet committed to `evidence/`.
+
+**Next step:** Test Windows DC Locator using `nltest /dsgetdc:MARVEL.local /force` from SPIDERMAN. This read-only diagnostic requests fresh DC discovery; even success would not resolve the earlier `Test-ComputerSecureChannel` failure. Continue with lab containment checks before active attack simulations.
 
 ---
 
