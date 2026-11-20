@@ -398,6 +398,34 @@ The command completed successfully
 
 ---
 
+## 2026-11-20 — MARVEL.local organisational unit inventory
+
+**Task:** Enumerate Active Directory organisational units from HYDRA-DC.
+
+**Command:**
+
+```powershell
+Get-ADOrganizationalUnit -Filter * |
+    Select-Object Name, DistinguishedName
+```
+
+**Observed result:**
+
+```text
+Domain Controllers   OU=Domain Controllers,DC=MARVEL,DC=local
+Groups               OU=Groups,DC=MARVEL,DC=local
+```
+
+**Analysis:** Two OUs were returned. The `Domain Controllers` OU is the conventional location for domain controller computer objects. The existence of an OU called `Groups` does not prove it contains security groups. Other AD containers were not enumerated by this OU-only query. No GPO link, permission or delegation information has yet been collected.
+
+**Evidence:** PowerShell screenshot supplied in the conversation on 2026-11-20. A redacted screenshot has not yet been committed to GitHub.
+
+**Documentation:** [Active Directory directory structure](06-active-directory-structure.md).
+
+**Next step:** Inspect the immediate contents of the `Groups` OU with a read-only AD object query.
+
+---
+
 ## New entry template
 
 **Date:** YYYY-MM-DD  
