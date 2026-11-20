@@ -59,7 +59,8 @@ Each phase remains **not verified** until relevant lab evidence is recorded.
 - [x] User confirmed running `nmcli connection modify` for Kali `Wired connection 1` with manual IPv4 `192.168.158.131/24`, DNS `192.168.158.128`, no gateway/default route (2026-11-20; settings not yet independently read back).
 - [x] Screenshot-verify Kali's saved `Wired connection 1` profile: `manual`, `192.168.158.131/24`, gateway empty, DNS `192.168.158.128`, `never-default=yes` (2026-11-20). Saved profile verified, active network state not yet verified.
 - [x] User switched Kali VMware adapter to LAN segment `PEH-AD-Isolated` and supplied post-boot `ip -br addr && ip route` confirming `eth0` UP at `192.168.158.131/24`, only `192.168.158.0/24` connected IPv4 route and no IPv4 default route (2026-11-20). Adapter selection user-reported/screenshot prior to boot; guest routing screenshot-verified.
-- [ ] Test Kali-to-HYDRA-DC connectivity on the isolated LAN (`192.168.158.128`); inspect DNS, other NICs and routes before claiming full containment.
+- [x] Verify Kali-to-HYDRA-DC ICMP reachability on the isolated LAN: `ping -c 4 192.168.158.128` returned 4/4 replies, 0% loss, avg RTT 0.337 ms (2026-11-20 screenshot). This establishes ICMP reachability only.
+- [ ] Verify DNS, other NICs and IPv6/IPv4 routes before claiming full containment.
 - [ ] Move THEPUNISHER and SPIDERMAN and configure static `.130` / `.129` with DNS `.128`; verify the full lab works on the isolated LAN.
 - [ ] Verify guest isolation, correct IP/DNS and scoped connectivity on LAN segment before any traffic-interception test.
 - [ ] Verify containment and approved scope before active attack simulation.
