@@ -30,6 +30,12 @@ Each phase remains **not verified** until relevant lab evidence is recorded.
 - [ ] Verify computer secure-channel health and live authentication after diagnostics; domain controller discovery is not proof of either.
 - [x] Establish at least one successful client-to-server file-sharing connection by direct UNC path (observed during prior lab troubleshooting).
 
+## Active Directory object structure
+- [x] Inventory OUs with `Get-ADOrganizationalUnit -Filter *`: `Domain Controllers` and `Groups` (2026-11-20).
+- [ ] Inspect immediate child objects in the `Groups` OU and document their types.
+- [ ] Document relevant users, security groups, computer objects and Group Policy links based on verified results.
+- [ ] Upload the OU enumeration screenshot as redacted evidence when preparing the next screenshot batch.
+
 ## Transition to PEH Active Directory initial attack vectors
 - [ ] Identify authorised testing VM (e.g. Kali), verify isolation/network scope and take snapshots before attack simulation.
 - [ ] Study LLMNR/NBT-NS poisoning prerequisites and mitigations before running Responder in an isolated lab.
