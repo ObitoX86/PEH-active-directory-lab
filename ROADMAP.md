@@ -3,7 +3,8 @@
 Each phase remains **not verified** until relevant lab evidence is recorded.
 
 ## Phase 1 — Build and inventory
-- [ ] Verify VM names, OS versions, roles and hypervisor network modes.
+- [x] Capture and identify VMware display names of three VMs: Windows Server 2022, THEPUNISHER, SPIDERMAN (screenshot supplied 2026-11-20).
+- [ ] Verify installed operating systems, VM roles and hypervisor network modes.
 - [ ] Document domain controller, domain, client machines and test machine(s).
 - [ ] Produce a network topology diagram using confirmed details.
 - [x] Establish at least one successful client-to-server file-sharing connection by direct UNC path (observed during prior lab troubleshooting).
