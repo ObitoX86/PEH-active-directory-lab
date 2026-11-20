@@ -1058,13 +1058,38 @@ TcpTestSucceeded : True
 
 **Evidence:** User-provided PowerShell screenshot on 2026-11-20; screenshot is not yet uploaded as a redacted PNG in the repository.
 
-**Next step:** On SPIDERMAN, test resolution of the domain controller's A record directly through the intended DNS server:
+**Next step:** SPIDERMAN's hostname A lookup subsequently succeeded, documented in the following journal entry. Continue with AD service-discovery records and scope checks before offensive exercises.
+
+---
+
+## 2026-11-20 — SPIDERMAN resolves HYDRA-DC A record on isolated LAN
+
+**Task:** Verify that SPIDERMAN can obtain the correct domain-controller host IPv4 address from HYDRA-DC's DNS service after isolated-LAN migration.
+
+**PowerShell command:**
 
 ```powershell
 Resolve-DnsName HYDRA-DC.MARVEL.local -Server 192.168.158.128 -Type A
 ```
 
-Then verify scope/isolation and relevant authenticated services before offensive exercises.
+**Screenshot-verified result:**
+
+```text
+Name                   Type TTL  Section IPAddress
+HYDRA-DC.MARVEL.local  A    3600 Answer  192.168.158.128
+```
+
+**Analysis:** An explicit DNS query to `192.168.158.128` returned the correct A record for `HYDRA-DC.MARVEL.local`, with TTL 3600 seconds. This confirms DNS name-to-IPv4 resolution for this single host, not the availability of Active Directory's DNS SRV service-location records, authenticated domain operations or a healthy computer secure channel. Prior connectivity results showed SPIDERMAN can establish TCP 389 and THEPUNISHER can establish TCP 389 to this controller, but LDAP binds remain untested.
+
+**Evidence:** PowerShell screenshot provided in the PEH conversation on 2026-11-20; not yet uploaded as a redacted PNG to GitHub.
+
+**Next step:** Check the SRV record that Active Directory uses for domain controller discovery:
+
+```powershell
+Resolve-DnsName _ldap._tcp.dc._msdcs.MARVEL.local -Server 192.168.158.128 -Type SRV
+```
+
+Continue with network isolation and trust/AD functionality checks before running poisoning or other offensive exercises.
 
 ---
 
