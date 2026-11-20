@@ -372,7 +372,7 @@ VMnet1 is an available **host-only** network using `192.168.125.0`. Switching th
 
 **Evidence:** VMware Virtual Network Editor screenshot provided in conversation on 2026-11-20. Redacted PNG not yet uploaded to GitHub.
 
-## Configuration diagram (IP/DNS/domain from screenshots; NAT VMnet8 identified)
+## Historical NAT-baseline configuration diagram (before isolated-LAN migration)
 
 ```text
           [HYDRA-DC]                    AD domain controller + GC; VMware adapter: NAT
@@ -403,7 +403,7 @@ VMnet1 is an available **host-only** network using `192.168.125.0`. Switching th
    Kali-to-Windows reachability and containment still untested.
 ```
 
-### Portfolio topology (Mermaid)
+### Historical NAT-baseline topology (Mermaid; not current attachment state)
 
 The arrows below reflect **only the tested TCP 389 paths**; other network paths are not implied.
 
@@ -439,6 +439,27 @@ The user reports having created a separate VMware LAN segment named `PEH-AD-Isol
 VMware LAN segments do not provide DHCP automatically; the existing NAT DHCP lease behaviour cannot be relied upon after migration. The `192.168.158.0/24` address range may be reused on a **separate isolated network** because the original NICs should be moved, not connected to both networks simultaneously. Until migration and reachability checks complete, this is only a proposal—not proof of IP retention or isolation.
 
 **Sequence:** With backups in place, move the powered-off HYDRA-DC VM first because its IPv4 was already static; boot to check `.128`. Then move and configure Kali and clients individually with matching static addresses and DNS, test lab-only connectivity and verify no NAT bridge/extra NIC remains. Client-to-server connectivity can be interrupted during partial migration.
+
+## Current migration status — HYDRA-DC addressing preserved (2026-11-20)
+
+The user followed the instructions to move **HYDRA-DC** to LAN segment `PEH-AD-Isolated`, and supplied a screenshot of `ipconfig /all` on the powered-on server afterward.
+
+| Observed field | Screenshot value |
+| --- | --- |
+| Hostname and DNS suffix | `HYDRA-DC`, `MARVEL.local` |
+| Network interface | `Ethernet0` |
+| IPv4 and subnet mask | `192.168.158.128`, `255.255.255.0` |
+| DHCP | No (static) |
+| Default gateway | Empty |
+| DNS servers | `::1`, `127.0.0.1` |
+
+**Interpretation:** The server's static IPv4, absence of gateway and loopback DNS resolver settings are preserved. A command run inside the guest does not independently show the VMware network adapter's selected segment. The migration is therefore **user-reported with post-migration guest IP evidence**, not direct VMware adapter-setting screenshot evidence. Do not infer working connections or isolation based solely on the IP configuration.
+
+**Topology status:** The earlier NAT diagram above is now **historical baseline evidence** and does not represent all guests' current attachments. HYDRA-DC is reported on the isolated segment; Kali, THEPUNISHER and SPIDERMAN have not yet been confirmed migrated and may still be configured for NAT. This mixed state explains expected temporary loss of communication between guests.
+
+**Planned next:** Identify Kali's NetworkManager profile, arrange persistent static `192.168.158.131/24` (DNS `192.168.158.128`, no gateway), migrate Kali, and test reachability only to the lab controller. Continue the clients afterward.
+
+**Evidence:** `ipconfig /all` screenshot supplied on 2026-11-20; image not yet committed to `evidence/`.
 
 ## Details to confirm
 
