@@ -29,7 +29,7 @@ The displayed names alone do not prove host roles, domain membership or network 
 | DNS servers | `::1` and `127.0.0.1` (loopback) |
 | IP routing enabled | No |
 
-**Interpretation:** DHCP is disabled; an IPv4 address is configured. The DNS servers are loopback addresses. An additional successful `Get-ADDomainController` query verifies the server is identified as an AD domain controller and Global Catalog; it does not independently test DNS availability or every AD service. The VMware virtual switch mode and which clients are on the same subnet are still unknown.
+**Interpretation:** DHCP is disabled; an IPv4 address is configured. The DNS servers are loopback addresses. An additional successful `Get-ADDomainController` query verifies the server is identified as an AD domain controller and Global Catalog; it does not independently test DNS availability or every AD service. The VMware virtual switch mode remains unknown; later client screenshots show both clients have addresses in the same IPv4 subnet.
 
 **Prior observation caveat:** An earlier troubleshooting session used a direct UNC path to `192.168.10.10`, whereas the current screenshot reports `192.168.158.128` for `HYDRA-DC`. Do not assume these are the same host/interface or that the network was changed without confirming the configuration.
 
@@ -82,6 +82,24 @@ Get-CimInstance Win32_ComputerSystem |
 
 **Interpretation:** The client computer reports that it is joined to the `MARVEL.local` domain. This verifies configured domain membership; active communication with the domain controller, live authentication and current Group Policy operation require further testing.
 
+## Verified SPIDERMAN network configuration — `ipconfig /all` screenshot, 2026-11-20
+
+| Field | Observed value |
+| --- | --- |
+| VMware display name / host name | `SPIDERMAN` |
+| Primary DNS suffix | `MARVEL.local` |
+| Connection-specific DNS suffix | `localdomain` |
+| IPv4 address | `192.168.158.129` (preferred) |
+| Subnet mask | `255.255.255.0` (`/24`) |
+| DHCP enabled | Yes |
+| Default gateway | `192.168.158.2` |
+| DHCP server | `192.168.158.254` |
+| DNS server | `192.168.158.128` |
+| Primary WINS server | `192.168.158.2` |
+| NetBIOS over TCP/IP | Enabled |
+
+**Comparison:** SPIDERMAN is configured within `192.168.158.0/24` alongside HYDRA-DC and THEPUNISHER. Its configured DNS server matches HYDRA-DC's IPv4 address. DHCP assigns the client configuration from `192.168.158.254`. This proves the observed settings, **not** working DNS, network reachability, or domain membership. A domain membership query is pending.
+
 ## Verified connection from earlier troubleshooting
 
 A Windows client referred to as **Punisher** accessed a lab Windows server using a direct UNC path by private IP. This is evidence of that specific connection; it does not verify all three VMware entries, the domain setup, or network discovery settings. The exact relationship between the previously reported client and **THEPUNISHER** is to be confirmed.
@@ -89,13 +107,21 @@ A Windows client referred to as **Punisher** accessed a lab Windows server using
 ## Proposed diagram (pending verified topology)
 
 ```text
-[Windows Server 2022 / HYDRA-DC]     [THEPUNISHER]       [SPIDERMAN]
-   192.168.158.128/24               192.168.158.130/24       ?
-      AD DC + GC                     Domain-joined client
-           ^                               |
-           +---------- DNS configured -----+
-        192.168.158.0/24 (IP subnet for first two hosts)
-          VMware network mode / reachability: TO VERIFY
+          [HYDRA-DC]                    AD domain controller + GC
+          192.168.158.128/24             Domain: MARVEL.local
+                 ^
+                 | Configured as DNS server by both clients
+          +------+----------------------+
+          |                             |
+   [THEPUNISHER]                   [SPIDERMAN]
+   192.168.158.130/24              192.168.158.129/24
+   Domain joined: YES              Domain joined: TO VERIFY
+   DHCP enabled                    DHCP enabled
+   Gateway: 192.168.158.2          Gateway: 192.168.158.2
+
+   All three IPv4 settings fall within 192.168.158.0/24.
+   Diagram reflects configuration, NOT tested connectivity.
+   VMware network mode: TO VERIFY.
 ```
 
 No connections are drawn until their configuration is confirmed.
@@ -106,7 +132,7 @@ No connections are drawn until their configuration is confirmed.
 2. Which additional domain controller services are functioning (AD controller identity is verified).
 3. Additional domain configuration and DNS health (domain identified as `MARVEL.local`; publish only if safe).
 4. VMware adapter types (NAT, host-only, custom VMnet, etc.).
-5. SPIDERMAN IP address, subnet mask, gateway and DNS server settings (HYDRA-DC and THEPUNISHER baselines recorded).
+5. Verify actual connectivity and DNS resolution (all three IPv4 configuration baselines have been recorded).
 6. SPIDERMAN domain membership (THEPUNISHER membership verified via `Win32_ComputerSystem`).
 7. Redacted screenshot evidence for architecture and configuration.
 
