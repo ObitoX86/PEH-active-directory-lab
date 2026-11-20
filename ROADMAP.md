@@ -23,7 +23,8 @@ Each phase remains **not verified** until relevant lab evidence is recorded.
 - [x] Create a Mermaid network topology with verified IP addresses, domain roles and both tested TCP 389 paths (2026-11-20).
 - [x] Confirm domain controller discovery from SPIDERMAN using `nltest /dsgetdc:MARVEL.local` (returned HYDRA-DC at `192.168.158.128`, 2026-11-20).
 - [x] Run SPIDERMAN computer secure-channel diagnostic: `Test-ComputerSecureChannel -Verbose` returned **False** with a broken-channel message (2026-11-20).
-- [ ] Investigate SPIDERMAN's failed secure-channel check in an elevated shell using read-only `nltest /sc_query:MARVEL.local`; root cause and repair status unknown.
+- [x] Run `nltest /sc_query:MARVEL.local` on SPIDERMAN: last-used Netlogon channel reports `0x0 NERR_Success` with HYDRA-DC (2026-11-20).
+- [ ] Re-run `Test-ComputerSecureChannel -Verbose` in explicitly elevated PowerShell to resolve contradictory diagnostic observations; root cause and current health remain unknown.
 - [ ] Verify computer secure-channel health and live authentication after diagnostics; domain controller discovery is not proof of either.
 - [x] Establish at least one successful client-to-server file-sharing connection by direct UNC path (observed during prior lab troubleshooting).
 
