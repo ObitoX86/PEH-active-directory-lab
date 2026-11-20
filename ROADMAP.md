@@ -76,9 +76,10 @@ Each phase remains **not verified** until relevant lab evidence is recorded.
 - [x] Screenshot-verify SPIDERMAN's forced DC locator: `nltest /dsgetdc:MARVEL.local /force` returned `\\HYDRA-DC.MARVEL.local`, `\\192.168.158.128`, forest/domain `MARVEL.local`, site `Default-First-Site-Name`, flags including PDC/GC/LDAP/KDC/DNS_DC/WRITABLE, and `The command completed successfully` (2026-11-20). DC discovery works; client computer secure-channel remains separately unresolved.
 - [x] Screenshot-verify Kali routing after isolated LAN migration: `ip -4 route && ip -6 route` shows only connected IPv4 route `192.168.158.0/24 dev eth0` (source `192.168.158.131`, metric 100) and IPv6 link-local `fe80::/64 dev eth0` (metric 1024). No IPv4 or IPv6 default route appears (2026-11-20). This confirms Kali's routing configuration, not complete VMware isolation.
 - [x] Screenshot-verify Kali's external IPv4 route lookup: `ip -4 route get 1.1.1.1` returned `RTNETLINK answers: Network is unreachable` (2026-11-20). This read-only kernel lookup does not send network packets and confirms no usable IPv4 route to that destination at the time.
-- [ ] Audit VMware Workstation network adapters for all four guests: one intended network adapter each, selected LAN Segment `PEH-AD-Isolated`, no second NAT/Bridged/Host-only NIC, and no unplanned host connection before traffic-poisoning exercises.
+- [x] User confirmed VMware Workstation adapter audit for all four guests: one network adapter per VM, each connected to LAN Segment `PEH-AD-Isolated`, with no extra NAT/Bridged/Host-only adapter (2026-11-20, user confirmation; no new screenshots).
 - [ ] Verify all four VMs operate correctly on the isolated LAN; do not infer AD authentication from network settings alone.
-- [ ] Verify guest isolation, correct IP/DNS and scoped connectivity on LAN segment before any traffic-interception test.
+- [x] Document planned private lab scope: HYDRA-DC `.128`, SPIDERMAN `.129`, THEPUNISHER `.130`, Kali `.131` on `192.168.158.0/24`; VMware adapter audit user-confirmed; lab-only connectivity and DC discovery tested. No attack traffic yet.
+- [ ] Run a passive, non-poisoning Responder analysis exercise on Kali before considering an active lab demonstration.
 - [ ] Verify containment and approved scope before active attack simulation.
 - [ ] Study LLMNR/NBT-NS poisoning prerequisites and mitigations before running Responder in an isolated lab.
 - [ ] Keep SPIDERMAN trust-status anomaly separate from attack findings; investigate only if a lab depends on healthy computer trust.
