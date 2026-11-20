@@ -160,7 +160,32 @@ SPIDERMAN   MARVEL.local  True
 
 **Analysis:** The reported modes are consistent with the machines' `192.168.158.0/24` address settings. NAT is not proof of full containment, and the hypervisor's specific virtual switch and live packet connectivity have not yet been verified. Do not mark outbound access or inter-VM connectivity as tested.
 
-**Follow-up:** Run a targeted DNS lookup from THEPUNISHER for `HYDRA-DC.MARVEL.local`; record output and then test connection to the domain controller.
+**Follow-up:** The targeted DNS lookup succeeded in the next entry; test TCP connectivity to the domain controller next.
+
+---
+
+## 2026-11-20 — THEPUNISHER resolves domain controller hostname
+
+**Task:** Validate DNS name resolution from a domain-joined Windows client.
+
+**Command (THEPUNISHER):**
+
+```powershell
+Resolve-DnsName HYDRA-DC.MARVEL.local
+```
+
+**Evidence:** User-supplied screenshot in the project conversation on 2026-11-20; screenshot itself has not been committed to GitHub.
+
+**Observed result:**
+
+```text
+Name                    Type  TTL   Section  IPAddress
+HYDRA-DC.MARVEL.local   A     3600  Answer   192.168.158.128
+```
+
+**Analysis:** THEPUNISHER successfully resolved the domain controller hostname to its independently verified IPv4 address. Its earlier network configuration named `192.168.158.128` as the DNS server. This tests hostname resolution, not successful LDAP/Kerberos connectivity or live domain authentication.
+
+**Follow-up:** On THEPUNISHER, run `Test-NetConnection HYDRA-DC.MARVEL.local -Port 389` to test TCP reachability to the LDAP service port; interpret the output without treating port connectivity as authentication.
 
 ---
 
