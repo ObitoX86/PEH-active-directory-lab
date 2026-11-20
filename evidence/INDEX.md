@@ -1,6 +1,6 @@
 # Screenshot Evidence Register — 20 November 2026
 
-**Status: 14/14 PNG images confirmed present in the GitHub `evidence/` directory.** The files were prepared from the project's supplied screenshots and uploaded on 2026-11-20. The technical outcomes are separately documented in [the assessment journal](../docs/03-assessment-journal.md) and [the network architecture document](../docs/02-network-architecture.md).
+**Status: 14 original PNG images confirmed present in the GitHub `evidence/` directory.** An additional 26 screenshots from the same day have been organised and numbered 15–40 but are **pending upload**; see [batch 2 upload plan](UPLOAD-PLAN-2026-11-20.md). Do not interpret the pending files as already present. The files were prepared from the project's supplied screenshots and uploaded on 2026-11-20. The technical outcomes are separately documented in [the assessment journal](../docs/03-assessment-journal.md) and [the network architecture document](../docs/02-network-architecture.md).
 
 | File | Evidence of |
 | --- | --- |
