@@ -260,7 +260,7 @@ The command completed successfully
 
 **Interpretation:** The Netlogon query reports `0x0 NERR_Success` for the last-used secure-channel state with `HYDRA-DC.MARVEL.local`. However, the earlier `Test-ComputerSecureChannel -Verbose` returned `False`. The two observations should **both** be retained; success from a last-used-state query does not conclusively override a failed direct test. Whether the earlier PowerShell session was elevated is unknown. No repair has been performed.
 
-**Recommended next diagnostic (no repair):** Open PowerShell **as Administrator** on SPIDERMAN and rerun `Test-ComputerSecureChannel -Verbose`. Record both the boolean value and verbose messages.
+**Follow-up result:** The user reported rerunning `Test-ComputerSecureChannel -Verbose` as Administrator on SPIDERMAN; it **still returned `False`**. Root cause remains unverified. Repair is deferred while the course continues. See [tracking issue #1](https://github.com/ObitoX86/PEH-active-directory-lab/issues/1). The repeated output was reported in chat, not screenshot-submitted.
 
 **Evidence:** Screenshot supplied in the conversation. This entry includes only the relevant result, not a committed image.
 
@@ -290,6 +290,7 @@ A Windows client referred to as **Punisher** accessed a lab Windows server using
    Authenticated LDAP binding and user logon remain untested.
    SPIDERMAN secure-channel test: FALSE.
    SPIDERMAN nltest /sc_query last-used channel status: NERR_Success.
+   Elevated repetition of Test-ComputerSecureChannel: FALSE (user-reported).
    Discrepancy unresolved; no repair performed.
    All three VMs: NAT (server screenshot; clients user report).
    NAT switch identity not independently verified; TCP 389 paths tested.
@@ -319,7 +320,7 @@ Both clients are configured to use HYDRA-DC for DNS; THEPUNISHER also has a sepa
 3. Additional domain configuration and DNS health (domain identified as `MARVEL.local`; publish only if safe).
 4. Screenshot evidence for client NAT configuration if needed (their NAT settings are user-confirmed).
 5. Validate other services and authenticated domain operations (both clients succeeded on TCP 389; THEPUNISHER also succeeded in a separate DNS lookup).
-6. Recheck SPIDERMAN computer secure channel in elevated PowerShell; earlier direct test returned False but /sc_query reported NERR_Success for last-used status. Authenticated domain operations remain untested.
+6. SPIDERMAN elevated secure-channel check repeated and still False; root cause and impact on computer-authenticated exercises remain unresolved. See issue #1; do not assume authenticated domain operations are healthy.
 7. Redacted screenshot evidence for architecture and configuration.
 
 This diagram is grounded in supplied settings and successful TCP tests. Expand it only when subsequent tests verify additional paths.
