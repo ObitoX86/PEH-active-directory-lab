@@ -63,7 +63,7 @@ Each phase remains **not verified** until relevant lab evidence is recorded.
 - [ ] Verify DNS, other NICs and IPv6/IPv4 routes before claiming full containment.
 - [x] Verify THEPUNISHER's current Windows network adapter is `Ethernet0`, status `Up`, hardware `Intel(R) 82574L Gigabit Network Connection` via `Get-NetAdapter` screenshot (2026-11-20).
 - [x] User confirmed executing `netsh interface ipv4 set address name="Ethernet0" static 192.168.158.130 255.255.255.0 none` on THEPUNISHER (2026-11-20; output not yet independently verified).
-- [ ] Verify THEPUNISHER's IP, DHCP status, gateway and DNS with `ipconfig /all`; explicitly set DNS to HYDRA-DC if needed.
+- [x] Screenshot-verify THEPUNISHER post-change `ipconfig /all`: hostname `THEPUNISHER`, DNS suffix `MARVEL.local`, IPv4 `192.168.158.130/24`, DHCP `No`, gateway blank, DNS `192.168.158.128` (2026-11-20). No further IPv4/DNS change needed before VMware segment migration.
 - [ ] Move THEPUNISHER to `PEH-AD-Isolated`, verify address and DC connectivity.
 - [ ] Move SPIDERMAN and configure static `192.168.158.129/24` with DNS `.128`; verify the full lab works on the isolated LAN.
 - [ ] Verify guest isolation, correct IP/DNS and scoped connectivity on LAN segment before any traffic-interception test.
