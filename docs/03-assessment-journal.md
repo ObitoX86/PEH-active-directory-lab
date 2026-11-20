@@ -730,6 +730,34 @@ sudo nmcli connection modify "Wired connection 1" \
 
 ---
 
+## 2026-11-20 — Kali saved static IPv4 profile independently read back
+
+**Task:** Verify the saved NetworkManager settings before changing Kali's VMware network attachment.
+
+**Command:**
+
+```bash
+nmcli -f ipv4.method,ipv4.addresses,ipv4.gateway,ipv4.dns,ipv4.never-default connection show "Wired connection 1"
+```
+
+**Screenshot-verified result:**
+
+```text
+ipv4.method:         manual
+ipv4.addresses:      192.168.158.131/24
+ipv4.gateway:        --
+ipv4.dns:            192.168.158.128
+ipv4.never-default:  yes
+```
+
+**Analysis:** The stored Kali connection profile is correctly configured for the proposed contained PEH LAN: static IPv4 .131/24, domain controller as DNS, no IPv4 gateway or default route. This does **not** mean the currently active connection has applied those changes or that its VMware adapter has moved. Once Kali is connected solely to the LAN segment and this profile is active, internet access is normally unavailable by design. This improves attack-lab containment but must be checked for any extra NICs or routes.
+
+**Evidence:** Kali terminal screenshot supplied in the conversation on 2026-11-20; PNG not yet committed to `evidence/`.
+
+**Next step:** Shut down Kali, attach its sole VMware network adapter to `PEH-AD-Isolated`, boot, and verify the active interface IP plus routes before testing connectivity to HYDRA-DC.
+
+---
+
 ## New entry template
 
 **Date:** YYYY-MM-DD  
