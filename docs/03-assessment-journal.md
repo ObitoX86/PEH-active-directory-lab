@@ -16,6 +16,20 @@ This log captures **observed** work, not just planned tutorials. Dates should re
 
 ---
 
+## 2026-11-20 — Server network configuration baseline
+
+**Task:** Record the Windows Server network configuration using `ipconfig /all` in the existing VMware lab.
+
+**Evidence:** Chat-supplied screenshot showing the command output (not yet uploaded to GitHub).
+
+**Observed result:** Server reports host name `HYDRA-DC`, primary DNS suffix `MARVEL.local`, IPv4 `192.168.158.128`, subnet mask `255.255.255.0`, DHCP disabled, no configured default gateway, and DNS servers `::1` and `127.0.0.1`.
+
+**Analysis:** This establishes a network-configuration baseline for the server VM and suggests local DNS resolution is intended. It does not establish the operational status of Active Directory Domain Services.
+
+**Follow-up:** Verify AD DS role and the server's domain controller status; then inventory the client machines' IP/DNS settings.
+
+---
+
 ## New entry template
 
 **Date:** YYYY-MM-DD  
