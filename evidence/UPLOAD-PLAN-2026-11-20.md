@@ -1,6 +1,6 @@
-# Evidence batch 2 — planned upload (20 November 2026)
+# Evidence batch 2 — upload verified (20 November 2026)
 
-**Status: waiting for image upload.** The first 14 screenshot PNGs are already confirmed in this repository. These **26 new screenshots (15–40)** are prepared, named, and packaged from the user-supplied images, but are **not yet present in GitHub**. Do not mark them uploaded or embed broken links before verification.
+**Status: completed.** The first 14 screenshots and the additional 26 screenshots (15–40) were verified present in the GitHub `evidence/` directory on 2026-11-20. All 40 have descriptive filenames and are included in the [inline screenshot gallery](INDEX.md).
 
 | Filename to upload into `evidence/` | Screenshot evidence |
 | --- | --- |
@@ -31,7 +31,7 @@
 | `2026-11-20_39-kali-isolated-ipv4-ipv6-routes.png` | Kali IPv4 and IPv6 routes |
 | `2026-11-20_40-kali-no-external-ipv4-route.png` | Kali unreachable external IPv4 route |
 
-## Upload instructions
+## Upload instructions (completed)
 
 1. Extract the prepared batch ZIP from this conversation.
 2. In its `upload-to-evidence/` folder, select the **26 PNG files** (not the ZIP or Markdown files).
@@ -42,3 +42,5 @@
 ## Quality and privacy
 
 These screenshots illustrate authorised local lab topology, Active Directory inventory, and network connectivity. They do not demonstrate exploitation or recovered credentials. Review screenshots for anything you do not want public before changing repository visibility; do not commit real passwords, authentication tokens, or credential hashes. Separate explicit user confirmation of snapshot creation and four-VM adapter audit from screenshot-verified results.
+
+**Completion check:** 40 matching PNG filenames present in GitHub repository directory listing. Screen content is user-provided evidence; see accompanying test analysis for limits of each conclusion.
