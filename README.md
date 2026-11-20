@@ -36,7 +36,23 @@ This project documents the design, administration and authorised security testin
 
 ## Screenshot evidence
 
-**14 of 14 lab setup and verification screenshots are in GitHub.** Browse the [evidence register](evidence/INDEX.md) for direct links to VM inventory, IP and DNS configuration, domain membership, network tests, and the unresolved secure-channel diagnostic.
+**14 of 14 lab setup and verification screenshots are in GitHub.** Selected evidence is displayed below. The [complete evidence gallery](evidence/INDEX.md) displays all 14 images directly, and the [network architecture document](docs/02-network-architecture.md) embeds them beside the corresponding test results.
+
+### Virtual machines
+
+![VMware Workstation inventory](evidence/2026-11-20_01-vmware-inventory.png)
+
+### Domain controller verification
+
+![HYDRA-DC Active Directory identity](evidence/2026-11-20_03-hydra-dc-ad-identity.png)
+
+### Client connectivity verification
+
+![SPIDERMAN TCP 389 test](evidence/2026-11-20_11-spiderman-ldap-tcp389.png)
+
+### Outstanding secure-channel check
+
+![SPIDERMAN secure-channel check reported False](evidence/2026-11-20_13-spiderman-secure-channel-failure.png)
 
 ## Ethics and scope
 
