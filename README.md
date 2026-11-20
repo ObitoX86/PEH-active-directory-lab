@@ -39,7 +39,7 @@ This project documents the design, administration and authorised security testin
 
 ## Screenshot evidence
 
-**14 original lab setup and verification screenshots are in GitHub.** A second batch of **26** network-migration and AD-verification screenshots has been organised and is [pending upload](evidence/UPLOAD-PLAN-2026-11-20.md); these images are not yet embedded or present on GitHub. Selected evidence is displayed below. The [complete evidence gallery](evidence/INDEX.md) displays all 14 images directly, and the [network architecture document](docs/02-network-architecture.md) embeds them beside the corresponding test results.
+**All 40 lab screenshots have been uploaded and verified in GitHub.** The original 14 and the 26 additional AD, VMware, isolation and connectivity screenshots are organised in the [40-image inline evidence gallery](evidence/INDEX.md). The [network architecture](docs/02-network-architecture.md), [AD structure](docs/06-active-directory-structure.md) and [assessment journal](docs/03-assessment-journal.md) now embed the relevant images beside their results. Selected examples are shown below.
 
 ### Virtual machines
 
@@ -56,6 +56,14 @@ This project documents the design, administration and authorised security testin
 ### Outstanding secure-channel check
 
 ![SPIDERMAN secure-channel check reported False](evidence/2026-11-20_13-spiderman-secure-channel-failure.png)
+
+### Isolated Active Directory lab: final verification
+
+![Kali on the private VMware LAN segment](evidence/2026-11-20_25-kali-isolated-vmware-adapter.png)
+
+![SPIDERMAN Active Directory DNS SRV discovery](evidence/2026-11-20_37-spiderman-isolated-dns-srv.png)
+
+![Kali external IPv4 route check](evidence/2026-11-20_40-kali-no-external-ipv4-route.png)
 
 ## Ethics and scope
 
