@@ -504,7 +504,9 @@ The user reports moving THEPUNISHER's VMware adapter to `PEH-AD-Isolated` and re
 
 **Result:** The intended guest network configuration is preserved after the reported segment change. The screenshot cannot itself show VMware's selected segment or verify TCP connectivity, DNS resolution, Kerberos, domain logon or isolation. Kali has confirmed ICMP connectivity to HYDRA-DC on the separate LAN, but Windows-client connectivity after migration is not yet tested.
 
-**Next test:** Run `Test-NetConnection 192.168.158.128 -Port 389` on THEPUNISHER, then address SPIDERMAN's migration independently. The earlier NAT topology diagram remains historical only.
+**Post-migration TCP connectivity verified on THEPUNISHER (2026-11-20):** The user ran `Test-NetConnection 192.168.158.128 -Port 389` and supplied a screenshot showing `RemoteAddress=192.168.158.128`, `RemotePort=389`, `InterfaceAlias=Ethernet0`, `SourceAddress=192.168.158.130` and `TcpTestSucceeded=True`. This confirms a successful TCP connection to the domain controller's LDAP port from the isolated Windows client, not successful LDAP authentication or full network containment.
+
+**Next:** Identify SPIDERMAN's interface and prepare static IP/DNS before switching it to the isolated segment. The earlier NAT topology diagram remains historical only.
 
 **Evidence:** PowerShell screenshot supplied 2026-11-20; PNG not yet uploaded to GitHub.
 
