@@ -22,7 +22,8 @@ Each phase remains **not verified** until relevant lab evidence is recorded.
 - [x] Document domain controller and both visible clients (hostnames, addresses, AD membership) from supplied evidence.
 - [x] Identify Kali Linux testing environment via `ip -br addr` (`eth0` UP, `192.168.158.131/24`; 2026-11-20).
 - [x] Verify Kali VMware Network Adapter is NAT and connected at power-on (Settings screenshot, 2026-11-20).
-- [ ] Identify the precise VMware NAT network/VMnet, test scoped connectivity and record containment; NAT/IP range alone does not establish isolation.
+- [x] Identify VMware NAT VMnet8 (`192.168.158.0`) and host-only VMnet1 (`192.168.125.0`) from Virtual Network Editor (2026-11-20).
+- [ ] Test scoped Kali-to-Windows connectivity and record containment; NAT alone does not establish isolation.
 - [x] Create a Mermaid network topology with verified IP addresses, domain roles and both tested TCP 389 paths (2026-11-20).
 - [x] Confirm domain controller discovery from SPIDERMAN using `nltest /dsgetdc:MARVEL.local` (returned HYDRA-DC at `192.168.158.128`, 2026-11-20).
 - [x] Run SPIDERMAN computer secure-channel diagnostic: `Test-ComputerSecureChannel -Verbose` returned **False** with a broken-channel message (2026-11-20).
@@ -45,7 +46,8 @@ Each phase remains **not verified** until relevant lab evidence is recorded.
 ## Transition to PEH Active Directory initial attack vectors
 - [x] Identify Kali Linux as intended authorised tester at `192.168.158.131/24`.
 - [x] Confirm Kali's hypervisor Network Adapter is NAT (screenshot).
-- [ ] Verify shared VMnet, isolation and approved scope; take VM snapshots before attack simulation.
+- [x] Identify VMnet8 as the NAT subnet (VMware Virtual Network Editor screenshot).
+- [ ] Verify containment and approved scope; take recoverable VM snapshots before active attack simulation.
 - [ ] Study LLMNR/NBT-NS poisoning prerequisites and mitigations before running Responder in an isolated lab.
 - [ ] Keep SPIDERMAN trust-status anomaly separate from attack findings; investigate only if a lab depends on healthy computer trust.
 
