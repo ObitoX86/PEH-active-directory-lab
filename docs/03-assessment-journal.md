@@ -1,5 +1,7 @@
 # Assessment Journal
 
+**VM inventory screenshot:** [2026-11-20_01-vmware-inventory.png](../evidence/2026-11-20_01-vmware-inventory.png). All 14 screenshot files are listed in the [evidence register](../evidence/INDEX.md).
+
 This log captures **observed** work, not just planned tutorials. Dates should reflect actual lab work when known.
 
 ## Prior activity — date to confirm
@@ -22,7 +24,7 @@ This log captures **observed** work, not just planned tutorials. Dates should re
 
 **Task:** Record the Windows Server network configuration using `ipconfig /all` in the existing VMware lab.
 
-**Evidence:** Chat-supplied screenshot showing the command output (not yet uploaded to GitHub).
+**Evidence:** Linked screenshot above.
 
 **Observed result:** Server reports host name `HYDRA-DC`, primary DNS suffix `MARVEL.local`, IPv4 `192.168.158.128`, subnet mask `255.255.255.0`, DHCP disabled, no configured default gateway, and DNS servers `::1` and `127.0.0.1`.
 
@@ -154,7 +156,7 @@ SPIDERMAN   MARVEL.local  True
 
 **Task:** Inspect the VMware Workstation VM Settings > Hardware > Network Adapter page for the Windows Server 2022 VM.
 
-**Evidence:** VMware Settings screenshot supplied in the chat on 2026-11-20. No image uploaded to the repository yet.
+**Evidence:** Linked screenshot above.
 
 **Observed result:** `NAT: Used to share the host's IP address` is selected; `Connected` and `Connect at power on` are checked. The VM guest was previously identified as `HYDRA-DC`.
 
