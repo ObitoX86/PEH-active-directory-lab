@@ -66,7 +66,33 @@ HYDRA-DC.MARVEL.local   MARVEL.local  192.168.158.128    True
 
 **Analysis:** THEPUNISHER and HYDRA-DC (`192.168.158.128/24`) have IPv4 settings in the same subnet, and THEPUNISHER is configured to query HYDRA-DC for DNS. This is consistent with an Active Directory lab client but does not prove domain membership, DNS availability or successful domain authentication. The DHCP server is distinct from the DC.
 
-**Follow-up:** Verify THEPUNISHER domain membership from Windows; then collect SPIDERMAN's configuration.
+**Follow-up:** THEPUNISHER domain membership was verified in the next entry; SPIDERMAN network configuration remains to collect.
+
+---
+
+## 2026-11-20 — THEPUNISHER domain membership verification
+
+**Task:** Confirm whether the Windows client is joined to the Active Directory domain.
+
+**Command:**
+
+```powershell
+Get-CimInstance Win32_ComputerSystem |
+    Select-Object Name, Domain, PartOfDomain
+```
+
+**Evidence:** PowerShell screenshot supplied in the chat on 2026-11-20; repository image upload pending redaction.
+
+**Observed result:**
+
+```text
+Name          Domain        PartOfDomain
+THEPUNISHER   MARVEL.local  True
+```
+
+**Analysis:** Local Windows CIM data reports THEPUNISHER belongs to the `MARVEL.local` domain. This verifies domain membership configuration, but this command alone does not demonstrate live domain controller connectivity or successful domain authentication.
+
+**Follow-up:** Collect SPIDERMAN's network settings, then its domain membership status.
 
 ---
 
