@@ -548,7 +548,11 @@ Neither protocol had a displayed default route. IPv6's `fe80::/64` is link-local
 
 **Kali external-route lookup verified (2026-11-20):** The user ran `ip -4 route get 1.1.1.1` and the screenshot returned `RTNETLINK answers: Network is unreachable`. This is a read-only kernel lookup, with no packets sent, showing there was no usable route to this external IPv4 address. Together with the prior IPv4/IPv6 route tables, the result corroborates Kali's intended local-only networking configuration, **not complete hypervisor/host isolation**.
 
-**Next:** Audit VMware Workstation network adapters for all four VMs: confirm exactly the intended LAN segment `PEH-AD-Isolated`, no additional NAT/bridged/host-only NICs, and no unintentional network bridges before active traffic interception exercises.
+**VMware adapter audit (user-confirmed, 2026-11-20):** User reported checking all four guests in VMware Workstation and confirmed each has a single Network Adapter set to LAN Segment `PEH-AD-Isolated`, without additional NAT, bridged or host-only adapters. No new VMware screenshots were supplied, so do not label this an independently verified adapter audit.
+
+**Network scope:** HYDRA-DC `.128`, SPIDERMAN `.129`, THEPUNISHER `.130`, Kali `.131` on `192.168.158.0/24`. Previously verified no-default-route Kali state, successful local ICMP/TCP 389 tests and AD DNS/DC Locator strongly support the intended contained topology. SPIDERMAN's existing secure-channel issue remains independent.
+
+**Next phase:** Begin PEH name-resolution-poisoning study by first checking the installed Responder tool's help, then passive monitoring, before any controlled active demonstration. Do not connect poisoning tools to NAT or bridged networks.
 
 **Evidence:** SPIDERMAN post-boot `ipconfig /all` screenshot received 2026-11-20; redacted PNG pending GitHub upload.
 
