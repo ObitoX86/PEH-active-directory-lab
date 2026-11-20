@@ -263,7 +263,35 @@ nltest /dsgetdc:MARVEL.local
 
 **Analysis:** Windows on SPIDERMAN successfully discovered the expected Active Directory domain controller. Advertised capability flags do not establish successful authenticated user access or secure-channel health. The domain GUID was intentionally not reproduced in this journal entry.
 
-**Follow-up:** On SPIDERMAN, run `Test-ComputerSecureChannel -Verbose` without `-Repair`, then assess the result.
+**Follow-up:** The secure-channel test on SPIDERMAN returned `False` (next entry). Diagnose before making repairs.
+
+---
+
+## 2026-11-20 — SPIDERMAN secure-channel test reports failure
+
+**Task:** Check whether SPIDERMAN's computer account secure channel to the `MARVEL.local` domain is healthy.
+
+**Command run on SPIDERMAN:**
+
+```powershell
+Test-ComputerSecureChannel -Verbose
+```
+
+**Evidence:** User-supplied PowerShell screenshot in the conversation on 2026-11-20; no image uploaded to GitHub.
+
+**Observed result:**
+
+```text
+VERBOSE: Performing the operation "Test-ComputerSecureChannel" on target "SPIDERMAN".
+False
+VERBOSE: The secure channel between the local computer and the domain MARVEL.local is broken.
+```
+
+**Interpretation:** The command reported a failed computer-domain secure-channel check despite previously successful domain controller discovery and TCP connectivity to `192.168.158.128:389`. This is an unresolved authentication/trust diagnostic observation, **not evidence of the underlying cause**, exploitation or a confirmed vulnerability. Administrative elevation was not established from the screenshot.
+
+**Decision:** No repair, machine account reset, unjoin/rejoin, or password change has been performed.
+
+**Next action:** From SPIDERMAN, use an elevated PowerShell session to run `nltest /sc_query:MARVEL.local`. Record the status output and compare with this test before deciding on further diagnostics. The `/sc_query` result describes the channel's last-used state, not necessarily a fresh authentication.
 
 ---
 
