@@ -535,7 +535,11 @@ The user reported switching SPIDERMAN's VMware adapter to the dedicated `PEH-AD-
 
 **Important limitation:** DNS SRV and A answers do not establish an authenticated LDAP bind, healthy machine trust, Kerberos service or complete LAN containment.
 
-**Next read-only check:** On SPIDERMAN run `nltest /dsgetdc:MARVEL.local /force` to test DC Locator; interpret its result as discovery, not as a secure-channel repair.
+**Windows DC Locator verified (2026-11-20):** SPIDERMAN ran `nltest /dsgetdc:MARVEL.local /force`. The supplied screenshot reports DC `\\HYDRA-DC.MARVEL.local`, address `\\192.168.158.128`, domain and forest `MARVEL.local`, DC and client site `Default-First-Site-Name`, and `The command completed successfully`. Flags include `PDC`, `GC`, `DS`, `LDAP`, `KDC`, `TIMESERV`, `WRITABLE`, `DNS_DC` and others.
+
+**Interpretation:** Forced DC discovery works from SPIDERMAN after migration. Advertised capabilities do not prove authentication, application service health, healthy secure channel or complete network isolation. The prior `Test-ComputerSecureChannel` failure remains a separate issue.
+
+**Next:** Review Kali's IPv4 and IPv6 routing with `ip -4 route && ip -6 route`, then check VMware adapter isolation before using attack tools.
 
 **Evidence:** SPIDERMAN post-boot `ipconfig /all` screenshot received 2026-11-20; redacted PNG pending GitHub upload.
 
