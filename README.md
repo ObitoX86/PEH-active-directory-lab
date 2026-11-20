@@ -12,9 +12,9 @@ This project documents the design, administration and authorised security testin
 
 | Area | Status | Evidence or next action |
 | --- | --- | --- |
-| Active Directory lab inventory | Windows hosts documented; Kali interface captured | HYDRA-DC (.128), SPIDERMAN (.129), THEPUNISHER (.130) in MARVEL.local; Kali Linux eth0 (.131/24). Kali NAT adapter screenshot-verified; exact VMnet, connectivity and containment still to verify |
+| Active Directory lab inventory | Windows hosts documented; Kali interface captured | HYDRA-DC (.128), SPIDERMAN (.129), THEPUNISHER (.130) in MARVEL.local; Kali Linux eth0 (.131/24). Kali NAT adapter screenshot-verified; VMware VMnet8 NAT subnet identified as 192.168.158.0; connectivity and containment still to verify |
 | Windows client-to-server file-sharing connectivity | Previously observed in troubleshooting | Direct UNC access by private IP worked; the earlier address differs from the current server IP and needs reconciliation |
-| Network topology diagram | Documented (Mermaid) | All three machines use NAT (server screenshot, clients user-confirmed); the two clients each reached HYDRA-DC TCP/389 |
+| Network topology diagram | Documented (Mermaid) | All four VMs are configured for NAT; VMnet8 is identified as NAT subnet 192.168.158.0; Windows clients reached HYDRA-DC TCP/389 |
 | DNS, LDAP transport and DC discovery | Verified for tested functions | THEPUNISHER resolved HYDRA-DC; both clients reached TCP 389; SPIDERMAN successfully located HYDRA-DC with `nltest /dsgetdc`; subsequent `Test-ComputerSecureChannel` returned **False**; LDAP authentication not yet tested |
 | SPIDERMAN secure-channel diagnostics | Mixed results — investigation pending | `Test-ComputerSecureChannel` remained `False` when repeated elevated (user-reported); `nltest /sc_query` previously showed last-used `NERR_Success`. Unresolved, deferred; see [issue #1](https://github.com/ObitoX86/PEH-active-directory-lab/issues/1) |
 | Active Directory OU and group inventory | Partially documented | Two OUs identified; 20 groups found directly under `Groups`; `Domain Admins` has 3 verified direct user members (`Administrator`, `Tony Stark`, `SQL Service`). Other memberships and GPOs pending |
@@ -67,4 +67,4 @@ For each exercise, capture: **objective, authorised targets, method, observed ou
 
 ## Next milestone
 
-Verify the VMware NAT VMnet and lab containment, then take snapshots before attack-vector exercises. The deliberately privileged, SPN-bearing `SQLService` account is documented as a lab prerequisite, not as a completed compromise. SPIDERMAN's unresolved secure-channel result is tracked in [issue #1](https://github.com/ObitoX86/PEH-active-directory-lab/issues/1) and will be revisited if an exercise depends on it.
+VMnet8 NAT is identified; next take clean VM snapshots and establish a safely contained attack-simulation network before proceeding with network poisoning exercises. The deliberately privileged, SPN-bearing `SQLService` account is documented as a lab prerequisite, not as a completed compromise. SPIDERMAN's unresolved secure-channel result is tracked in [issue #1](https://github.com/ObitoX86/PEH-active-directory-lab/issues/1) and will be revisited if an exercise depends on it.
