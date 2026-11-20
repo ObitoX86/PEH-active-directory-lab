@@ -80,7 +80,7 @@ Get-ADObject -SearchBase "OU=Groups,DC=MARVEL,DC=local" -SearchScope OneLevel -F
 
 **Interpretation:** All 20 are immediate child group objects in this OU. Their names include well-known privilege-relevant groups such as `Domain Admins`, `Enterprise Admins`, `Schema Admins` and `DnsAdmins`. The command doesn't establish group membership, permissions, GroupScope, GroupCategory or vulnerabilities. Built-in AD objects in other containers are outside this query's scope.
 
-**Evidence:** Screenshot submitted in the conversation on 2026-11-20; redacted PNG not yet committed to the GitHub evidence folder.
+**Evidence:** The corresponding screenshot is uploaded to `evidence/` and embedded beside this result.
 
 ## Domain Admins — verified direct membership (2026-11-20)
 
@@ -105,7 +105,7 @@ Get-ADGroupMember -Identity "Domain Admins" |
 
 **Security observation — intentional lab configuration:** The account named `SQL Service` is a direct member of `Domain Admins`. The user confirmed this was **deliberately configured for PEH attack practice**, rather than an accidental production misconfiguration. The separate SPN query below establishes that an SPN is registered; neither the name nor SPN establishes that an actual SQL Server service is running. No attack has been performed or proven successful.
 
-**Evidence:** PowerShell screenshot supplied in the PEH project conversation on 2026-11-20; a redacted image copy is not yet in GitHub.
+**Evidence:** The corresponding PowerShell screenshot is uploaded to `evidence/` and embedded beside this result.
 
 ## SQL Service account — SPN registration verified (2026-11-20)
 
