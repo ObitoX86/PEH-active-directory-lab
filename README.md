@@ -15,7 +15,8 @@ This project documents the design, administration and authorised security testin
 | Active Directory lab inventory | Documented from supplied evidence | HYDRA-DC (192.168.158.128), SPIDERMAN (.129), THEPUNISHER (.130), all in MARVEL.local; client membership confirmed |
 | Windows client-to-server file-sharing connectivity | Previously observed in troubleshooting | Direct UNC access by private IP worked; the earlier address differs from the current server IP and needs reconciliation |
 | Network topology diagram | Documented (Mermaid) | All three machines use NAT (server screenshot, clients user-confirmed); the two clients each reached HYDRA-DC TCP/389 |
-| DNS, LDAP transport and DC discovery | Verified for tested functions | THEPUNISHER resolved HYDRA-DC; both clients reached TCP 389; SPIDERMAN successfully located HYDRA-DC with `nltest /dsgetdc`; secure channel and LDAP authentication not yet tested |
+| DNS, LDAP transport and DC discovery | Verified for tested functions | THEPUNISHER resolved HYDRA-DC; both clients reached TCP 389; SPIDERMAN successfully located HYDRA-DC with `nltest /dsgetdc`; subsequent `Test-ComputerSecureChannel` returned **False**; LDAP authentication not yet tested |
+| SPIDERMAN secure-channel check | Failed — investigation pending | `Test-ComputerSecureChannel -Verbose` returned `False`; cause unknown, no repair performed. Next: elevated `nltest /sc_query:MARVEL.local` |
 | Initial attack vectors | To verify | Attach lab-only observations and redacted screenshots |
 | Post-compromise enumeration | To verify | Document commands, authorised scope and results |
 | Post-compromise attacks | To verify | Record only exercises personally reproduced |
@@ -42,4 +43,4 @@ For each exercise, capture: **objective, authorised targets, method, observed ou
 
 ## Next milestone
 
-Verify the Windows client's computer domain secure channel with a non-repairing test; authenticated operations should not be inferred from open TCP ports or domain controller discovery.
+Investigate SPIDERMAN's failed domain secure-channel test with non-repairing diagnostics; don't infer trust health from open TCP ports or successful domain controller discovery.
