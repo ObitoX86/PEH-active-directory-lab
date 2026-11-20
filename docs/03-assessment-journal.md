@@ -1198,7 +1198,25 @@ RTNETLINK answers: Network is unreachable
 
 **Evidence:** Kali screenshot supplied in the PEH conversation on 2026-11-20. A redacted PNG has not yet been committed to GitHub.
 
-**Next step:** Inspect the VMware Workstation hardware/network adapter settings for the four intended VMs, verifying that each uses the `PEH-AD-Isolated` LAN Segment and no extra NAT, bridged or host-only adapters are connected. Continue one guest at a time, without changing settings. No attack executed.
+**Next step:** The user subsequently confirmed the VMware adapter audit for all four VMs. Begin with a non-invasive Responder tool check and passive observation only; no attack executed in this entry.
+
+---
+
+## 2026-11-20 — VMware four-VM isolated-LAN adapter audit user-confirmed
+
+**Task:** Confirm the physical-style virtual network boundary before conducting traffic-poisoning exercises in the authorised PEH lab.
+
+**Requested review:** VMware Workstation `VM Settings > Hardware > Network Adapter` for all four lab guests, verifying exactly one network adapter per VM and LAN Segment `PEH-AD-Isolated` selected, without a second NAT, bridged or host-only adapter.
+
+**Result:** User explicitly confirmed that all four VMs match the requested adapter settings. This is **user-confirmed, not independently screenshot-verified**.
+
+**Lab scope for subsequent controlled testing:** `HYDRA-DC=192.168.158.128`, `SPIDERMAN=192.168.158.129`, `THEPUNISHER=192.168.158.130`, `Kali=192.168.158.131`, all `/24`, user-reported on `PEH-AD-Isolated`.
+
+**Supporting evidence:** Kali has no IPv4/IPv6 default route, external IPv4 route lookup returned `Network is unreachable`, Kali-to-DC ICMP succeeded, both Windows-to-DC TCP 389 tests succeeded, and SPIDERMAN successfully completed AD DNS and forced DC Locator queries. Taken together, these results support a controlled local-only training setup; they do not prove that domain authentication or SPIDERMAN's machine secure channel is healthy.
+
+**Security note:** Never connect an active Responder poisoning instance to VMware NAT, bridged, or a real user network. The user has not run a poisoning test yet. Avoid committing captured credentials or hashes to the repository.
+
+**Next step:** On Kali, check Responder availability with `responder -h` (help only, no traffic, poisoning, or credential capture). If present, proceed step by step to passive analysis on `eth0` before any authorised active demonstration.
 
 ---
 
