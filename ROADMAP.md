@@ -71,7 +71,8 @@ Each phase remains **not verified** until relevant lab evidence is recorded.
 - [x] Screenshot-verify SPIDERMAN's `ipconfig /all` before isolated LAN migration: `192.168.158.129/24`, DHCP No, default gateway blank, DNS `192.168.158.128`, domain suffix `MARVEL.local` (2026-11-20).
 - [x] User reports moving SPIDERMAN to `PEH-AD-Isolated`; its post-boot `ipconfig /all` screenshot confirms `192.168.158.129/24`, DHCP disabled, blank gateway, DNS `192.168.158.128` and `MARVEL.local` (2026-11-20). VMware adapter selection not separately screenshot-verified.
 - [x] Screenshot-verify SPIDERMAN-to-HYDRA-DC TCP 389 connection after isolated-LAN migration: `SourceAddress=192.168.158.129`, `RemoteAddress=192.168.158.128`, `InterfaceAlias=Ethernet0`, `TcpTestSucceeded=True` (2026-11-20). Transport only, not an authenticated LDAP bind.
-- [ ] Verify DNS A-record resolution from SPIDERMAN using HYDRA-DC as DNS; keep computer secure-channel investigation tracked separately.
+- [x] Screenshot-verify SPIDERMAN's isolated-LAN DNS A query: `Resolve-DnsName HYDRA-DC.MARVEL.local -Server 192.168.158.128 -Type A` returned `192.168.158.128`, TTL 3600, Answer (2026-11-20). Confirms direct A lookup only; secure-channel issue remains separate.
+- [ ] Query AD-specific DNS SRV record `_ldap._tcp.dc._msdcs.MARVEL.local` on HYDRA-DC's DNS before checking DC discovery and domain operation.
 - [ ] Verify all four VMs operate correctly on the isolated LAN; do not infer AD authentication from network settings alone.
 - [ ] Verify guest isolation, correct IP/DNS and scoped connectivity on LAN segment before any traffic-interception test.
 - [ ] Verify containment and approved scope before active attack simulation.
