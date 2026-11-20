@@ -973,7 +973,34 @@ netsh interface ipv4 set address name="Ethernet0" static 192.168.158.129 255.255
 
 **Intended result:** Manual IPv4 `192.168.158.129/24`, no default gateway. The command does not explicitly set DNS, so the earlier DNS setting `192.168.158.128` needs separate readback verification. SPIDERMAN's previously reported failed computer secure-channel test remains unresolved and should not be confused with IP configuration.
 
-**Next step:** Run `ipconfig /all` on SPIDERMAN while its VMware adapter is still on NAT, and verify IPv4, mask, DHCP state, gateway and DNS. Do not move it to `PEH-AD-Isolated` until the output is checked.
+**Next step:** The post-change configuration was screenshot-verified in the next entry. Move SPIDERMAN's adapter to the isolated segment next.
+
+---
+
+## 2026-11-20 — SPIDERMAN static IPv4 and DNS verified before isolated LAN migration
+
+**Task:** Verify that SPIDERMAN retained its existing IP and domain DNS settings after changing from DHCP to a static IPv4 configuration.
+
+**Command executed:** `ipconfig /all` on SPIDERMAN.
+
+**Screenshot-verified output:**
+
+| Field | Observed value |
+| --- | --- |
+| Hostname | `SPIDERMAN` |
+| Primary DNS suffix | `MARVEL.local` |
+| Adapter | `Ethernet0` |
+| DHCP Enabled | `No` |
+| IPv4 address | `192.168.158.129` (Preferred) |
+| Subnet mask | `255.255.255.0` |
+| Default gateway | Empty |
+| DNS server | `192.168.158.128` |
+
+**Analysis:** SPIDERMAN is configured for manual IPv4 `192.168.158.129/24`, has no default gateway, and retains HYDRA-DC (`192.168.158.128`) as its DNS server. No further IP/DNS configuration is required before changing the VM's network attachment. This output does not show VMware's selected LAN segment or verify connectivity, domain authentication or resolution of the previously observed broken secure channel.
+
+**Evidence:** PowerShell screenshot provided in conversation on 2026-11-20; redacted image has not yet been committed to GitHub.
+
+**Next step:** Power down SPIDERMAN; change its VMware Network Adapter from NAT to LAN Segment `PEH-AD-Isolated`, leaving `Connect at power on` checked; boot and run `ipconfig /all` again.
 
 ---
 
