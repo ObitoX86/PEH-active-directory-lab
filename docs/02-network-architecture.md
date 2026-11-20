@@ -169,7 +169,28 @@ TcpTestSucceeded : True
 
 **Interpretation:** TCP connection from `192.168.158.130` to `192.168.158.128:389` succeeded. Port 389 is commonly associated with LDAP. This confirms reachability to a TCP listener on that port, but does not prove an LDAP bind, directory query, user authentication, or the health of every Active Directory service. Evidence is currently in the conversation; no screenshot file has been uploaded to the repository.
 
-**Next check:** Verify the same client-to-domain-controller TCP connection from SPIDERMAN.
+**Next check:** Compare the TCP result against SPIDERMAN, then verify domain controller discovery and authentication independently.
+
+## Verified TCP connectivity to LDAP port — SPIDERMAN (PowerShell screenshot, 2026-11-20)
+
+**Command run on SPIDERMAN:**
+
+```powershell
+Test-NetConnection HYDRA-DC.MARVEL.local -Port 389
+```
+
+**Observed output:**
+
+```text
+ComputerName     : HYDRA-DC.MARVEL.local
+RemoteAddress    : 192.168.158.128
+RemotePort       : 389
+InterfaceAlias   : Ethernet0
+SourceAddress    : 192.168.158.129
+TcpTestSucceeded : True
+```
+
+**Interpretation:** A TCP connection from SPIDERMAN (`192.168.158.129`) to HYDRA-DC (`192.168.158.128`) port 389 succeeded. This is the same outcome already observed from THEPUNISHER. The hostname was resolved as part of the connection test, but a standalone SPIDERMAN DNS query has not been recorded. Neither test is evidence of a successful LDAP bind, Kerberos authentication or domain logon. The screenshot remains in the conversation; it is not yet stored in the repository.
 
 ## Verified connection from earlier troubleshooting
 
@@ -192,13 +213,28 @@ A Windows client referred to as **Punisher** accessed a lab Windows server using
 
    All three IPv4 settings fall within 192.168.158.0/24.
    Diagram reflects configuration plus one successful DNS lookup.
-   TCP 389 connection from THEPUNISHER to HYDRA-DC: SUCCESS.
+   TCP 389 connections from THEPUNISHER and SPIDERMAN to HYDRA-DC: SUCCESS.
    Authenticated LDAP binding and Kerberos remain untested.
    All three VMs: NAT (server screenshot; clients user report).
-   Virtual NAT switch identity and actual connectivity: TO VERIFY.
+   NAT switch identity not independently verified; TCP 389 paths tested.
 ```
 
-No connections are drawn until their configuration is confirmed.
+### Portfolio topology (Mermaid)
+
+The arrows below reflect **only the tested TCP 389 paths**; other network paths are not implied.
+
+```mermaid
+flowchart TB
+    subgraph LAB["VMware NAT lab — 192.168.158.0/24"]
+        DC["HYDRA-DC — 192.168.158.128 (DC + GC)"]
+        P["THEPUNISHER — 192.168.158.130 (domain joined)"]
+        S["SPIDERMAN — 192.168.158.129 (domain joined)"]
+        P -->|"TCP 389 verified"| DC
+        S -->|"TCP 389 verified"| DC
+    end
+```
+
+Both clients are configured to use HYDRA-DC for DNS; THEPUNISHER also has a separate successful DNS A-record lookup. DHCP for both clients is reported as `192.168.158.254`, and the configured default gateway is `192.168.158.2`. These network services are not drawn as independently verified infrastructure machines.
 
 ## Details to confirm
 
@@ -206,8 +242,8 @@ No connections are drawn until their configuration is confirmed.
 2. Which additional domain controller services are functioning (AD controller identity is verified).
 3. Additional domain configuration and DNS health (domain identified as `MARVEL.local`; publish only if safe).
 4. Screenshot evidence for client NAT configuration if needed (their NAT settings are user-confirmed).
-5. Test live TCP 389 connectivity from SPIDERMAN (THEPUNISHER DNS A-record resolution and TCP 389 connection succeeded).
+5. Validate other services and authenticated domain operations (both clients succeeded on TCP 389; THEPUNISHER also succeeded in a separate DNS lookup).
 6. Live domain controller discovery/authentication and name-resolution tests; both client memberships are verified via `Win32_ComputerSystem`.
 7. Redacted screenshot evidence for architecture and configuration.
 
-This is the configuration topology based on the information supplied to date. After live connectivity and DNS testing, add validated service paths.
+This diagram is grounded in supplied settings and successful TCP tests. Expand it only when subsequent tests verify additional paths.
