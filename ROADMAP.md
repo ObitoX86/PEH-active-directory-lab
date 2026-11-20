@@ -20,7 +20,8 @@ Each phase remains **not verified** until relevant lab evidence is recorded.
 - [ ] Confirm authenticated Active Directory service operation separately; TCP connectivity is not authentication.
 - [ ] Verify guest operating systems, other VM roles and individual service health.
 - [x] Document domain controller and both visible clients (hostnames, addresses, AD membership) from supplied evidence.
-- [ ] Verify whether a separate testing VM is used and document its scope if applicable.
+- [x] Identify Kali Linux testing environment via `ip -br addr` (`eth0` UP, `192.168.158.131/24`; 2026-11-20).
+- [ ] Verify Kali VMware adapter mode, test scoped connectivity and record lab containment; IP range alone does not establish isolation.
 - [x] Create a Mermaid network topology with verified IP addresses, domain roles and both tested TCP 389 paths (2026-11-20).
 - [x] Confirm domain controller discovery from SPIDERMAN using `nltest /dsgetdc:MARVEL.local` (returned HYDRA-DC at `192.168.158.128`, 2026-11-20).
 - [x] Run SPIDERMAN computer secure-channel diagnostic: `Test-ComputerSecureChannel -Verbose` returned **False** with a broken-channel message (2026-11-20).
@@ -41,7 +42,8 @@ Each phase remains **not verified** until relevant lab evidence is recorded.
 - [ ] Upload the OU enumeration screenshot as redacted evidence when preparing the next screenshot batch.
 
 ## Transition to PEH Active Directory initial attack vectors
-- [ ] Identify authorised testing VM (e.g. Kali), verify isolation/network scope and take snapshots before attack simulation.
+- [x] Identify Kali Linux as intended authorised tester at `192.168.158.131/24`.
+- [ ] Verify Kali hypervisor network mode, isolation and approved scope; take VM snapshots before attack simulation.
 - [ ] Study LLMNR/NBT-NS poisoning prerequisites and mitigations before running Responder in an isolated lab.
 - [ ] Keep SPIDERMAN trust-status anomaly separate from attack findings; investigate only if a lab depends on healthy computer trust.
 
