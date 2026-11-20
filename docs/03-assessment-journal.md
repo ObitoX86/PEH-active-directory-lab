@@ -782,7 +782,27 @@ eth0     UP       192.168.158.131/24  fe80::5e29:65cd:2a93:70b9/64
 
 **Evidence:** VMware adapter settings and Kali terminal screenshots supplied in the conversation on 2026-11-20. Neither screenshot has yet been uploaded to GitHub.
 
-**Next step:** Check connectivity from Kali to the lab domain controller `192.168.158.128` before migrating any Windows clients. No attack simulation has been performed.
+**Next step:** A subsequent Kali ICMP test succeeded, documented in the following entry. No attack simulation has been performed.
+
+---
+
+## 2026-11-20 — Kali to HYDRA-DC ICMP connectivity on isolated lab segment
+
+**Task:** Verify that the Linux testing guest can reach the lab domain controller after both were moved to the private segment.
+
+**Command executed on Kali:**
+
+```bash
+ping -c 4 192.168.158.128
+```
+
+**Screenshot-verified output:** Four echo requests transmitted and four echo replies received from `192.168.158.128`; packet loss **0%**. Reply TTL **128**; individual times **0.450, 0.318, 0.280, 0.300 ms**; summary RTT minimum/average/maximum **0.280/0.337/0.450 ms**.
+
+**Interpretation:** ICMP works between Kali (`192.168.158.131/24`) and HYDRA-DC (`192.168.158.128/24`). This strongly corroborates that both VMs are connected to the same reachable lab network. It does **not** establish DNS, Kerberos or LDAP service access, authenticated operation, isolation from the host/external networks, or absence of extra adapters. No attack was performed.
+
+**Evidence:** User-provided Kali terminal screenshot dated 2026-11-20; redacted PNG not yet committed to GitHub.
+
+**Next step:** On THEPUNISHER, inspect the active Windows network interface name using a read-only PowerShell command. Plan to preserve its existing `192.168.158.130/24` IPv4 and `192.168.158.128` DNS when replacing NAT DHCP with a manual address and moving it to `PEH-AD-Isolated`.
 
 ---
 
