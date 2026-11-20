@@ -477,7 +477,17 @@ eth0     UP       192.168.158.131/24  fe80::5e29:65cd:2a93:70b9/64
 
 **Verified:** Kali's `eth0` is UP and retains its static `192.168.158.131/24` IPv4 address after reboot; it has a directly connected route to the lab subnet and no IPv4 default route in the `ip route` output. The VMware segment selection was shown before boot. The route table does **not** prove HYDRA-DC is reachable or establish total absence of other possible IPv6 network paths. The Windows clients have not been migrated yet.
 
-**Next:** Test only the known lab controller `192.168.158.128`, then review the Windows clients' DHCP-to-static settings before moving them.
+### Kali → HYDRA-DC ICMP connectivity verified (2026-11-20)
+
+**Command from Kali:** `ping -c 4 192.168.158.128`
+
+**Observed:** **4 sent, 4 replies, 0% packet loss**, RTT min/avg/max `0.280/0.337/0.450 ms`. Every reply came from `192.168.158.128` with TTL 128.
+
+**Conclusion:** Kali (`.131`) successfully reaches the domain controller (`.128`) using ICMP after the user-reported/screenshot-supported isolated-LAN migration. These results validate one network path, **not** DNS, LDAP authentication, Kerberos, complete network isolation, or external connectivity restrictions.
+
+**Evidence:** Kali terminal screenshot supplied 2026-11-20, pending redacted PNG upload.
+
+**Next:** Identify THEPUNISHER's Windows NIC and prepare its DHCP-to-static transition; the Windows clients have not yet been confirmed moved to the isolated segment.
 
 ## Details to confirm
 
