@@ -529,7 +529,9 @@ The user reported switching SPIDERMAN's VMware adapter to the dedicated `PEH-AD-
 
 **Network milestone:** All four intended guests retain their originally documented IPv4 addresses after user-reported migration. Kali to HYDRA-DC ICMP passed (4/4); both Windows clients to HYDRA-DC TCP 389 passed. These successful paths do not prove complete network isolation, DNS health, Kerberos authentication or a healthy secure channel.
 
-**Next read-only test:** From SPIDERMAN, query `HYDRA-DC.MARVEL.local` as an A record with `Resolve-DnsName HYDRA-DC.MARVEL.local -Server 192.168.158.128 -Type A`, then proceed to network isolation checks.
+**Post-migration DNS A-record verified (2026-11-20):** SPIDERMAN ran `Resolve-DnsName HYDRA-DC.MARVEL.local -Server 192.168.158.128 -Type A`. The supplied screenshot shows `HYDRA-DC.MARVEL.local`, record type `A`, TTL `3600`, section `Answer`, and IPv4 `192.168.158.128`. This establishes correct DNS A-record lookup directly against HYDRA-DC's DNS service. It does not yet establish SRV records, Kerberos authentication, secure-channel repair or complete isolation.
+
+**Next read-only test:** Query `_ldap._tcp.dc._msdcs.MARVEL.local` as a DNS SRV record using `-Server 192.168.158.128` to verify service-location records for the domain controller.
 
 **Evidence:** SPIDERMAN post-boot `ipconfig /all` screenshot received 2026-11-20; redacted PNG pending GitHub upload.
 
