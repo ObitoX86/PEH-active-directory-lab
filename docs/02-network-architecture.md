@@ -339,11 +339,23 @@ eth0   UP       192.168.158.131/24  fe80::5e29:65cd:2a93:70b9/64
 
 **Interpretation:** Kali's `eth0` interface is UP and has `192.168.158.131/24`. This is within the `192.168.158.0/24` IPv4 subnet already recorded for HYDRA-DC, THEPUNISHER and SPIDERMAN. Same-subnet addressing alone does not prove the Kali guest is connected to the same VMware virtual switch, has a working route to the Windows systems, or is isolated from unintended targets.
 
-**Next safety verification:** Inspect Kali's VMware Network Adapter selection (NAT, host-only, custom VMnet, bridged, etc.) and verify it is scoped to the authorised lab. Avoid running Responder or broadcast/multicast interception tools on an unconfirmed or outbound-connected segment. Record VM snapshots before active attacks.
+### Kali VMware adapter mode verified (Settings screenshot, 2026-11-20)
+
+| Setting | Observed |
+| --- | --- |
+| Network connection | NAT selected |
+| Device status | Connected checked |
+| Connect at power on | Checked |
+| Allocated RAM | 8 GB |
+| Virtual processors | 4 |
+
+**Interpretation:** All four lab machines now have NAT recorded: screenshot evidence for HYDRA-DC and Kali, and user confirmation for the two Windows clients. This does **not** establish that all four occupy the exact same VMware virtual network, nor that the segment is safe for LLMNR/NBT-NS poisoning. The `VMnet0` field visible below the inactive Custom option is not the selected NAT network.
+
+**Next safety verification:** Inspect VMware **Edit > Virtual Network Editor** and the NAT virtual network configuration (often VMnet8, but verify rather than assume). Check whether the NAT network has external access and which host adapters or other guests can reach it. Consider a dedicated non-routed/host-only or LAN-segment environment for traffic-poisoning exercises after preserving the current working configuration and confirming necessary DHCP/DNS arrangements. Take snapshots before changes or active tests.
 
 **Evidence:** User-supplied terminal screenshot dated 2026-11-20; PNG not yet uploaded to the repository.
 
-## Configuration diagram (IP/DNS/domain from screenshots; Windows NAT verified or user-confirmed; Kali mode pending)
+## Configuration diagram (IP/DNS/domain from screenshots; NAT verified for Kali and HYDRA-DC, reported for clients)
 
 ```text
           [HYDRA-DC]                    AD domain controller + GC; VMware adapter: NAT
@@ -368,8 +380,8 @@ eth0   UP       192.168.158.131/24  fe80::5e29:65cd:2a93:70b9/64
    SPIDERMAN nltest /sc_query last-used channel status: NERR_Success.
    Elevated repetition of Test-ComputerSecureChannel: FALSE (user-reported).
    Discrepancy unresolved; no repair performed.
-   Three Windows VMs: NAT (server screenshot; clients user report).
-   Kali VMware network mode: NOT YET VERIFIED.
+   All four VMs: NAT (server + Kali screenshots; client modes user-reported).
+   Kali VMware network mode: NAT (VMware Settings screenshot, 2026-11-20).
    NAT switch identity not independently verified; TCP 389 paths tested.
 ```
 
@@ -386,10 +398,10 @@ flowchart TB
         P -->|"TCP 389 verified"| DC
         S -->|"TCP 389 verified"| DC
     end
-    K["Kali Linux — eth0 192.168.158.131/24 (VMware mode not verified)"]
+    K["Kali Linux — eth0 192.168.158.131/24 (NAT verified)"]
 ```
 
-Kali is deliberately shown without a connection arrow because no Kali-to-Windows connectivity test has yet been completed. The three Windows guests have confirmed or user-reported NAT settings.
+Kali is deliberately shown without a connection arrow because no Kali-to-Windows connectivity test has yet been completed. All four guests have NAT recorded, but whether they share one specific virtual switch and are adequately isolated is not yet verified.
 
 Both clients are configured to use HYDRA-DC for DNS; THEPUNISHER also has a separate successful DNS A-record lookup. DHCP for both clients is reported as `192.168.158.254`, and the configured default gateway is `192.168.158.2`. These network services are not drawn as independently verified infrastructure machines.
 
@@ -398,7 +410,7 @@ Both clients are configured to use HYDRA-DC for DNS; THEPUNISHER also has a sepa
 1. Installed operating systems and purposes for each of the three VMs.
 2. Which additional domain controller services are functioning (AD controller identity is verified).
 3. Additional domain configuration and DNS health (domain identified as `MARVEL.local`; publish only if safe).
-4. Verify Kali's VMware network mode and actual connectivity to Windows lab machines; client Windows NAT settings were user-confirmed.
+4. Verify the shared VMware NAT VMnet, Kali-to-Windows connectivity and containment; Kali and HYDRA-DC NAT settings are screenshot-verified and the Windows clients' settings user-confirmed.
 5. Validate other services and authenticated domain operations (both clients succeeded on TCP 389; THEPUNISHER also succeeded in a separate DNS lookup).
 6. SPIDERMAN elevated secure-channel check repeated and still False; root cause and impact on computer-authenticated exercises remain unresolved. See issue #1; do not assume authenticated domain operations are healthy.
 7. Redacted screenshot evidence for architecture and configuration.
