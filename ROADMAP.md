@@ -50,7 +50,8 @@ Each phase remains **not verified** until relevant lab evidence is recorded.
 - [x] User confirmed creating VMware snapshot `PEH-Kali-Baseline-Before-Attacks` for Kali Linux (2026-11-20; confirmation in conversation, snapshot not independently inspected).
 - [x] User confirmed creating powered-off VMware snapshot `PEH-HYDRA-DC-Baseline-Before-Attacks` for HYDRA-DC (2026-11-20; not independently inspected).
 - [x] User confirmed powered-off VMware snapshot `PEH-THEPUNISHER-Baseline-Before-Attacks` for THEPUNISHER (2026-11-20; not independently inspected).
-- [ ] Create baseline snapshot for SPIDERMAN; verify all four snapshots in VMware Snapshot Manager before attacks.
+- [x] User confirmed powered-off VMware snapshot `PEH-SPIDERMAN-Baseline-Before-Attacks` for SPIDERMAN (2026-11-20; not independently inspected; existing secure-channel problem retained).
+- [ ] Verify all four snapshot names in VMware Snapshot Manager before attacks; ensure recovery points are coherent with the lab baseline.
 - [ ] Verify containment and approved scope before active attack simulation.
 - [ ] Study LLMNR/NBT-NS poisoning prerequisites and mitigations before running Responder in an isolated lab.
 - [ ] Keep SPIDERMAN trust-status anomaly separate from attack findings; investigate only if a lab depends on healthy computer trust.
