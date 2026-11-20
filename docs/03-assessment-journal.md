@@ -539,6 +539,22 @@ eth0   UP       192.168.158.131/24  fe80::5e29:65cd:2a93:70b9/64
 
 ---
 
+## 2026-11-20 — VMware VMnet8 NAT and VMnet1 host-only networks identified
+
+**Task:** Inspect VMware Virtual Network Editor after verifying the Kali NAT adapter mode.
+
+**Evidence:** Screenshot supplied in the conversation on 2026-11-20; image not yet committed to GitHub.
+
+**Observed result:** Editor lists `VMnet8` as **NAT** with subnet address `192.168.158.0`, host Connected and DHCP Enabled; `VMnet1` as **Host-only** with subnet address `192.168.125.0`, host Connected and DHCP Enabled. The selected row in the editor is VMnet1, so the detailed subnet mask field shown underneath belongs to VMnet1. The `/24` for the guest address range is supported by the separate VM `ipconfig` and `ip` outputs.
+
+**Analysis:** The VMware NAT subnet corresponds with the four guests' `192.168.158.x` addresses and their NAT adapter settings. This does not establish full isolation, demonstrate active Kali-to-guest connectivity, or identify other VMs potentially attached to the NAT network. NAT may enable outbound traffic. A move to the existing host-only VMnet1 network would require advance planning for domain-controller static IP, DHCP, client DNS and other dependencies.
+
+**Safety decision:** No virtual network reconfiguration, exploitation or poisoned traffic generated. Preserve the working baseline and snapshots. Before Responder, plan a dedicated contained segment and verify all participating systems.
+
+**Follow-up:** Confirm clean, recoverable snapshots for the four VMs; then verify a containment plan before active exercises.
+
+---
+
 ## New entry template
 
 **Date:** YYYY-MM-DD  
