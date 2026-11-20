@@ -487,7 +487,7 @@ eth0     UP       192.168.158.131/24  fe80::5e29:65cd:2a93:70b9/64
 
 **Evidence:** Kali terminal screenshot supplied 2026-11-20, pending redacted PNG upload.
 
-**Next:** Identify THEPUNISHER's Windows NIC and prepare its DHCP-to-static transition; the Windows clients have not yet been confirmed moved to the isolated segment.
+**THEPUNISHER NIC identified (2026-11-20):** The user ran `Get-NetAdapter | Select-Object Name, Status, InterfaceDescription`, returning `Ethernet0` / `Up` / `Intel(R) 82574L Gigabit Network Connection`. This identifies the intended interface for its forthcoming DHCP-to-static change; no changed IP or LAN segment attachment is yet verified. **Next:** Set THEPUNISHER's IP to static `192.168.158.130/24` without a default gateway and preserve DNS `192.168.158.128` before migration.
 
 ## Details to confirm
 
