@@ -29,7 +29,7 @@ The displayed names alone do not prove host roles, domain membership or network 
 | DNS servers | `::1` and `127.0.0.1` (loopback) |
 | IP routing enabled | No |
 
-**Interpretation:** DHCP is disabled; an IPv4 address is configured. The DNS servers are loopback addresses. An additional successful `Get-ADDomainController` query verifies the server is identified as an AD domain controller and Global Catalog; it does not independently test DNS availability or every AD service. The server's VMware adapter mode was subsequently verified as **NAT**; the client adapter modes remain unverified. Both clients have addresses in the same IPv4 subnet.
+**Interpretation:** DHCP is disabled; an IPv4 address is configured. The DNS servers are loopback addresses. An additional successful `Get-ADDomainController` query verifies the server is identified as an AD domain controller and Global Catalog; it does not independently test DNS availability or every AD service. The server's VMware adapter mode was subsequently verified as **NAT** by screenshot; the user confirmed **NAT** for both client adapters without providing separate Settings screenshots. Both clients have addresses in the same IPv4 subnet.
 
 **Prior observation caveat:** An earlier troubleshooting session used a direct UNC path to `192.168.10.10`, whereas the current screenshot reports `192.168.158.128` for `HYDRA-DC`. Do not assume these are the same host/interface or that the network was changed without confirming the configuration.
 
@@ -42,7 +42,7 @@ The displayed names alone do not prove host roles, domain membership or network 
 | Connected | Checked |
 | Connect at power on | Checked |
 
-**Interpretation:** NAT normally allows the guest to share the host's network connection and may permit outbound connectivity. This does **not** guarantee an isolated or offline assessment environment. Neither THEPUNISHER nor SPIDERMAN has yet had its VMware adapter mode confirmed. The inactive `VMnet0` field in the screenshot is not evidence that the selected NAT adapter uses that virtual network.
+**Interpretation:** NAT normally allows the guest to share the host's network connection and may permit outbound connectivity. This does **not** guarantee an isolated or offline assessment environment. The user has also confirmed that THEPUNISHER and SPIDERMAN are configured for NAT; this is user-reported rather than screenshot-verified. The inactive `VMnet0` field in the screenshot is not evidence that the selected NAT adapter uses that virtual network.
 
 **Assessment safety:** Before running intrusive or noisy training exercises, confirm all participating VMs' adapter modes and intended connectivity. Avoid changing the working network before documenting the configuration and assessing the impact on DNS, DHCP and the lab domain.
 
@@ -78,7 +78,7 @@ Get-ADDomainController -Identity HYDRA-DC |
 | Primary WINS server | `192.168.158.2` |
 | NetBIOS over TCP/IP | Enabled |
 
-**Comparison:** The client and HYDRA-DC (`192.168.158.128/24`) are configured in the same IPv4 subnet (`192.168.158.0/24`). The client's configured DNS address matches the domain controller's IPv4 address. This establishes intended DNS configuration, **not** a successful DNS lookup or end-to-end network connectivity. Domain membership was later verified separately with a local Windows CIM query. DHCP service is configured at a separate address (`192.168.158.254`). VMware network modes are still unverified.
+**Comparison:** The client and HYDRA-DC (`192.168.158.128/24`) are configured in the same IPv4 subnet (`192.168.158.0/24`). The client's configured DNS address matches the domain controller's IPv4 address. This establishes intended DNS configuration, **not** a successful DNS lookup or end-to-end network connectivity. Domain membership was later verified separately with a local Windows CIM query. DHCP service is configured at a separate address (`192.168.158.254`). VMware NAT mode has been confirmed for the server (screenshot) and both clients (user report).
 
 ## Verified THEPUNISHER domain membership — PowerShell screenshot, 2026-11-20
 
@@ -132,7 +132,7 @@ Get-CimInstance Win32_ComputerSystem |
 
 A Windows client referred to as **Punisher** accessed a lab Windows server using a direct UNC path by private IP. This is evidence of that specific connection; it does not verify all three VMware entries, the domain setup, or network discovery settings. The exact relationship between the previously reported client and **THEPUNISHER** is to be confirmed.
 
-## Configuration diagram (based on verified IP, DNS, domain membership and server NAT mode)
+## Configuration diagram (IP/DNS/domain from screenshots; NAT for clients user-confirmed)
 
 ```text
           [HYDRA-DC]                    AD domain controller + GC; VMware adapter: NAT
@@ -149,7 +149,8 @@ A Windows client referred to as **Punisher** accessed a lab Windows server using
 
    All three IPv4 settings fall within 192.168.158.0/24.
    Diagram reflects configuration, NOT tested connectivity.
-   Client VMware adapter modes: TO VERIFY.
+   All three VMs: NAT (server screenshot; clients user report).
+   Virtual NAT switch identity and actual connectivity: TO VERIFY.
 ```
 
 No connections are drawn until their configuration is confirmed.
@@ -159,9 +160,9 @@ No connections are drawn until their configuration is confirmed.
 1. Installed operating systems and purposes for each of the three VMs.
 2. Which additional domain controller services are functioning (AD controller identity is verified).
 3. Additional domain configuration and DNS health (domain identified as `MARVEL.local`; publish only if safe).
-4. THEPUNISHER and SPIDERMAN VMware adapter types (HYDRA-DC is verified NAT).
+4. Screenshot evidence for client NAT configuration if needed (their NAT settings are user-confirmed).
 5. Verify actual connectivity and DNS resolution (all three IPv4 configuration baselines have been recorded).
 6. Live domain controller discovery/authentication and name-resolution tests; both client memberships are verified via `Win32_ComputerSystem`.
 7. Redacted screenshot evidence for architecture and configuration.
 
-Replace the draft with a diagram grounded in the running environment once confirmed.
+This is the configuration topology based on the information supplied to date. After live connectivity and DNS testing, add validated service paths.
