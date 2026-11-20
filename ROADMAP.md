@@ -33,7 +33,8 @@ Each phase remains **not verified** until relevant lab evidence is recorded.
 ## Active Directory object structure
 - [x] Inventory OUs with `Get-ADOrganizationalUnit -Filter *`: `Domain Controllers` and `Groups` (2026-11-20).
 - [x] Inspect 20 direct child objects in `OU=Groups`; all returned with `ObjectClass=group` (2026-11-20).
-- [ ] Verify direct membership of privileged groups, starting with `Domain Admins`.
+- [x] Verify `Domain Admins` direct membership (3 user objects: `Administrator`, `Tony Stark`, `SQL Service`; 2026-11-20).
+- [ ] Review the `SQL Service` identity and SPN registration before deciding whether it is a service-account privilege finding or Kerberoasting candidate.
 - [ ] Document relevant users, security groups, computer objects and Group Policy links based on verified results.
 - [ ] Upload the OU enumeration screenshot as redacted evidence when preparing the next screenshot batch.
 
