@@ -326,6 +326,8 @@ A Windows client referred to as **Punisher** accessed a lab Windows server using
 
 ## Kali Linux testing VM — interface inventory (2026-11-20)
 
+![Kali eth0 initial IP inventory](../evidence/2026-11-20_19-kali-initial-ip.png)
+
 A terminal screenshot from Kali shows the read-only command:
 
 ```bash
@@ -340,6 +342,8 @@ eth0   UP       192.168.158.131/24  fe80::5e29:65cd:2a93:70b9/64
 **Interpretation:** Kali's `eth0` interface is UP and has `192.168.158.131/24`. This is within the `192.168.158.0/24` IPv4 subnet already recorded for HYDRA-DC, THEPUNISHER and SPIDERMAN. Same-subnet addressing alone does not prove the Kali guest is connected to the same VMware virtual switch, has a working route to the Windows systems, or is isolated from unintended targets.
 
 ### Kali VMware adapter mode verified (Settings screenshot, 2026-11-20)
+
+![Kali original NAT adapter settings](../evidence/2026-11-20_20-kali-nat-adapter.png)
 
 | Setting | Observed |
 | --- | --- |
@@ -356,6 +360,8 @@ eth0   UP       192.168.158.131/24  fe80::5e29:65cd:2a93:70b9/64
 **Evidence:** User-supplied terminal screenshot dated 2026-11-20; PNG not yet uploaded to the repository.
 
 ## Verified VMware virtual networks — Virtual Network Editor (2026-11-20)
+
+![VMware NAT and host-only network editor](../evidence/2026-11-20_21-vmware-virtual-network-editor.png)
 
 The VMware Virtual Network Editor screenshot shows:
 
@@ -440,7 +446,17 @@ VMware LAN segments do not provide DHCP automatically; the existing NAT DHCP lea
 
 **Sequence:** With backups in place, move the powered-off HYDRA-DC VM first because its IPv4 was already static; boot to check `.128`. Then move and configure Kali and clients individually with matching static addresses and DNS, test lab-only connectivity and verify no NAT bridge/extra NIC remains. Client-to-server connectivity can be interrupted during partial migration.
 
+### Kali preparation — NetworkManager connection and static settings
+
+![Kali active NetworkManager connection](../evidence/2026-11-20_23-kali-nmcli-active-profile.png)
+
+![Kali verified saved static IP configuration](../evidence/2026-11-20_24-kali-nmcli-static-profile.png)
+
+These screenshots support the identified `Wired connection 1` profile and its saved `192.168.158.131/24`, DNS `192.168.158.128`, no-gateway configuration before Kali's isolated-LAN migration.
+
 ## Current migration status — HYDRA-DC addressing preserved (2026-11-20)
+
+![HYDRA-DC isolated LAN IP configuration](../evidence/2026-11-20_22-hydra-dc-isolated-ipconfig.png)
 
 The user followed the instructions to move **HYDRA-DC** to LAN segment `PEH-AD-Isolated`, and supplied a screenshot of `ipconfig /all` on the powered-on server afterward.
 
@@ -463,6 +479,8 @@ The user followed the instructions to move **HYDRA-DC** to LAN segment `PEH-AD-I
 
 ## Kali isolated LAN attachment — live IP and routing verified (2026-11-20)
 
+![Kali selected isolated LAN segment](../evidence/2026-11-20_25-kali-isolated-vmware-adapter.png)
+
 The user selected VMware **LAN Segment: `PEH-AD-Isolated`** for the Kali adapter, kept `Connect at power on` checked, started Kali and supplied the following command output:
 
 ```bash
@@ -479,6 +497,8 @@ eth0     UP       192.168.158.131/24  fe80::5e29:65cd:2a93:70b9/64
 
 ### Kali → HYDRA-DC ICMP connectivity verified (2026-11-20)
 
+![Kali to HYDRA-DC ping verification](../evidence/2026-11-20_27-kali-to-hydra-dc-ping.png)
+
 **Command from Kali:** `ping -c 4 192.168.158.128`
 
 **Observed:** **4 sent, 4 replies, 0% packet loss**, RTT min/avg/max `0.280/0.337/0.450 ms`. Every reply came from `192.168.158.128` with TTL 128.
@@ -489,7 +509,23 @@ eth0     UP       192.168.158.131/24  fe80::5e29:65cd:2a93:70b9/64
 
 **THEPUNISHER NIC identified (2026-11-20):** The user ran `Get-NetAdapter | Select-Object Name, Status, InterfaceDescription`, returning `Ethernet0` / `Up` / `Intel(R) 82574L Gigabit Network Connection`. This identifies the intended interface for its forthcoming DHCP-to-static change; the next screenshot verifies its new static IP configuration, but **LAN segment attachment is not yet verified**. **Static IPv4 baseline verified:** The user supplied post-change `ipconfig /all` on THEPUNISHER showing hostname `THEPUNISHER`, primary suffix `MARVEL.local`, adapter `Ethernet0`, `DHCP Enabled: No`, `192.168.158.130/24`, blank default gateway and DNS `192.168.158.128`. This preserves its IPv4 and DNS settings without a further DNS change. **Next:** Move the powered-off VM adapter to `PEH-AD-Isolated`, boot, and validate post-migration settings and DC connectivity.
 
+### Kali post-migration live IP and route
+
+![Kali live isolated LAN IPv4 and route](../evidence/2026-11-20_26-kali-isolated-ip-and-route.png)
+
+This provides the live `eth0` and connected route output following the VMware adapter change.
+
+### THEPUNISHER pre-migration NIC and static settings
+
+![THEPUNISHER adapter identification](../evidence/2026-11-20_28-thepunisher-adapter-name.png)
+
+![THEPUNISHER pre-migration static IPv4 and DNS](../evidence/2026-11-20_29-thepunisher-static-ip-before-move.png)
+
+These screenshots establish that `Ethernet0` was the intended adapter and that static `192.168.158.130/24` with DNS `192.168.158.128` was verified before the switch.
+
 ## THEPUNISHER after isolated LAN migration — IP retained (2026-11-20)
+
+![THEPUNISHER post-isolation IPv4 configuration](../evidence/2026-11-20_30-thepunisher-isolated-ipconfig.png)
 
 The user reports moving THEPUNISHER's VMware adapter to `PEH-AD-Isolated` and restarting the VM. Its **fresh post-boot** `ipconfig /all` screenshot confirms:
 
@@ -504,13 +540,25 @@ The user reports moving THEPUNISHER's VMware adapter to `PEH-AD-Isolated` and re
 
 **Result:** The intended guest network configuration is preserved after the reported segment change. The screenshot cannot itself show VMware's selected segment or verify TCP connectivity, DNS resolution, Kerberos, domain logon or isolation. Kali has confirmed ICMP connectivity to HYDRA-DC on the separate LAN, but Windows-client connectivity after migration is not yet tested.
 
+![THEPUNISHER isolated-LAN TCP 389 test](../evidence/2026-11-20_31-thepunisher-isolated-tcp389.png)
+
 **Post-migration TCP connectivity verified on THEPUNISHER (2026-11-20):** The user ran `Test-NetConnection 192.168.158.128 -Port 389` and supplied a screenshot showing `RemoteAddress=192.168.158.128`, `RemotePort=389`, `InterfaceAlias=Ethernet0`, `SourceAddress=192.168.158.130` and `TcpTestSucceeded=True`. This confirms a successful TCP connection to the domain controller's LDAP port from the isolated Windows client, not successful LDAP authentication or full network containment.
 
 **SPIDERMAN NIC identified (2026-11-20):** Its PowerShell `Get-NetAdapter | Select-Object Name, Status, InterfaceDescription` screenshot confirms `Ethernet0` is `Up` and uses `Intel(R) 82574L Gigabit Network Connection`. **SPIDERMAN static IPv4 now verified before migration:** A subsequent `ipconfig /all` screenshot confirms hostname `SPIDERMAN`, DNS suffix `MARVEL.local`, `Ethernet0` at `192.168.158.129/24`, DHCP disabled, empty default gateway and DNS `192.168.158.128`. SPIDERMAN's subsequent migration was user-reported and a post-boot screenshot now independently confirms its static IP/DNS persisted (see section below); no post-migration connectivity test has yet been supplied. **Next:** Check TCP 389 transport connectivity. The earlier NAT topology diagram remains historical only.
 
 **Evidence:** PowerShell screenshot supplied 2026-11-20; PNG not yet uploaded to GitHub.
 
+### SPIDERMAN pre-migration NIC and static settings
+
+![SPIDERMAN adapter identification](../evidence/2026-11-20_32-spiderman-adapter-name.png)
+
+![SPIDERMAN pre-migration static IPv4 and DNS](../evidence/2026-11-20_33-spiderman-static-ip-before-move.png)
+
+These screenshots identify `Ethernet0` and confirm static `192.168.158.129/24`, DNS `192.168.158.128`, and no default gateway before moving the adapter.
+
 ## SPIDERMAN post-migration network settings — IPv4 preserved (2026-11-20)
+
+![SPIDERMAN post-isolation IPv4 configuration](../evidence/2026-11-20_34-spiderman-isolated-ipconfig.png)
 
 The user reported switching SPIDERMAN's VMware adapter to the dedicated `PEH-AD-Isolated` LAN segment and rebooting Windows. Its fresh `ipconfig /all` screenshot shows:
 
@@ -525,19 +573,29 @@ The user reported switching SPIDERMAN's VMware adapter to the dedicated `PEH-AD-
 
 **Verified:** Guest addressing and DNS remain as planned after the reported migration. The migration of all four intended VMs is now **user-confirmed**, with address configurations observed afterward. The screenshot itself does not prove VMware's selected segment or current connectivity between SPIDERMAN and HYDRA-DC, and does not resolve the pre-existing computer secure-channel failure. The prior NAT diagram is historical and should not be presented as the current topology.
 
+![SPIDERMAN isolated-LAN TCP 389 test](../evidence/2026-11-20_35-spiderman-isolated-tcp389.png)
+
 **Post-migration connectivity result (2026-11-20):** A new SPIDERMAN PowerShell screenshot for `Test-NetConnection 192.168.158.128 -Port 389` shows `SourceAddress=192.168.158.129`, `InterfaceAlias=Ethernet0`, `RemoteAddress=192.168.158.128`, `RemotePort=389` and `TcpTestSucceeded=True`. This independently verifies a TCP connection from SPIDERMAN to HYDRA-DC's LDAP port after the reported migration, but **not** an authenticated LDAP bind or the restoration of the client's existing broken computer trust relationship.
 
 **Network milestone:** All four intended guests retain their originally documented IPv4 addresses after user-reported migration. Kali to HYDRA-DC ICMP passed (4/4); both Windows clients to HYDRA-DC TCP 389 passed. These successful paths do not prove complete network isolation, DNS health, Kerberos authentication or a healthy secure channel.
 
+![SPIDERMAN DNS A lookup](../evidence/2026-11-20_36-spiderman-isolated-dns-a.png)
+
 **Post-migration DNS A-record verified (2026-11-20):** SPIDERMAN ran `Resolve-DnsName HYDRA-DC.MARVEL.local -Server 192.168.158.128 -Type A`. The supplied screenshot shows `HYDRA-DC.MARVEL.local`, record type `A`, TTL `3600`, section `Answer`, and IPv4 `192.168.158.128`. This establishes correct DNS A-record lookup directly against HYDRA-DC's DNS service. It does not yet establish SRV records, Kerberos authentication, secure-channel repair or complete isolation.
+
+![SPIDERMAN AD LDAP SRV lookup](../evidence/2026-11-20_37-spiderman-isolated-dns-srv.png)
 
 **AD LDAP SRV DNS service-discovery verified (2026-11-20):** The SPIDERMAN screenshot from `Resolve-DnsName _ldap._tcp.dc._msdcs.MARVEL.local -Server 192.168.158.128 -Type SRV` shows an Answer record pointing to `hydra-dc.marvel.local` on TCP port `389` with priority `0`, weight `100`, TTL `600`. The Additional A record maps `hydra-dc.marvel.local` to `192.168.158.128` with TTL `3600`. Thus both direct host resolution and this AD service-location record function over the user-reported isolated LAN.
 
 **Important limitation:** DNS SRV and A answers do not establish an authenticated LDAP bind, healthy machine trust, Kerberos service or complete LAN containment.
 
+![SPIDERMAN forced DC discovery](../evidence/2026-11-20_38-spiderman-isolated-dc-locator.png)
+
 **Windows DC Locator verified (2026-11-20):** SPIDERMAN ran `nltest /dsgetdc:MARVEL.local /force`. The supplied screenshot reports DC `\\HYDRA-DC.MARVEL.local`, address `\\192.168.158.128`, domain and forest `MARVEL.local`, DC and client site `Default-First-Site-Name`, and `The command completed successfully`. Flags include `PDC`, `GC`, `DS`, `LDAP`, `KDC`, `TIMESERV`, `WRITABLE`, `DNS_DC` and others.
 
 **Interpretation:** Forced DC discovery works from SPIDERMAN after migration. Advertised capabilities do not prove authentication, application service health, healthy secure channel or complete network isolation. The prior `Test-ComputerSecureChannel` failure remains a separate issue.
+
+![Kali IPv4 and IPv6 routing table](../evidence/2026-11-20_39-kali-isolated-ipv4-ipv6-routes.png)
 
 **Kali route-table containment check verified (2026-11-20):** The user ran `ip -4 route && ip -6 route` from the isolated Kali guest. Screenshot output contained only:
 ```text
@@ -545,6 +603,8 @@ The user reported switching SPIDERMAN's VMware adapter to the dedicated `PEH-AD-
 fe80::/64 dev eth0 proto kernel metric 1024 pref medium
 ```
 Neither protocol had a displayed default route. IPv6's `fe80::/64` is link-local and does not by itself provide a route beyond the local link. The absence of default routes corroborates the intended local-only configuration **but does not prove total isolation across VMware/host networks**.
+
+![Kali external IPv4 destination unreachable](../evidence/2026-11-20_40-kali-no-external-ipv4-route.png)
 
 **Kali external-route lookup verified (2026-11-20):** The user ran `ip -4 route get 1.1.1.1` and the screenshot returned `RTNETLINK answers: Network is unreachable`. This is a read-only kernel lookup, with no packets sent, showing there was no usable route to this external IPv4 address. Together with the prior IPv4/IPv6 route tables, the result corroborates Kali's intended local-only networking configuration, **not complete hypervisor/host isolation**.
 
