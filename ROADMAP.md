@@ -49,7 +49,8 @@ Each phase remains **not verified** until relevant lab evidence is recorded.
 - [x] Identify VMnet8 as the NAT subnet (VMware Virtual Network Editor screenshot).
 - [x] User confirmed creating VMware snapshot `PEH-Kali-Baseline-Before-Attacks` for Kali Linux (2026-11-20; confirmation in conversation, snapshot not independently inspected).
 - [x] User confirmed creating powered-off VMware snapshot `PEH-HYDRA-DC-Baseline-Before-Attacks` for HYDRA-DC (2026-11-20; not independently inspected).
-- [ ] Create baseline snapshots for THEPUNISHER and SPIDERMAN; verify all snapshots in VMware Snapshot Manager before attacks.
+- [x] User confirmed powered-off VMware snapshot `PEH-THEPUNISHER-Baseline-Before-Attacks` for THEPUNISHER (2026-11-20; not independently inspected).
+- [ ] Create baseline snapshot for SPIDERMAN; verify all four snapshots in VMware Snapshot Manager before attacks.
 - [ ] Verify containment and approved scope before active attack simulation.
 - [ ] Study LLMNR/NBT-NS poisoning prerequisites and mitigations before running Responder in an isolated lab.
 - [ ] Keep SPIDERMAN trust-status anomaly separate from attack findings; investigate only if a lab depends on healthy computer trust.
