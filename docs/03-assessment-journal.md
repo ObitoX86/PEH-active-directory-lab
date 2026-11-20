@@ -845,7 +845,34 @@ netsh interface ipv4 set address name="Ethernet0" static 192.168.158.130 255.255
 
 **Interpretation:** Intended static IPv4 `192.168.158.130/24`, no gateway. The command changes IPv4 address assignment but does not explicitly set the DNS server. Do not assume DNS remains configured as `192.168.158.128`; check it separately. User asked whether to repeat the action on HYDRA-DC: not necessary because an earlier post-migration `ipconfig /all` screenshot verified HYDRA-DC was already static at `192.168.158.128/24`, with no gateway and loopback DNS.
 
-**Next step:** On THEPUNISHER, run `ipconfig /all` to verify the new address, DHCP status, gateway and DNS before moving the VMware NIC to the isolated LAN.
+**Next step:** THEPUNISHER's static settings were subsequently verified by screenshot in the next entry.
+
+---
+
+## 2026-11-20 — THEPUNISHER static IPv4 and DNS verified before LAN migration
+
+**Task:** Validate `Ethernet0` after changing THEPUNISHER from NAT-provided DHCP to manual IPv4.
+
+**Command:** `ipconfig /all` on THEPUNISHER.
+
+**Screenshot-verified output:**
+
+| Property | Observed value |
+| --- | --- |
+| Hostname | `THEPUNISHER` |
+| Primary DNS suffix | `MARVEL.local` |
+| Network adapter | `Ethernet0` |
+| DHCP Enabled | `No` |
+| IPv4 address | `192.168.158.130` (Preferred) |
+| Subnet mask | `255.255.255.0` |
+| Default gateway | Empty |
+| DNS server | `192.168.158.128` |
+
+**Interpretation:** THEPUNISHER has correctly retained its original IPv4 and domain-controller DNS while switching to static addressing, without a default gateway. DNS was already correctly configured; no additional DNS command is required. This screenshot does **not** establish that the VMware adapter has been moved onto `PEH-AD-Isolated` or that current Active Directory communication works.
+
+**Evidence:** User-supplied `ipconfig /all` PowerShell screenshot from 2026-11-20. PNG not yet committed to the GitHub evidence folder.
+
+**Next step:** Power off THEPUNISHER normally, change only its VMware adapter from NAT to LAN Segment `PEH-AD-Isolated` with Connect at power on enabled, boot and verify `ipconfig /all` again. Then test connectivity to HYDRA-DC.
 
 ---
 
