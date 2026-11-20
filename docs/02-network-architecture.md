@@ -128,6 +128,26 @@ Get-CimInstance Win32_ComputerSystem |
 
 **Interpretation:** The local Windows computer reports that SPIDERMAN is joined to the `MARVEL.local` domain. This demonstrates configured membership, not a fresh successful domain authentication. Screenshot was supplied in the project conversation, not committed as an image.
 
+## Verified DNS name resolution from THEPUNISHER — PowerShell screenshot, 2026-11-20
+
+**Command executed on THEPUNISHER:**
+
+```powershell
+Resolve-DnsName HYDRA-DC.MARVEL.local
+```
+
+**Observed answer:**
+
+| Property | Value |
+| --- | --- |
+| Name | `HYDRA-DC.MARVEL.local` |
+| Type | `A` |
+| Section | `Answer` |
+| TTL | `3600` seconds |
+| IPAddress | `192.168.158.128` |
+
+**Interpretation:** The client successfully resolved HYDRA-DC's fully qualified hostname to the domain controller's previously recorded IPv4 address. The client was configured to use `192.168.158.128` as DNS in the earlier `ipconfig /all` output. This demonstrates successful name resolution for this record but does not independently verify Kerberos/LDAP operation, current domain authentication, or connectivity to every server service. The screenshot was provided in the conversation; an image copy has not been committed.
+
 ## Verified connection from earlier troubleshooting
 
 A Windows client referred to as **Punisher** accessed a lab Windows server using a direct UNC path by private IP. This is evidence of that specific connection; it does not verify all three VMware entries, the domain setup, or network discovery settings. The exact relationship between the previously reported client and **THEPUNISHER** is to be confirmed.
@@ -148,7 +168,8 @@ A Windows client referred to as **Punisher** accessed a lab Windows server using
    Gateway: 192.168.158.2          Gateway: 192.168.158.2
 
    All three IPv4 settings fall within 192.168.158.0/24.
-   Diagram reflects configuration, NOT tested connectivity.
+   Diagram reflects configuration plus one successful DNS lookup.
+   LDAP/Kerberos connectivity has NOT been tested.
    All three VMs: NAT (server screenshot; clients user report).
    Virtual NAT switch identity and actual connectivity: TO VERIFY.
 ```
@@ -161,7 +182,7 @@ No connections are drawn until their configuration is confirmed.
 2. Which additional domain controller services are functioning (AD controller identity is verified).
 3. Additional domain configuration and DNS health (domain identified as `MARVEL.local`; publish only if safe).
 4. Screenshot evidence for client NAT configuration if needed (their NAT settings are user-confirmed).
-5. Verify actual connectivity and DNS resolution (all three IPv4 configuration baselines have been recorded).
+5. Test live TCP service connectivity (THEPUNISHER DNS A-record resolution succeeded; SPIDERMAN DNS not tested).
 6. Live domain controller discovery/authentication and name-resolution tests; both client memberships are verified via `Win32_ComputerSystem`.
 7. Redacted screenshot evidence for architecture and configuration.
 
