@@ -20,6 +20,8 @@ Groups              OU=Groups,DC=MARVEL,DC=local
 
 ## Directory structure observed
 
+![Active Directory OU inventory](../evidence/2026-11-20_15-ad-organizational-units.png)
+
 ```text
 MARVEL.local
 ├── OU=Domain Controllers
@@ -41,6 +43,8 @@ The tree above shows **only organisational units returned by this command**. It 
 - The OU enumeration does not establish group memberships, permissions or privileges. A subsequent read-only query enumerates 20 group objects, but not their members or permissions.
 
 ## Groups OU — direct child objects verified on 2026-11-20
+
+![OU=Groups group inventory](../evidence/2026-11-20_16-ad-group-inventory.png)
 
 Command executed on HYDRA-DC:
 
@@ -80,6 +84,8 @@ Get-ADObject -SearchBase "OU=Groups,DC=MARVEL,DC=local" -SearchScope OneLevel -F
 
 ## Domain Admins — verified direct membership (2026-11-20)
 
+![Domain Admins direct members](../evidence/2026-11-20_17-domain-admins-members.png)
+
 **Command executed on HYDRA-DC:**
 
 ```powershell
@@ -102,6 +108,8 @@ Get-ADGroupMember -Identity "Domain Admins" |
 **Evidence:** PowerShell screenshot supplied in the PEH project conversation on 2026-11-20; a redacted image copy is not yet in GitHub.
 
 ## SQL Service account — SPN registration verified (2026-11-20)
+
+![SQL Service SPN lookup](../evidence/2026-11-20_18-sqlservice-spn.png)
 
 **Command run on HYDRA-DC:**
 
@@ -130,4 +138,4 @@ The SPN string is not the usual `MSSQLSvc/` format; **it does not prove Microsof
 
 ## Screenshot evidence
 
-The original PowerShell screenshot was supplied in the PEH project conversation on 2026-11-20. A separately redacted PNG has **not yet been uploaded** to this repository. The output above is a transcription of the supplied evidence, not a new test.
+The four corresponding PowerShell screenshots were supplied during the PEH project conversation and have now been uploaded to GitHub as evidence files 15–18. They are embedded in the relevant sections above. The screenshot evidence supports only the displayed inventories, memberships and SPN attributes; no exploitation is claimed.
