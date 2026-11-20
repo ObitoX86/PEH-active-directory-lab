@@ -243,7 +243,27 @@ TcpTestSucceeded : True
 
 **Analysis:** A TCP handshake to port 389 on HYDRA-DC succeeded from SPIDERMAN. Both domain-joined clients now have demonstrated transport connectivity to this port. This does not independently verify LDAP binding, Kerberos authentication, Group Policy or service health.
 
-**Follow-up:** Test domain controller discovery from a client, then test secure-channel or authenticated domain operations separately.
+**Follow-up:** SPIDERMAN domain controller discovery succeeded in the next entry. Test its domain secure channel separately.
+
+---
+
+## 2026-11-20 — SPIDERMAN domain controller discovery
+
+**Task:** Locate an Active Directory domain controller for `MARVEL.local` from SPIDERMAN using the Windows `nltest` utility.
+
+**Command:**
+
+```powershell
+nltest /dsgetdc:MARVEL.local
+```
+
+**Evidence:** Screenshot supplied in the conversation on 2026-11-20; no screenshot image uploaded to GitHub.
+
+**Observed result:** The command completed successfully, showing `\\\\HYDRA-DC.MARVEL.local` at `192.168.158.128`; the domain and forest names were `MARVEL.local`, both sites were `Default-First-Site-Name`, and flags included `PDC`, `GC`, `LDAP`, `KDC`, `WRITABLE`, and `DNS_DC`.
+
+**Analysis:** Windows on SPIDERMAN successfully discovered the expected Active Directory domain controller. Advertised capability flags do not establish successful authenticated user access or secure-channel health. The domain GUID was intentionally not reproduced in this journal entry.
+
+**Follow-up:** On SPIDERMAN, run `Test-ComputerSecureChannel -Verbose` without `-Repair`, then assess the result.
 
 ---
 
