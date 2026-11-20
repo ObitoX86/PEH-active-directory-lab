@@ -23,7 +23,22 @@ These observations do **not** establish administrator access or success of any p
 | THEPUNISHER | Domain-joined Windows client (membership verified) | Guest hostname `THEPUNISHER`; `PartOfDomain=True` and domain `MARVEL.local` | IPv4 `192.168.158.130/24` (DHCP enabled); DNS `192.168.158.128`; gateway `192.168.158.2`; DHCP server `192.168.158.254`; VMware adapter NAT (user-confirmed) | `ipconfig /all` and `Get-CimInstance` screenshots, 2026-11-20 |
 | SPIDERMAN | Domain-joined Windows client (membership verified) | Guest hostname `SPIDERMAN`; `PartOfDomain=True`, domain `MARVEL.local` | IPv4 `192.168.158.129/24` (DHCP enabled); DNS `192.168.158.128`; gateway `192.168.158.2`; DHCP server `192.168.158.254`; VMware adapter NAT (user-confirmed) | VMware inventory, `ipconfig /all`, and `Get-CimInstance` screenshots, 2026-11-20 |
 
-Other machines (including a Kali testing VM, if present) are not shown in this VMware screenshot; their presence and connectivity should not be assumed.
+## Kali Linux tester — 2026-11-20
+
+A later terminal screenshot from the **Kali Linux** testing environment shows `ip -br addr` returning:
+
+```text
+lo     UNKNOWN  127.0.0.1/8  ::1/128
+eth0   UP       192.168.158.131/24  fe80::5e29:65cd:2a93:70b9/64
+```
+
+**Verified:** `eth0` is UP with IPv4 address `192.168.158.131/24`. This falls within the same calculated IPv4 subnet as the three Windows lab guests. `lo` is the loopback interface.
+
+**Not yet verified:** Kali's hypervisor network mode, virtual network identity, DNS/gateway, actual connectivity to the Windows machines, and whether Kali's networking is suitably contained for the upcoming lab exercises. This screenshot confirms the tester's OS environment, but does not show it in the earlier three-VM VMware inventory.
+
+**Evidence:** Kali terminal screenshot supplied in the conversation on 2026-11-20. Redacted image has not yet been committed to the repository. 
+
+All observations above must be interpreted as configuration facts, not as evidence of an attack.
 
 **Screenshot references:** See [the 14-file evidence register](../evidence/INDEX.md), including server and client network settings, domain membership, NAT configuration, and connectivity diagnostics.
 
