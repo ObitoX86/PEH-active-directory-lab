@@ -9,9 +9,10 @@ Each phase remains **not verified** until relevant lab evidence is recorded.
 - [x] Record THEPUNISHER's IP, DNS, DHCP, gateway and hostname from `ipconfig /all` (2026-11-20).
 - [x] Verify THEPUNISHER's domain membership in `MARVEL.local` using `Win32_ComputerSystem` (`PartOfDomain=True`), 2026-11-20.
 - [x] Record SPIDERMAN's IP, DNS, DHCP, gateway and hostname from `ipconfig /all` (2026-11-20).
-- [ ] Verify SPIDERMAN's domain membership in `MARVEL.local`.
+- [x] Verify SPIDERMAN's configured domain membership in `MARVEL.local` using `Win32_ComputerSystem` (`PartOfDomain=True`), 2026-11-20.
 - [ ] Verify guest operating systems, other VM roles, individual service health and hypervisor network modes.
-- [ ] Document domain controller, domain, client machines and test machine(s).
+- [x] Document domain controller and both visible clients (hostnames, addresses, AD membership) from supplied evidence.
+- [ ] Verify whether a separate testing VM is used and document its scope if applicable.
 - [ ] Produce a network topology diagram using confirmed details.
 - [x] Establish at least one successful client-to-server file-sharing connection by direct UNC path (observed during prior lab troubleshooting).
 
