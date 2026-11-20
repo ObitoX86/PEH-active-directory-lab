@@ -34,7 +34,9 @@ Each phase remains **not verified** until relevant lab evidence is recorded.
 - [x] Inventory OUs with `Get-ADOrganizationalUnit -Filter *`: `Domain Controllers` and `Groups` (2026-11-20).
 - [x] Inspect 20 direct child objects in `OU=Groups`; all returned with `ObjectClass=group` (2026-11-20).
 - [x] Verify `Domain Admins` direct membership (3 user objects: `Administrator`, `Tony Stark`, `SQL Service`; 2026-11-20).
-- [ ] Review the `SQL Service` identity and SPN registration before deciding whether it is a service-account privilege finding or Kerberoasting candidate.
+- [x] Verify `SQL Service` has `SamAccountName=SQLService` and registered SPN `HYDRA-DC/SQLService.MARVEL.local:60111` (2026-11-20).
+- [x] Record user's confirmation that privileged SQLService + SPN configuration was **intentional PEH lab setup** (2026-11-20).
+- [ ] Test actual Kerberoasting behaviour only in an authorised, contained lab; no ticket request or credential recovery has yet been documented.
 - [ ] Document relevant users, security groups, computer objects and Group Policy links based on verified results.
 - [ ] Upload the OU enumeration screenshot as redacted evidence when preparing the next screenshot batch.
 
