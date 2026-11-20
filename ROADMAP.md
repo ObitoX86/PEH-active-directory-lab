@@ -56,7 +56,8 @@ Each phase remains **not verified** until relevant lab evidence is recorded.
 - [x] Draft guest-address preservation plan for `PEH-AD-Isolated`: HYDRA-DC `.128`, SPIDERMAN `.129`, THEPUNISHER `.130`, Kali `.131`, all `/24`; preserve HYDRA-DC DNS for clients; no gateway needed in contained LAN.
 - [x] User followed powered-off HYDRA-DC migration to `PEH-AD-Isolated` and supplied `ipconfig /all` confirming static `192.168.158.128/24`, DHCP disabled, no gateway, DNS loopback, `MARVEL.local` (2026-11-20). VMware segment selection is user-reported, not separately screenshot-verified.
 - [x] Identify Kali's active NetworkManager connection as `Wired connection 1` on `eth0` (2026-11-20 screenshot from `nmcli -f NAME,DEVICE connection show --active`).
-- [ ] Set `Wired connection 1` to a persistent static IPv4 `192.168.158.131/24` with DNS `192.168.158.128` and no default gateway; validate stored profile before migrating Kali's VMware adapter to the LAN segment.
+- [x] User confirmed running `nmcli connection modify` for Kali `Wired connection 1` with manual IPv4 `192.168.158.131/24`, DNS `192.168.158.128`, no gateway/default route (2026-11-20; settings not yet independently read back).
+- [ ] Read back Kali's saved NetworkManager profile to verify IPv4 method/address, DNS, and no default gateway before moving its VMware adapter.
 - [ ] Migrate Kali to the isolated LAN and test connection to HYDRA-DC.
 - [ ] Move THEPUNISHER and SPIDERMAN and configure static `.130` / `.129` with DNS `.128`; verify the full lab works on the isolated LAN.
 - [ ] Verify guest isolation, correct IP/DNS and scoped connectivity on LAN segment before any traffic-interception test.
