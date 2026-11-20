@@ -106,7 +106,33 @@ THEPUNISHER   MARVEL.local  True
 
 **Analysis:** All three VMs have IP settings in the `192.168.158.0/24` subnet. The two Windows clients are configured to use HYDRA-DC for DNS and receive their IP configurations from a separate DHCP server. Domain suffix configuration does not by itself prove that SPIDERMAN is domain-joined or that connectivity is functioning.
 
-**Follow-up:** On SPIDERMAN, run `Get-CimInstance Win32_ComputerSystem | Select-Object Name, Domain, PartOfDomain` to verify its domain membership.
+**Follow-up:** SPIDERMAN's configured domain membership was verified in the next journal entry.
+
+---
+
+## 2026-11-20 — SPIDERMAN domain membership verification
+
+**Task:** Verify whether the SPIDERMAN Windows client reports membership of the Active Directory domain.
+
+**Command:**
+
+```powershell
+Get-CimInstance Win32_ComputerSystem |
+    Select-Object Name, Domain, PartOfDomain
+```
+
+**Evidence:** User-supplied PowerShell screenshot in the chat on 2026-11-20; no screenshot file committed to the repository yet.
+
+**Observed result:**
+
+```text
+Name        Domain        PartOfDomain
+SPIDERMAN   MARVEL.local  True
+```
+
+**Analysis:** Local CIM results identify SPIDERMAN as a domain-joined computer in `MARVEL.local`. Together with the previous results for THEPUNISHER and HYDRA-DC, this completes verification of the intended domain roles and configured membership of the two clients. Live service availability, client-to-controller authentication, name resolution and VMware network-mode mapping remain untested.
+
+**Follow-up:** Verify VMware network adapter modes for all three VMs, then validate basic live DNS/domain controller discovery.
 
 ---
 
