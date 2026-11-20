@@ -17,7 +17,7 @@ This project documents the design, administration and authorised security testin
 | Network topology diagram | Documented (Mermaid) | All three machines use NAT (server screenshot, clients user-confirmed); the two clients each reached HYDRA-DC TCP/389 |
 | DNS, LDAP transport and DC discovery | Verified for tested functions | THEPUNISHER resolved HYDRA-DC; both clients reached TCP 389; SPIDERMAN successfully located HYDRA-DC with `nltest /dsgetdc`; subsequent `Test-ComputerSecureChannel` returned **False**; LDAP authentication not yet tested |
 | SPIDERMAN secure-channel diagnostics | Mixed results — investigation pending | `Test-ComputerSecureChannel` remained `False` when repeated elevated (user-reported); `nltest /sc_query` previously showed last-used `NERR_Success`. Unresolved, deferred; see [issue #1](https://github.com/ObitoX86/PEH-active-directory-lab/issues/1) |
-| Active Directory OU inventory | Documented | Two OUs returned by PowerShell: `Domain Controllers` and `Groups`; contents, users, groups and GPOs remain to be inspected |
+| Active Directory OU and group inventory | Partially documented | Two OUs identified; 20 groups found directly under `Groups`. Group memberships, user accounts and GPOs remain to be inspected |
 | Initial attack vectors | To verify | Attach lab-only observations and redacted screenshots |
 | Post-compromise enumeration | To verify | Document commands, authorised scope and results |
 | Post-compromise attacks | To verify | Record only exercises personally reproduced |
@@ -66,4 +66,4 @@ For each exercise, capture: **objective, authorised targets, method, observed ou
 
 ## Next milestone
 
-Finish read-only directory object enumeration (starting with the `Groups` OU), then identify the authorised testing VM and confirm lab isolation before attack-vector exercises. SPIDERMAN's unresolved secure-channel result is tracked in [issue #1](https://github.com/ObitoX86/PEH-active-directory-lab/issues/1) and will be revisited if an exercise depends on it.
+Inspect direct membership of `Domain Admins` in the next read-only directory query. Then continue users, groups, policies and authorised testing VM inventory before attack-vector exercises. SPIDERMAN's unresolved secure-channel result is tracked in [issue #1](https://github.com/ObitoX86/PEH-active-directory-lab/issues/1) and will be revisited if an exercise depends on it.
