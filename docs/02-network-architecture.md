@@ -215,7 +215,31 @@ nltest /dsgetdc:MARVEL.local
 
 **Evidence:** Screenshot provided in the conversation on 2026-11-20; no screenshot image has been committed to GitHub. The domain GUID is omitted from this public-facing record because it is not necessary to explain the result.
 
-**Next verification:** From SPIDERMAN, run the non-repairing `Test-ComputerSecureChannel -Verbose` command and record whether the computer's domain secure channel is healthy.
+**Next verification:** SPIDERMAN ran the non-repairing `Test-ComputerSecureChannel -Verbose` command; it reported `False` (see diagnostic entry below).
+
+## SPIDERMAN domain secure-channel check — failed (PowerShell screenshot, 2026-11-20)
+
+**Command run on SPIDERMAN:**
+
+```powershell
+Test-ComputerSecureChannel -Verbose
+```
+
+**Observed output:**
+
+```text
+VERBOSE: Performing the operation "Test-ComputerSecureChannel" on target "SPIDERMAN".
+False
+VERBOSE: The secure channel between the local computer and the domain MARVEL.local is broken.
+```
+
+**Status:** Failed diagnostic check; **cause not yet established**. The screenshot doesn't establish whether PowerShell was elevated. Microsoft's documentation instructs running this cmdlet as administrator on supported Windows client systems.
+
+**Interpretation:** Even though SPIDERMAN is configured as a domain member, discovers HYDRA-DC, and can establish TCP 389, its computer-domain secure-channel test returned `False`. Domain discovery and a reachable LDAP port do not prove the computer's account trust works. Possible explanations require further investigation; do not label a specific root cause or a security vulnerability from this output alone.
+
+**Next step:** Open PowerShell **as Administrator** on SPIDERMAN and run `nltest /sc_query:MARVEL.local` to inspect the secure channel's last reported state and status codes. This query does not repair or reset the secure channel. Note that Microsoft's `nltest` documentation describes `/sc_query` as reporting the channel state the last time it was used.
+
+**Evidence:** Screenshot supplied in the conversation; no image uploaded to GitHub.
 
 ## Verified connection from earlier troubleshooting
 
@@ -240,7 +264,8 @@ A Windows client referred to as **Punisher** accessed a lab Windows server using
    Diagram reflects configuration plus one successful DNS lookup.
    TCP 389 connections from THEPUNISHER and SPIDERMAN to HYDRA-DC: SUCCESS.
    SPIDERMAN domain-controller discovery: SUCCESS (nltest /dsgetdc).
-   Authenticated LDAP binding, secure-channel health and user logon remain untested.
+   Authenticated LDAP binding and user logon remain untested.
+   SPIDERMAN secure-channel test: FALSE — diagnostic investigation pending.
    All three VMs: NAT (server screenshot; clients user report).
    NAT switch identity not independently verified; TCP 389 paths tested.
 ```
@@ -269,7 +294,7 @@ Both clients are configured to use HYDRA-DC for DNS; THEPUNISHER also has a sepa
 3. Additional domain configuration and DNS health (domain identified as `MARVEL.local`; publish only if safe).
 4. Screenshot evidence for client NAT configuration if needed (their NAT settings are user-confirmed).
 5. Validate other services and authenticated domain operations (both clients succeeded on TCP 389; THEPUNISHER also succeeded in a separate DNS lookup).
-6. Verify computer secure-channel health and authenticated domain operations (SPIDERMAN discovery succeeded; both client memberships verified via `Win32_ComputerSystem`).
+6. Diagnose SPIDERMAN secure-channel check failure (returned False); confirm elevation and inspect read-only nltest channel query. Authenticated domain operations remain untested.
 7. Redacted screenshot evidence for architecture and configuration.
 
 This diagram is grounded in supplied settings and successful TCP tests. Expand it only when subsequent tests verify additional paths.
