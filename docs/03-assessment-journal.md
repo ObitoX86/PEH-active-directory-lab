@@ -426,6 +426,29 @@ Groups               OU=Groups,DC=MARVEL,DC=local
 
 ---
 
+## 2026-11-20 — Group objects directly within OU=Groups
+
+**Task:** Determine which objects exist directly inside `OU=Groups,DC=MARVEL,DC=local`.
+
+**Command:**
+
+```powershell
+Get-ADObject -SearchBase "OU=Groups,DC=MARVEL,DC=local" -SearchScope OneLevel -Filter * |
+    Select-Object Name, ObjectClass
+```
+
+**Observed result:** 20 immediate child objects were listed, all with `ObjectClass=group`: Allowed RODC Password Replication Group, Cert Publishers, Cloneable Domain Controllers, Denied RODC Password Replication Group, DnsAdmins, DnsUpdateProxy, Domain Admins, Domain Computers, Domain Controllers, Domain Guests, Domain Users, Enterprise Admins, Enterprise Key Admins, Enterprise Read-only Domain Controllers, Group Policy Creator Owners, Key Admins, Protected Users, RAS and IAS Servers, Read-only Domain Controllers, Schema Admins.
+
+**Analysis:** The result establishes the presence of the listed group objects. It does not show any members, access control settings, group type, or proof of exploitation. The `OneLevel` scope does not cover objects in other containers or nested OUs.
+
+**Evidence:** PowerShell screenshot supplied in the conversation on 2026-11-20; redacted image not yet added to GitHub.
+
+**Detailed inventory:** [Active Directory directory structure](06-active-directory-structure.md).
+
+**Next step:** Query direct membership of the `Domain Admins` group.
+
+---
+
 ## New entry template
 
 **Date:** YYYY-MM-DD  
