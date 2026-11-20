@@ -531,7 +531,11 @@ The user reported switching SPIDERMAN's VMware adapter to the dedicated `PEH-AD-
 
 **Post-migration DNS A-record verified (2026-11-20):** SPIDERMAN ran `Resolve-DnsName HYDRA-DC.MARVEL.local -Server 192.168.158.128 -Type A`. The supplied screenshot shows `HYDRA-DC.MARVEL.local`, record type `A`, TTL `3600`, section `Answer`, and IPv4 `192.168.158.128`. This establishes correct DNS A-record lookup directly against HYDRA-DC's DNS service. It does not yet establish SRV records, Kerberos authentication, secure-channel repair or complete isolation.
 
-**Next read-only test:** Query `_ldap._tcp.dc._msdcs.MARVEL.local` as a DNS SRV record using `-Server 192.168.158.128` to verify service-location records for the domain controller.
+**AD LDAP SRV DNS service-discovery verified (2026-11-20):** The SPIDERMAN screenshot from `Resolve-DnsName _ldap._tcp.dc._msdcs.MARVEL.local -Server 192.168.158.128 -Type SRV` shows an Answer record pointing to `hydra-dc.marvel.local` on TCP port `389` with priority `0`, weight `100`, TTL `600`. The Additional A record maps `hydra-dc.marvel.local` to `192.168.158.128` with TTL `3600`. Thus both direct host resolution and this AD service-location record function over the user-reported isolated LAN.
+
+**Important limitation:** DNS SRV and A answers do not establish an authenticated LDAP bind, healthy machine trust, Kerberos service or complete LAN containment.
+
+**Next read-only check:** On SPIDERMAN run `nltest /dsgetdc:MARVEL.local /force` to test DC Locator; interpret its result as discovery, not as a secure-channel repair.
 
 **Evidence:** SPIDERMAN post-boot `ipconfig /all` screenshot received 2026-11-20; redacted PNG pending GitHub upload.
 
