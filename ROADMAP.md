@@ -69,7 +69,9 @@ Each phase remains **not verified** until relevant lab evidence is recorded.
 - [x] Verify SPIDERMAN's interface name `Ethernet0`, status `Up`, Intel(R) 82574L Gigabit Network Connection from `Get-NetAdapter` screenshot (2026-11-20).
 - [x] User confirmed running `netsh interface ipv4 set address name="Ethernet0" static 192.168.158.129 255.255.255.0 none` on SPIDERMAN (2026-11-20); no readback evidence yet.
 - [x] Screenshot-verify SPIDERMAN's `ipconfig /all` before isolated LAN migration: `192.168.158.129/24`, DHCP No, default gateway blank, DNS `192.168.158.128`, domain suffix `MARVEL.local` (2026-11-20).
-- [ ] Move SPIDERMAN and configure static `192.168.158.129/24` with DNS `.128`; verify the full lab works on the isolated LAN.
+- [x] User reports moving SPIDERMAN to `PEH-AD-Isolated`; its post-boot `ipconfig /all` screenshot confirms `192.168.158.129/24`, DHCP disabled, blank gateway, DNS `192.168.158.128` and `MARVEL.local` (2026-11-20). VMware adapter selection not separately screenshot-verified.
+- [ ] Verify SPIDERMAN reaches HYDRA-DC over TCP 389 after migration; follow with DNS tests and unresolved secure-channel diagnostics if relevant.
+- [ ] Verify all four VMs operate correctly on the isolated LAN; do not infer AD authentication from network settings alone.
 - [ ] Verify guest isolation, correct IP/DNS and scoped connectivity on LAN segment before any traffic-interception test.
 - [ ] Verify containment and approved scope before active attack simulation.
 - [ ] Study LLMNR/NBT-NS poisoning prerequisites and mitigations before running Responder in an isolated lab.
