@@ -500,6 +500,31 @@ Get-ADUser -Filter 'Name -eq "SQL Service"' -Properties ServicePrincipalName |
 
 ---
 
+## 2026-11-20 — Kali Linux testing machine IP baseline
+
+**Task:** Identify the Linux tester's active network interface and IPv4 configuration before running any Active Directory exercises.
+
+**Command:**
+
+```bash
+ip -br addr
+```
+
+**Observed result:**
+
+```text
+lo     UNKNOWN  127.0.0.1/8  ::1/128
+eth0   UP       192.168.158.131/24  fe80::5e29:65cd:2a93:70b9/64
+```
+
+**Analysis:** `eth0` is UP with `192.168.158.131/24`, matching the `192.168.158.0/24` address range used by the three Windows lab systems. This confirms address configuration, not Kali's VMware adapter mode, reachability, internet exposure, or isolation.
+
+**Evidence:** Kali terminal screenshot supplied in the conversation on 2026-11-20. Not yet uploaded as a redacted PNG to GitHub.
+
+**Next action:** Inspect the Kali VM's VMware Network Adapter setting, then validate that the environment is contained before snapshots or any active network attack simulation.
+
+---
+
 ## New entry template
 
 **Date:** YYYY-MM-DD  
