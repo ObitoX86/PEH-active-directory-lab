@@ -489,6 +489,25 @@ eth0     UP       192.168.158.131/24  fe80::5e29:65cd:2a93:70b9/64
 
 **THEPUNISHER NIC identified (2026-11-20):** The user ran `Get-NetAdapter | Select-Object Name, Status, InterfaceDescription`, returning `Ethernet0` / `Up` / `Intel(R) 82574L Gigabit Network Connection`. This identifies the intended interface for its forthcoming DHCP-to-static change; the next screenshot verifies its new static IP configuration, but **LAN segment attachment is not yet verified**. **Static IPv4 baseline verified:** The user supplied post-change `ipconfig /all` on THEPUNISHER showing hostname `THEPUNISHER`, primary suffix `MARVEL.local`, adapter `Ethernet0`, `DHCP Enabled: No`, `192.168.158.130/24`, blank default gateway and DNS `192.168.158.128`. This preserves its IPv4 and DNS settings without a further DNS change. **Next:** Move the powered-off VM adapter to `PEH-AD-Isolated`, boot, and validate post-migration settings and DC connectivity.
 
+## THEPUNISHER after isolated LAN migration — IP retained (2026-11-20)
+
+The user reports moving THEPUNISHER's VMware adapter to `PEH-AD-Isolated` and restarting the VM. Its **fresh post-boot** `ipconfig /all` screenshot confirms:
+
+| Item | Value |
+| --- | --- |
+| Hostname / DNS suffix | `THEPUNISHER` / `MARVEL.local` |
+| Interface | `Ethernet0` |
+| IPv4 | `192.168.158.130/24` |
+| DHCP | Disabled |
+| Default gateway | Blank |
+| DNS server | `192.168.158.128` |
+
+**Result:** The intended guest network configuration is preserved after the reported segment change. The screenshot cannot itself show VMware's selected segment or verify TCP connectivity, DNS resolution, Kerberos, domain logon or isolation. Kali has confirmed ICMP connectivity to HYDRA-DC on the separate LAN, but Windows-client connectivity after migration is not yet tested.
+
+**Next test:** Run `Test-NetConnection 192.168.158.128 -Port 389` on THEPUNISHER, then address SPIDERMAN's migration independently. The earlier NAT topology diagram remains historical only.
+
+**Evidence:** PowerShell screenshot supplied 2026-11-20; PNG not yet uploaded to GitHub.
+
 ## Details to confirm
 
 1. Installed operating systems and purposes for each of the three VMs.
