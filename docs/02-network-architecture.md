@@ -539,7 +539,14 @@ The user reported switching SPIDERMAN's VMware adapter to the dedicated `PEH-AD-
 
 **Interpretation:** Forced DC discovery works from SPIDERMAN after migration. Advertised capabilities do not prove authentication, application service health, healthy secure channel or complete network isolation. The prior `Test-ComputerSecureChannel` failure remains a separate issue.
 
-**Next:** Review Kali's IPv4 and IPv6 routing with `ip -4 route && ip -6 route`, then check VMware adapter isolation before using attack tools.
+**Kali route-table containment check verified (2026-11-20):** The user ran `ip -4 route && ip -6 route` from the isolated Kali guest. Screenshot output contained only:
+```text
+192.168.158.0/24 dev eth0 proto kernel scope link src 192.168.158.131 metric 100
+fe80::/64 dev eth0 proto kernel metric 1024 pref medium
+```
+Neither protocol had a displayed default route. IPv6's `fe80::/64` is link-local and does not by itself provide a route beyond the local link. The absence of default routes corroborates the intended local-only configuration **but does not prove total isolation across VMware/host networks**.
+
+**Next:** Confirm the kernel would not route an external IPv4 destination using `ip -4 route get 1.1.1.1`, which performs a lookup without sending packets, and continue reviewing VMware adapter scope before active interception tests.
 
 **Evidence:** SPIDERMAN post-boot `ipconfig /all` screenshot received 2026-11-20; redacted PNG pending GitHub upload.
 
