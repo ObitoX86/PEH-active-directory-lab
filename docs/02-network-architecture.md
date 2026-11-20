@@ -98,13 +98,28 @@ Get-CimInstance Win32_ComputerSystem |
 | Primary WINS server | `192.168.158.2` |
 | NetBIOS over TCP/IP | Enabled |
 
-**Comparison:** SPIDERMAN is configured within `192.168.158.0/24` alongside HYDRA-DC and THEPUNISHER. Its configured DNS server matches HYDRA-DC's IPv4 address. DHCP assigns the client configuration from `192.168.158.254`. This proves the observed settings, **not** working DNS, network reachability, or domain membership. A domain membership query is pending.
+**Comparison:** SPIDERMAN is configured within `192.168.158.0/24` alongside HYDRA-DC and THEPUNISHER. Its configured DNS server matches HYDRA-DC's IPv4 address. DHCP assigns the client configuration from `192.168.158.254`. This proves the observed settings, **not** working DNS or network reachability. Domain membership was verified separately using a CIM query.
+
+## Verified SPIDERMAN domain membership — PowerShell screenshot, 2026-11-20
+
+```powershell
+Get-CimInstance Win32_ComputerSystem |
+    Select-Object Name, Domain, PartOfDomain
+```
+
+| Property | Value |
+| --- | --- |
+| Name | `SPIDERMAN` |
+| Domain | `MARVEL.local` |
+| PartOfDomain | `True` |
+
+**Interpretation:** The local Windows computer reports that SPIDERMAN is joined to the `MARVEL.local` domain. This demonstrates configured membership, not a fresh successful domain authentication. Screenshot was supplied in the project conversation, not committed as an image.
 
 ## Verified connection from earlier troubleshooting
 
 A Windows client referred to as **Punisher** accessed a lab Windows server using a direct UNC path by private IP. This is evidence of that specific connection; it does not verify all three VMware entries, the domain setup, or network discovery settings. The exact relationship between the previously reported client and **THEPUNISHER** is to be confirmed.
 
-## Proposed diagram (pending verified topology)
+## Configuration diagram (based on verified IP, DNS and domain membership)
 
 ```text
           [HYDRA-DC]                    AD domain controller + GC
@@ -115,7 +130,7 @@ A Windows client referred to as **Punisher** accessed a lab Windows server using
           |                             |
    [THEPUNISHER]                   [SPIDERMAN]
    192.168.158.130/24              192.168.158.129/24
-   Domain joined: YES              Domain joined: TO VERIFY
+   Domain joined: YES              Domain joined: YES
    DHCP enabled                    DHCP enabled
    Gateway: 192.168.158.2          Gateway: 192.168.158.2
 
@@ -133,7 +148,7 @@ No connections are drawn until their configuration is confirmed.
 3. Additional domain configuration and DNS health (domain identified as `MARVEL.local`; publish only if safe).
 4. VMware adapter types (NAT, host-only, custom VMnet, etc.).
 5. Verify actual connectivity and DNS resolution (all three IPv4 configuration baselines have been recorded).
-6. SPIDERMAN domain membership (THEPUNISHER membership verified via `Win32_ComputerSystem`).
+6. Live domain controller discovery/authentication and name-resolution tests; both client memberships are verified via `Win32_ComputerSystem`.
 7. Redacted screenshot evidence for architecture and configuration.
 
 Replace the draft with a diagram grounded in the running environment once confirmed.
