@@ -597,6 +597,20 @@ eth0   UP       192.168.158.131/24  fe80::5e29:65cd:2a93:70b9/64
 
 ---
 
+## 2026-11-20 — SPIDERMAN baseline snapshot user-confirmed
+
+**Task:** Preserve a baseline recovery point for the domain-joined client SPIDERMAN.
+
+**Requested procedure:** Shut down Windows normally, then create a powered-off VMware snapshot named `PEH-SPIDERMAN-Baseline-Before-Attacks`.
+
+**Reported result:** User replied **Done** to the snapshot procedure. This is user-confirmed and has not been independently inspected using Snapshot Manager or screenshots.
+
+**Analysis:** The lab owner has now confirmed baseline snapshots for all four VMs: Kali, HYDRA-DC, THEPUNISHER, and SPIDERMAN. The SPIDERMAN snapshot preserves the known unresolved domain secure-channel issue; it does **not** remediate the trust. Snapshots are local recovery points, not standalone AD backups, and restoring an older domain-controller snapshot independently can produce domain state inconsistencies.
+
+**Next step:** Verify snapshot names and visibility in VMware Snapshot Manager for all four guests before any network reconfiguration or attack simulation; then plan a contained training segment separate from uncontrolled traffic.
+
+---
+
 ## New entry template
 
 **Date:** YYYY-MM-DD  
