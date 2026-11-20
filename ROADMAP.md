@@ -7,7 +7,8 @@ Each phase remains **not verified** until relevant lab evidence is recorded.
 - [x] Record `HYDRA-DC` guest hostname, DNS suffix and IPv4/DNS configuration from server `ipconfig /all` (2026-11-20).
 - [x] Verify HYDRA-DC domain controller identity and Global Catalog via `Get-ADDomainController` (2026-11-20).
 - [x] Record THEPUNISHER's IP, DNS, DHCP, gateway and hostname from `ipconfig /all` (2026-11-20).
-- [ ] Verify THEPUNISHER's domain membership and SPIDERMAN's network configuration.
+- [x] Verify THEPUNISHER's domain membership in `MARVEL.local` using `Win32_ComputerSystem` (`PartOfDomain=True`), 2026-11-20.
+- [ ] Record SPIDERMAN's network configuration and verify its domain membership.
 - [ ] Verify guest operating systems, other VM roles, individual service health and hypervisor network modes.
 - [ ] Document domain controller, domain, client machines and test machine(s).
 - [ ] Produce a network topology diagram using confirmed details.
