@@ -930,7 +930,32 @@ TcpTestSucceeded : True
 
 **Evidence:** Screenshot uploaded in the conversation on 2026-11-20; redacted PNG is not yet committed to GitHub.
 
-**Next step:** Inspect SPIDERMAN's active interface name with `Get-NetAdapter | Select-Object Name, Status, InterfaceDescription`; then plan static `192.168.158.129/24` addressing and DNS `192.168.158.128` before moving SPIDERMAN to `PEH-AD-Isolated`.
+**Next step:** SPIDERMAN's active interface name was verified in the subsequent journal entry. Configure static `.129` and retain DNS `.128` before moving it to the private segment.
+
+---
+
+## 2026-11-20 — SPIDERMAN Windows interface identification before isolated LAN migration
+
+**Task:** Identify the exact Windows adapter to configure before moving SPIDERMAN off NAT DHCP.
+
+**PowerShell command on SPIDERMAN:**
+
+```powershell
+Get-NetAdapter | Select-Object Name, Status, InterfaceDescription
+```
+
+**Screenshot-verified output:**
+
+```text
+Name       Status  InterfaceDescription
+Ethernet0  Up      Intel(R) 82574L Gigabit Network Connection
+```
+
+**Analysis:** SPIDERMAN's interface is `Ethernet0`, status `Up`. This verifies the adapter name, not current IPv4 settings, domain authentication or trust repair. Earlier `ipconfig /all` evidence showed DHCP-provided `192.168.158.129/24` and DNS `192.168.158.128`. The existing unresolved secure-channel failure must remain tracked separately.
+
+**Evidence:** Screenshot supplied on 2026-11-20; redacted PNG not yet uploaded to GitHub.
+
+**Next step:** From elevated PowerShell, configure `Ethernet0` with static IPv4 `192.168.158.129/24`, no default gateway. Read back `ipconfig /all` and check DNS before switching the powered-off VM's adapter to `PEH-AD-Isolated`.
 
 ---
 
