@@ -192,6 +192,31 @@ TcpTestSucceeded : True
 
 **Interpretation:** A TCP connection from SPIDERMAN (`192.168.158.129`) to HYDRA-DC (`192.168.158.128`) port 389 succeeded. This is the same outcome already observed from THEPUNISHER. The hostname was resolved as part of the connection test, but a standalone SPIDERMAN DNS query has not been recorded. Neither test is evidence of a successful LDAP bind, Kerberos authentication or domain logon. The screenshot remains in the conversation; it is not yet stored in the repository.
 
+## Verified domain controller discovery — SPIDERMAN (`nltest` screenshot, 2026-11-20)
+
+**Command executed on SPIDERMAN:**
+
+```powershell
+nltest /dsgetdc:MARVEL.local
+```
+
+**Observed results:**
+
+| Field | Returned value |
+| --- | --- |
+| DC | `\\\\HYDRA-DC.MARVEL.local` |
+| Address | `\\\\192.168.158.128` |
+| Domain / forest | `MARVEL.local` |
+| DC site / client site | `Default-First-Site-Name` |
+| Status | `The command completed successfully` |
+| Selected flags | `PDC`, `GC`, `DS`, `LDAP`, `KDC`, `WRITABLE`, `DNS_DC`, `DNS_DOMAIN`, `DNS_FOREST`, `TIMESERV` |
+
+**Interpretation:** From SPIDERMAN, Windows successfully located a domain controller for `MARVEL.local`, returning the expected hostname and IPv4 address. Flags describe advertised domain-controller roles and capabilities, including Global Catalog, Kerberos KDC, LDAP and PDC emulator. A successful `nltest /dsgetdc` lookup does **not** verify a computer secure channel, a fresh authenticated user session or every advertised service.
+
+**Evidence:** Screenshot provided in the conversation on 2026-11-20; no screenshot image has been committed to GitHub. The domain GUID is omitted from this public-facing record because it is not necessary to explain the result.
+
+**Next verification:** From SPIDERMAN, run the non-repairing `Test-ComputerSecureChannel -Verbose` command and record whether the computer's domain secure channel is healthy.
+
 ## Verified connection from earlier troubleshooting
 
 A Windows client referred to as **Punisher** accessed a lab Windows server using a direct UNC path by private IP. This is evidence of that specific connection; it does not verify all three VMware entries, the domain setup, or network discovery settings. The exact relationship between the previously reported client and **THEPUNISHER** is to be confirmed.
@@ -214,7 +239,8 @@ A Windows client referred to as **Punisher** accessed a lab Windows server using
    All three IPv4 settings fall within 192.168.158.0/24.
    Diagram reflects configuration plus one successful DNS lookup.
    TCP 389 connections from THEPUNISHER and SPIDERMAN to HYDRA-DC: SUCCESS.
-   Authenticated LDAP binding and Kerberos remain untested.
+   SPIDERMAN domain-controller discovery: SUCCESS (nltest /dsgetdc).
+   Authenticated LDAP binding, secure-channel health and user logon remain untested.
    All three VMs: NAT (server screenshot; clients user report).
    NAT switch identity not independently verified; TCP 389 paths tested.
 ```
@@ -243,7 +269,7 @@ Both clients are configured to use HYDRA-DC for DNS; THEPUNISHER also has a sepa
 3. Additional domain configuration and DNS health (domain identified as `MARVEL.local`; publish only if safe).
 4. Screenshot evidence for client NAT configuration if needed (their NAT settings are user-confirmed).
 5. Validate other services and authenticated domain operations (both clients succeeded on TCP 389; THEPUNISHER also succeeded in a separate DNS lookup).
-6. Live domain controller discovery/authentication and name-resolution tests; both client memberships are verified via `Win32_ComputerSystem`.
+6. Verify computer secure-channel health and authenticated domain operations (SPIDERMAN discovery succeeded; both client memberships verified via `Win32_ComputerSystem`).
 7. Redacted screenshot evidence for architecture and configuration.
 
 This diagram is grounded in supplied settings and successful TCP tests. Expand it only when subsequent tests verify additional paths.
