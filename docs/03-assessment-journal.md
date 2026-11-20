@@ -1000,7 +1000,36 @@ netsh interface ipv4 set address name="Ethernet0" static 192.168.158.129 255.255
 
 **Evidence:** PowerShell screenshot provided in conversation on 2026-11-20; redacted image has not yet been committed to GitHub.
 
-**Next step:** Power down SPIDERMAN; change its VMware Network Adapter from NAT to LAN Segment `PEH-AD-Isolated`, leaving `Connect at power on` checked; boot and run `ipconfig /all` again.
+**Next step:** The user subsequently reported moving SPIDERMAN to the LAN segment and supplied a post-boot `ipconfig /all` screenshot; see the next entry.
+
+---
+
+## 2026-11-20 — SPIDERMAN post-migration static IPv4 and DNS verified
+
+**Task:** Attach the final Windows client to LAN Segment `PEH-AD-Isolated`, start the guest and verify the static IPv4 configuration persisted.
+
+**Reported action:** User followed instructions to move SPIDERMAN's powered-off VMware Network Adapter from NAT to `PEH-AD-Isolated`, then booted Windows. No post-migration VMware adapter-settings screenshot was provided; the LAN segment selection remains user-reported.
+
+**PowerShell command:** `ipconfig /all` on SPIDERMAN.
+
+**Screenshot-verified post-boot output:**
+
+| Field | Observed value |
+| --- | --- |
+| Hostname | `SPIDERMAN` |
+| Primary DNS suffix | `MARVEL.local` |
+| Adapter | `Ethernet0` |
+| DHCP Enabled | `No` |
+| IPv4 address | `192.168.158.129` (Preferred) |
+| Subnet mask | `255.255.255.0` |
+| Default gateway | Empty |
+| DNS server | `192.168.158.128` |
+
+**Interpretation:** After the user-reported migration, SPIDERMAN retained its expected static IP, mask and domain-controller DNS settings. The user has now reported moving all four intended lab VMs, preserving addresses `.128` through `.131`. This **does not establish SPIDERMAN-to-DC reachability, directory authentication, healthy computer secure channel, or complete isolation**. Its earlier `Test-ComputerSecureChannel` failure remains open in issue #1.
+
+**Evidence:** PowerShell screenshot supplied on 2026-11-20; the redacted image has not yet been committed to GitHub.
+
+**Next step:** Run `Test-NetConnection 192.168.158.128 -Port 389` on SPIDERMAN and record whether its IPv4 source `.129` can establish a TCP connection to the controller. Continue with DNS and isolation checks before any offensive tests.
 
 ---
 
