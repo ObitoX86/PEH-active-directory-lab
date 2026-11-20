@@ -15,12 +15,13 @@ Each phase remains **not verified** until relevant lab evidence is recorded.
 - [ ] Assess NAT network containment before intrusive testing; NAT is not fully isolated.
 - [x] Verify THEPUNISHER resolves `HYDRA-DC.MARVEL.local` to `192.168.158.128` (DNS A answer, TTL 3600), 2026-11-20.
 - [x] Test THEPUNISHER to HYDRA-DC TCP port 389 connectivity (`TcpTestSucceeded=True`, 2026-11-20).
-- [ ] Test SPIDERMAN to HYDRA-DC TCP port 389 connectivity.
+- [x] Test SPIDERMAN to HYDRA-DC TCP port 389 connectivity (`TcpTestSucceeded=True`, 2026-11-20).
 - [ ] Confirm authenticated Active Directory service operation separately; TCP connectivity is not authentication.
 - [ ] Verify guest operating systems, other VM roles and individual service health.
 - [x] Document domain controller and both visible clients (hostnames, addresses, AD membership) from supplied evidence.
 - [ ] Verify whether a separate testing VM is used and document its scope if applicable.
-- [ ] Produce a network topology diagram using confirmed details.
+- [x] Create a Mermaid network topology with verified IP addresses, domain roles and both tested TCP 389 paths (2026-11-20).
+- [ ] Confirm domain controller discovery and secure channel / live authentication separately.
 - [x] Establish at least one successful client-to-server file-sharing connection by direct UNC path (observed during prior lab troubleshooting).
 
 ## Phase 2 — Reconnaissance and enumeration
