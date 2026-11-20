@@ -32,7 +32,8 @@ Each phase remains **not verified** until relevant lab evidence is recorded.
 
 ## Active Directory object structure
 - [x] Inventory OUs with `Get-ADOrganizationalUnit -Filter *`: `Domain Controllers` and `Groups` (2026-11-20).
-- [ ] Inspect immediate child objects in the `Groups` OU and document their types.
+- [x] Inspect 20 direct child objects in `OU=Groups`; all returned with `ObjectClass=group` (2026-11-20).
+- [ ] Verify direct membership of privileged groups, starting with `Domain Admins`.
 - [ ] Document relevant users, security groups, computer objects and Group Policy links based on verified results.
 - [ ] Upload the OU enumeration screenshot as redacted evidence when preparing the next screenshot batch.
 
