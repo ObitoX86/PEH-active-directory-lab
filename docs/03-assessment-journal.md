@@ -675,7 +675,33 @@ eth0   UP       192.168.158.131/24  fe80::5e29:65cd:2a93:70b9/64
 
 **Evidence:** Terminal screenshot supplied in conversation on 2026-11-20; a redacted PNG has not yet been uploaded to GitHub.
 
-**Next step:** Check Kali's active NetworkManager connection profile so a persistent `192.168.158.131/24` static configuration can be prepared without relying on NAT DHCP; then switch to the isolated LAN.
+**Next step:** Kali's active NetworkManager profile was identified in the following journal entry.
+
+---
+
+## 2026-11-20 — Kali active NetworkManager profile identified
+
+**Task:** Identify the named connection profile on Kali before preparing persistent static IPv4 for the private PEH LAN segment.
+
+**Command:**
+
+```bash
+nmcli -f NAME,DEVICE connection show --active
+```
+
+**Observed output:**
+
+```text
+NAME                DEVICE
+Wired connection 1  eth0
+lo                  lo
+```
+
+**Analysis:** `Wired connection 1` is the active NetworkManager connection bound to `eth0`. `lo` is the loopback connection and should not be modified. The output confirms the active profile name, but does not establish the current profile's IPv4 method or that static settings are applied. Kali has **not** been confirmed migrated to `PEH-AD-Isolated`.
+
+**Evidence:** Kali terminal screenshot submitted in conversation on 2026-11-20; redacted PNG not yet uploaded to GitHub.
+
+**Next step:** Modify the saved `Wired connection 1` profile to manual IPv4 `192.168.158.131/24`, DNS `192.168.158.128` and no default route; inspect saved settings without immediately activating on the NAT network. Then migrate Kali's powered-off VMware adapter and verify post-boot connectivity.
 
 ---
 
