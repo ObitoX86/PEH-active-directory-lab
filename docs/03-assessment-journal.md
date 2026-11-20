@@ -555,6 +555,20 @@ eth0   UP       192.168.158.131/24  fe80::5e29:65cd:2a93:70b9/64
 
 ---
 
+## 2026-11-20 — Kali Linux baseline snapshot reported complete
+
+**Task:** Preserve the pre-attack configuration of the Kali Linux test VM in VMware Workstation.
+
+**Requested snapshot name:** `PEH-Kali-Baseline-Before-Attacks`.
+
+**Reported result:** The user confirmed **Done** after the snapshot instructions. The snapshot creation is user-confirmed; it has **not** been independently inspected in VMware Snapshot Manager and no screenshot was supplied.
+
+**Interpretation:** A recovery point is reported for Kali only. This does not establish snapshots for the Windows domain controller or two clients. Snapshots are local recovery aids rather than a replacement for supported Active Directory backups. No network reconfiguration or active test has been performed.
+
+**Next step:** Preserve HYDRA-DC's baseline with a deliberate clean shutdown and VMware snapshot, followed by snapshots of the Windows clients. Plan coherent recovery procedures and do not casually restore an older domain controller snapshot while other domain systems continue running.
+
+---
+
 ## New entry template
 
 **Date:** YYYY-MM-DD  
