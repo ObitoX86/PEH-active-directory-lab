@@ -351,11 +351,28 @@ eth0   UP       192.168.158.131/24  fe80::5e29:65cd:2a93:70b9/64
 
 **Interpretation:** All four lab machines now have NAT recorded: screenshot evidence for HYDRA-DC and Kali, and user confirmation for the two Windows clients. This does **not** establish that all four occupy the exact same VMware virtual network, nor that the segment is safe for LLMNR/NBT-NS poisoning. The `VMnet0` field visible below the inactive Custom option is not the selected NAT network.
 
-**Next safety verification:** Inspect VMware **Edit > Virtual Network Editor** and the NAT virtual network configuration (often VMnet8, but verify rather than assume). Check whether the NAT network has external access and which host adapters or other guests can reach it. Consider a dedicated non-routed/host-only or LAN-segment environment for traffic-poisoning exercises after preserving the current working configuration and confirming necessary DHCP/DNS arrangements. Take snapshots before changes or active tests.
+**Next safety verification:** Virtual Network Editor subsequently identified VMnet8 as the NAT subnet (see section below). Verify which other VMs and host adapters can reach VMnet8 and whether its NAT connection provides outbound access. Consider a dedicated non-routed/host-only or LAN-segment environment for traffic-poisoning exercises after preserving the current working configuration and confirming necessary DHCP/DNS arrangements. Take snapshots before network changes or active tests.
 
 **Evidence:** User-supplied terminal screenshot dated 2026-11-20; PNG not yet uploaded to the repository.
 
-## Configuration diagram (IP/DNS/domain from screenshots; NAT verified for Kali and HYDRA-DC, reported for clients)
+## Verified VMware virtual networks — Virtual Network Editor (2026-11-20)
+
+The VMware Virtual Network Editor screenshot shows:
+
+| Network | Type | External connection | Host connection | DHCP | Subnet address |
+| --- | --- | --- | --- | --- | --- |
+| `VMnet1` | Host-only | None shown (`-`) | Connected | Enabled | `192.168.125.0` |
+| `VMnet8` | NAT | NAT | Connected | Enabled | `192.168.158.0` |
+
+**Interpretation:** The NAT network is **VMnet8** with subnet address `192.168.158.0`, consistent with the four guests' `192.168.158.x/24` addresses and their NAT adapter settings. This is strong evidence that the guests are configured for VMware's same NAT subnet, but does not itself show full end-to-end connectivity or prove no other guests have access. The subnet mask `255.255.255.0` shown at the bottom of the editor belongs to the **selected VMnet1**, not necessarily to VMnet8; the guests' `/24` masks were established separately from their network commands.
+
+VMnet1 is an available **host-only** network using `192.168.125.0`. Switching the lab directly to it would change the addressing environment and may disrupt static domain-controller IP settings, DHCP, DNS and domain clients. **No configuration changes were made.**
+
+**Security boundary:** VMnet8 has NAT enabled, and NAT does **not** provide a fully offline or fully isolated network. Before LLMNR/NBT-NS poisoning and SMB relay, plan a dedicated contained test segment, check other connected guests, and take verified VM snapshots. The host is connected to both VMnet1 and VMnet8 in this editor; no trust or route isolation should be presumed.
+
+**Evidence:** VMware Virtual Network Editor screenshot provided in conversation on 2026-11-20. Redacted PNG not yet uploaded to GitHub.
+
+## Configuration diagram (IP/DNS/domain from screenshots; NAT VMnet8 identified)
 
 ```text
           [HYDRA-DC]                    AD domain controller + GC; VMware adapter: NAT
@@ -382,7 +399,8 @@ eth0   UP       192.168.158.131/24  fe80::5e29:65cd:2a93:70b9/64
    Discrepancy unresolved; no repair performed.
    All four VMs: NAT (server + Kali screenshots; client modes user-reported).
    Kali VMware network mode: NAT (VMware Settings screenshot, 2026-11-20).
-   NAT switch identity not independently verified; TCP 389 paths tested.
+   VMware NAT VMnet8: 192.168.158.0 (Virtual Network Editor screenshot).
+   Kali-to-Windows reachability and containment still untested.
 ```
 
 ### Portfolio topology (Mermaid)
@@ -391,7 +409,7 @@ The arrows below reflect **only the tested TCP 389 paths**; other network paths 
 
 ```mermaid
 flowchart TB
-    subgraph LAB["Windows VMs — NAT; 192.168.158.0/24"]
+    subgraph LAB["Windows VMs — VMware NAT VMnet8; 192.168.158.0/24"]
         DC["HYDRA-DC — 192.168.158.128 (DC + GC)"]
         P["THEPUNISHER — 192.168.158.130 (domain joined)"]
         S["SPIDERMAN — 192.168.158.129 (domain joined)"]
@@ -410,7 +428,7 @@ Both clients are configured to use HYDRA-DC for DNS; THEPUNISHER also has a sepa
 1. Installed operating systems and purposes for each of the three VMs.
 2. Which additional domain controller services are functioning (AD controller identity is verified).
 3. Additional domain configuration and DNS health (domain identified as `MARVEL.local`; publish only if safe).
-4. Verify the shared VMware NAT VMnet, Kali-to-Windows connectivity and containment; Kali and HYDRA-DC NAT settings are screenshot-verified and the Windows clients' settings user-confirmed.
+4. VMnet8 has been identified as NAT with subnet address 192.168.158.0. Verify actual Kali-to-Windows connectivity, NAT egress/containment and other attached systems before active network-interception exercises.
 5. Validate other services and authenticated domain operations (both clients succeeded on TCP 389; THEPUNISHER also succeeded in a separate DNS lookup).
 6. SPIDERMAN elevated secure-channel check repeated and still False; root cause and impact on computer-authenticated exercises remain unresolved. See issue #1; do not assume authenticated domain operations are healthy.
 7. Redacted screenshot evidence for architecture and configuration.
