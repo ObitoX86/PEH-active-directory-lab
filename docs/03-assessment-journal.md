@@ -291,7 +291,36 @@ VERBOSE: The secure channel between the local computer and the domain MARVEL.loc
 
 **Decision:** No repair, machine account reset, unjoin/rejoin, or password change has been performed.
 
-**Next action:** From SPIDERMAN, use an elevated PowerShell session to run `nltest /sc_query:MARVEL.local`. Record the status output and compare with this test before deciding on further diagnostics. The `/sc_query` result describes the channel's last-used state, not necessarily a fresh authentication.
+**Next action:** `nltest /sc_query` has now returned `NERR_Success` (see next entry), but it describes a last-used channel status. Re-run the direct secure-channel test with an explicitly elevated PowerShell session before attempting any repair.
+
+---
+
+## 2026-11-20 — SPIDERMAN Netlogon secure-channel status query
+
+**Task:** Inspect the secure channel's last-used state after `Test-ComputerSecureChannel` returned `False`.
+
+**Command (SPIDERMAN):**
+
+```powershell
+nltest /sc_query:MARVEL.local
+```
+
+**Evidence:** User-supplied screenshot in the conversation on 2026-11-20; screenshot not yet uploaded to GitHub.
+
+**Observed output:**
+
+```text
+Flags: 30 HAS_IP  HAS_TIMESERV Authentication Service: Netlogon
+Trusted DC Name \\HYDRA-DC.MARVEL.local
+Trusted DC Connection Status Status = 0 0x0 NERR_Success
+The command completed successfully
+```
+
+**Analysis:** The Netlogon query shows a successful last-used secure-channel status for the expected domain controller. This is a different diagnostic observation from the prior `Test-ComputerSecureChannel -Verbose` result of `False`. `nltest /sc_query` does not necessarily revalidate the channel at the time of execution; the apparent discrepancy remains unresolved. Administrative elevation during either command has not been independently shown.
+
+**Action taken:** No repair, rejoin or reset performed.
+
+**Follow-up:** Re-run `Test-ComputerSecureChannel -Verbose` on SPIDERMAN in a known elevated Windows PowerShell session, capture the complete result and interpret it before changing configuration.
 
 ---
 
