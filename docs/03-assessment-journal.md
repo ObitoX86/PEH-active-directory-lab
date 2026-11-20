@@ -56,6 +56,20 @@ HYDRA-DC.MARVEL.local   MARVEL.local  192.168.158.128    True
 
 ---
 
+## 2026-11-20 — THEPUNISHER network configuration baseline
+
+**Task:** Review `ipconfig /all` output from the THEPUNISHER Windows VM.
+
+**Evidence:** Screenshot supplied in the chat on 2026-11-20; redacted copy has not been uploaded to GitHub. The local user profile path and hardware identifiers are deliberately omitted from this journal entry.
+
+**Observed result:** Hostname `THEPUNISHER`; primary DNS suffix `MARVEL.local`; Ethernet IPv4 `192.168.158.130` with `255.255.255.0` mask; DHCP enabled; gateway `192.168.158.2`; DHCP server `192.168.158.254`; DNS server `192.168.158.128`; connection-specific DNS suffix `localdomain`.
+
+**Analysis:** THEPUNISHER and HYDRA-DC (`192.168.158.128/24`) have IPv4 settings in the same subnet, and THEPUNISHER is configured to query HYDRA-DC for DNS. This is consistent with an Active Directory lab client but does not prove domain membership, DNS availability or successful domain authentication. The DHCP server is distinct from the DC.
+
+**Follow-up:** Verify THEPUNISHER domain membership from Windows; then collect SPIDERMAN's configuration.
+
+---
+
 ## New entry template
 
 **Date:** YYYY-MM-DD  
