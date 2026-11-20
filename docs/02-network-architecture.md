@@ -546,7 +546,9 @@ fe80::/64 dev eth0 proto kernel metric 1024 pref medium
 ```
 Neither protocol had a displayed default route. IPv6's `fe80::/64` is link-local and does not by itself provide a route beyond the local link. The absence of default routes corroborates the intended local-only configuration **but does not prove total isolation across VMware/host networks**.
 
-**Next:** Confirm the kernel would not route an external IPv4 destination using `ip -4 route get 1.1.1.1`, which performs a lookup without sending packets, and continue reviewing VMware adapter scope before active interception tests.
+**Kali external-route lookup verified (2026-11-20):** The user ran `ip -4 route get 1.1.1.1` and the screenshot returned `RTNETLINK answers: Network is unreachable`. This is a read-only kernel lookup, with no packets sent, showing there was no usable route to this external IPv4 address. Together with the prior IPv4/IPv6 route tables, the result corroborates Kali's intended local-only networking configuration, **not complete hypervisor/host isolation**.
+
+**Next:** Audit VMware Workstation network adapters for all four VMs: confirm exactly the intended LAN segment `PEH-AD-Isolated`, no additional NAT/bridged/host-only NICs, and no unintentional network bridges before active traffic interception exercises.
 
 **Evidence:** SPIDERMAN post-boot `ipconfig /all` screenshot received 2026-11-20; redacted PNG pending GitHub upload.
 
