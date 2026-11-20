@@ -29,9 +29,22 @@ The displayed names alone do not prove host roles, domain membership or network 
 | DNS servers | `::1` and `127.0.0.1` (loopback) |
 | IP routing enabled | No |
 
-**Interpretation:** DHCP is disabled; an IPv4 address is configured. The DNS servers are loopback addresses. An additional successful `Get-ADDomainController` query verifies the server is identified as an AD domain controller and Global Catalog; it does not independently test DNS availability or every AD service. The VMware virtual switch mode remains unknown; later client screenshots show both clients have addresses in the same IPv4 subnet.
+**Interpretation:** DHCP is disabled; an IPv4 address is configured. The DNS servers are loopback addresses. An additional successful `Get-ADDomainController` query verifies the server is identified as an AD domain controller and Global Catalog; it does not independently test DNS availability or every AD service. The server's VMware adapter mode was subsequently verified as **NAT**; the client adapter modes remain unverified. Both clients have addresses in the same IPv4 subnet.
 
 **Prior observation caveat:** An earlier troubleshooting session used a direct UNC path to `192.168.10.10`, whereas the current screenshot reports `192.168.158.128` for `HYDRA-DC`. Do not assume these are the same host/interface or that the network was changed without confirming the configuration.
+
+## Verified VMware adapter mode — HYDRA-DC (VMware Settings screenshot, 2026-11-20)
+
+| Property | Verified setting |
+| --- | --- |
+| VM display name | Windows Server 2022 (guest: `HYDRA-DC`) |
+| VMware Network Adapter | **NAT: Used to share the host's IP address** |
+| Connected | Checked |
+| Connect at power on | Checked |
+
+**Interpretation:** NAT normally allows the guest to share the host's network connection and may permit outbound connectivity. This does **not** guarantee an isolated or offline assessment environment. Neither THEPUNISHER nor SPIDERMAN has yet had its VMware adapter mode confirmed. The inactive `VMnet0` field in the screenshot is not evidence that the selected NAT adapter uses that virtual network.
+
+**Assessment safety:** Before running intrusive or noisy training exercises, confirm all participating VMs' adapter modes and intended connectivity. Avoid changing the working network before documenting the configuration and assessing the impact on DNS, DHCP and the lab domain.
 
 ## Verified AD domain controller identity — PowerShell screenshot, 2026-11-20
 
@@ -119,10 +132,10 @@ Get-CimInstance Win32_ComputerSystem |
 
 A Windows client referred to as **Punisher** accessed a lab Windows server using a direct UNC path by private IP. This is evidence of that specific connection; it does not verify all three VMware entries, the domain setup, or network discovery settings. The exact relationship between the previously reported client and **THEPUNISHER** is to be confirmed.
 
-## Configuration diagram (based on verified IP, DNS and domain membership)
+## Configuration diagram (based on verified IP, DNS, domain membership and server NAT mode)
 
 ```text
-          [HYDRA-DC]                    AD domain controller + GC
+          [HYDRA-DC]                    AD domain controller + GC; VMware adapter: NAT
           192.168.158.128/24             Domain: MARVEL.local
                  ^
                  | Configured as DNS server by both clients
@@ -136,7 +149,7 @@ A Windows client referred to as **Punisher** accessed a lab Windows server using
 
    All three IPv4 settings fall within 192.168.158.0/24.
    Diagram reflects configuration, NOT tested connectivity.
-   VMware network mode: TO VERIFY.
+   Client VMware adapter modes: TO VERIFY.
 ```
 
 No connections are drawn until their configuration is confirmed.
@@ -146,7 +159,7 @@ No connections are drawn until their configuration is confirmed.
 1. Installed operating systems and purposes for each of the three VMs.
 2. Which additional domain controller services are functioning (AD controller identity is verified).
 3. Additional domain configuration and DNS health (domain identified as `MARVEL.local`; publish only if safe).
-4. VMware adapter types (NAT, host-only, custom VMnet, etc.).
+4. THEPUNISHER and SPIDERMAN VMware adapter types (HYDRA-DC is verified NAT).
 5. Verify actual connectivity and DNS resolution (all three IPv4 configuration baselines have been recorded).
 6. Live domain controller discovery/authentication and name-resolution tests; both client memberships are verified via `Win32_ComputerSystem`.
 7. Redacted screenshot evidence for architecture and configuration.
