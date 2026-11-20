@@ -189,6 +189,35 @@ HYDRA-DC.MARVEL.local   A     3600  Answer   192.168.158.128
 
 ---
 
+## 2026-11-20 — THEPUNISHER TCP connectivity to domain controller LDAP port
+
+**Task:** Determine whether a domain-joined Windows client can open a TCP connection to the domain controller on the usual LDAP port (389).
+
+**Command (on THEPUNISHER):**
+
+```powershell
+Test-NetConnection HYDRA-DC.MARVEL.local -Port 389
+```
+
+**Evidence:** User-provided PowerShell screenshot in the conversation on 2026-11-20; screenshot not yet uploaded to GitHub.
+
+**Observed result:**
+
+```text
+ComputerName     : HYDRA-DC.MARVEL.local
+RemoteAddress    : 192.168.158.128
+RemotePort       : 389
+InterfaceAlias   : Ethernet0
+SourceAddress    : 192.168.158.130
+TcpTestSucceeded : True
+```
+
+**Analysis:** The successful TCP connection demonstrates network reachability from THEPUNISHER to a listener on HYDRA-DC port 389. It supports the network baseline but is **not** proof of a valid LDAP bind, AD authentication, or complete directory-service health.
+
+**Follow-up:** Run the same targeted TCP test from SPIDERMAN to HYDRA-DC, and record the outcome.
+
+---
+
 ## New entry template
 
 **Date:** YYYY-MM-DD  
