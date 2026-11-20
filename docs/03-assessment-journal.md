@@ -629,6 +629,27 @@ eth0   UP       192.168.158.131/24  fe80::5e29:65cd:2a93:70b9/64
 
 ---
 
+## 2026-11-20 — Private LAN segment creation user-confirmed
+
+**Task:** Create a separate VMware LAN segment for authorised PEH Active Directory attack practice without disrupting the existing VMnet8 baseline.
+
+**Reported result:** User confirmed creating the VMware LAN segment named `PEH-AD-Isolated`. This is user-reported; no screenshot was supplied and **no VMware guest network adapter change is yet confirmed**.
+
+**Address preservation plan:** Reuse the known `192.168.158.0/24` guest network on the new, separate LAN segment, assuming no guest retains a simultaneous connected NIC on VMnet8 with an overlapping subnet:
+
+| Guest | Planned IPv4 | Planned DNS | IPv4 method |
+| --- | --- | --- | --- |
+| HYDRA-DC | `192.168.158.128/24` | Loopback as already configured | Existing static |
+| SPIDERMAN | `192.168.158.129/24` | `192.168.158.128` | Change from VMware NAT DHCP to static after switching |
+| THEPUNISHER | `192.168.158.130/24` | `192.168.158.128` | Change from VMware NAT DHCP to static after switching |
+| Kali | `192.168.158.131/24` | `192.168.158.128` as appropriate for AD name resolution | Confirm existing DHCP then switch to static on segment |
+
+**Network safety:** LAN segments do not automatically provide a DHCP service, default gateway or routed internet access. No default gateway is required for this contained lab network. Keeping the original addresses on a distinct network is possible, but all participating guests must be migrated; do not leave simultaneous overlapping `192.168.158.0/24` adapters connected to both NAT and the LAN segment. Current VMnet8 remains the documented working baseline, preserved in snapshots. An actual isolation/connectivity check must follow.
+
+**Next step:** With HYDRA-DC powered off, change only its VMware Network Adapter to LAN Segment `PEH-AD-Isolated`; then boot and confirm that its existing static IPv4 remains `192.168.158.128/24`. Expect temporary loss of connectivity to clients still on NAT, until they are migrated.
+
+---
+
 ## New entry template
 
 **Date:** YYYY-MM-DD  
