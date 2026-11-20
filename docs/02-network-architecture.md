@@ -357,7 +357,7 @@ eth0   UP       192.168.158.131/24  fe80::5e29:65cd:2a93:70b9/64
 
 **Next safety verification:** Virtual Network Editor subsequently identified VMnet8 as the NAT subnet (see section below). Verify which other VMs and host adapters can reach VMnet8 and whether its NAT connection provides outbound access. Consider a dedicated non-routed/host-only or LAN-segment environment for traffic-poisoning exercises after preserving the current working configuration and confirming necessary DHCP/DNS arrangements. Take snapshots before network changes or active tests.
 
-**Evidence:** User-supplied terminal screenshot dated 2026-11-20; PNG not yet uploaded to the repository.
+**Evidence:** GitHub PNG `2026-11-20_19-kali-initial-ip.png` is uploaded and embedded in this document.
 
 ## Verified VMware virtual networks — Virtual Network Editor (2026-11-20)
 
@@ -376,7 +376,7 @@ VMnet1 is an available **host-only** network using `192.168.125.0`. Switching th
 
 **Security boundary:** VMnet8 has NAT enabled, and NAT does **not** provide a fully offline or fully isolated network. Before LLMNR/NBT-NS poisoning and SMB relay, plan a dedicated contained test segment, check other connected guests, and take verified VM snapshots. The host is connected to both VMnet1 and VMnet8 in this editor; no trust or route isolation should be presumed.
 
-**Evidence:** VMware Virtual Network Editor screenshot provided in conversation on 2026-11-20. Redacted PNG not yet uploaded to GitHub.
+**Evidence:** GitHub PNG `2026-11-20_21-vmware-virtual-network-editor.png` is uploaded and embedded above.
 
 ## Historical NAT-baseline configuration diagram (before isolated-LAN migration)
 
@@ -475,7 +475,7 @@ The user followed the instructions to move **HYDRA-DC** to LAN segment `PEH-AD-I
 
 **Subsequent Kali profile check (2026-11-20):** Running `nmcli -f NAME,DEVICE connection show --active` returned `Wired connection 1` on `eth0` and `lo` on `lo`. The active NetworkManager profile is identified. The user subsequently confirmed running `nmcli connection modify` to save manual IPv4 `192.168.158.131/24`, DNS `192.168.158.128` and no default gateway, and a subsequent screenshot **verified the saved profile** with `ipv4.method=manual`, `ipv4.addresses=192.168.158.131/24`, empty gateway, `ipv4.dns=192.168.158.128`, and `ipv4.never-default=yes`. These are saved settings, not evidence of current activation or movement to the private segment. **Planned next:** Move the powered-off Kali adapter to `PEH-AD-Isolated`, then verify the live interface IP, routes and lab-only connectivity. Continue the clients afterward.
 
-**Evidence:** `ipconfig /all` screenshot supplied on 2026-11-20; image not yet committed to `evidence/`.
+**Evidence:** GitHub PNG `2026-11-20_22-hydra-dc-isolated-ipconfig.png` is uploaded and embedded above.
 
 ## Kali isolated LAN attachment — live IP and routing verified (2026-11-20)
 
@@ -546,7 +546,7 @@ The user reports moving THEPUNISHER's VMware adapter to `PEH-AD-Isolated` and re
 
 **SPIDERMAN NIC identified (2026-11-20):** Its PowerShell `Get-NetAdapter | Select-Object Name, Status, InterfaceDescription` screenshot confirms `Ethernet0` is `Up` and uses `Intel(R) 82574L Gigabit Network Connection`. **SPIDERMAN static IPv4 now verified before migration:** A subsequent `ipconfig /all` screenshot confirms hostname `SPIDERMAN`, DNS suffix `MARVEL.local`, `Ethernet0` at `192.168.158.129/24`, DHCP disabled, empty default gateway and DNS `192.168.158.128`. SPIDERMAN's subsequent migration was user-reported and a post-boot screenshot now independently confirms its static IP/DNS persisted (see section below); no post-migration connectivity test has yet been supplied. **Next:** Check TCP 389 transport connectivity. The earlier NAT topology diagram remains historical only.
 
-**Evidence:** PowerShell screenshot supplied 2026-11-20; PNG not yet uploaded to GitHub.
+**Evidence:** Relevant SPIDERMAN PowerShell screenshots are uploaded and embedded above; see the 40-image [evidence gallery](../evidence/INDEX.md).
 
 ### SPIDERMAN pre-migration NIC and static settings
 
@@ -614,7 +614,7 @@ Neither protocol had a displayed default route. IPv6's `fe80::/64` is link-local
 
 **Next phase:** Begin PEH name-resolution-poisoning study by first checking the installed Responder tool's help, then passive monitoring, before any controlled active demonstration. Do not connect poisoning tools to NAT or bridged networks.
 
-**Evidence:** SPIDERMAN post-boot `ipconfig /all` screenshot received 2026-11-20; redacted PNG pending GitHub upload.
+**Evidence:** GitHub PNG `2026-11-20_34-spiderman-isolated-ipconfig.png` is uploaded and embedded in the SPIDERMAN migration section.
 
 ## Details to confirm
 
