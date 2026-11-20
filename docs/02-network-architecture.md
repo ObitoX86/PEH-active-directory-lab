@@ -457,7 +457,7 @@ The user followed the instructions to move **HYDRA-DC** to LAN segment `PEH-AD-I
 
 **Topology status:** The earlier NAT diagram above is now **historical baseline evidence** and does not represent all guests' current attachments. HYDRA-DC is reported on the isolated segment; Kali, THEPUNISHER and SPIDERMAN have not yet been confirmed migrated and may still be configured for NAT. This mixed state explains expected temporary loss of communication between guests.
 
-**Planned next:** Identify Kali's NetworkManager profile, arrange persistent static `192.168.158.131/24` (DNS `192.168.158.128`, no gateway), migrate Kali, and test reachability only to the lab controller. Continue the clients afterward.
+**Subsequent Kali profile check (2026-11-20):** Running `nmcli -f NAME,DEVICE connection show --active` returned `Wired connection 1` on `eth0` and `lo` on `lo`. The active NetworkManager profile is now identified; IPv4 settings have not yet been changed or confirmed. **Planned next:** Save persistent static `192.168.158.131/24` and DNS `192.168.158.128` with no default gateway, verify the profile, migrate the powered-off Kali adapter, then test only the lab controller. Continue the clients afterward.
 
 **Evidence:** `ipconfig /all` screenshot supplied on 2026-11-20; image not yet committed to `evidence/`.
 
