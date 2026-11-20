@@ -29,9 +29,25 @@ The displayed names alone do not prove host roles, domain membership or network 
 | DNS servers | `::1` and `127.0.0.1` (loopback) |
 | IP routing enabled | No |
 
-**Interpretation:** DHCP is disabled; an IPv4 address is configured. The DNS servers are loopback addresses. The domain suffix and host name fit the intended lab design, but they do not verify that AD DS or DNS services are running. The VMware virtual switch mode and which clients are on the same subnet are still unknown.
+**Interpretation:** DHCP is disabled; an IPv4 address is configured. The DNS servers are loopback addresses. An additional successful `Get-ADDomainController` query verifies the server is identified as an AD domain controller and Global Catalog; it does not independently test DNS availability or every AD service. The VMware virtual switch mode and which clients are on the same subnet are still unknown.
 
 **Prior observation caveat:** An earlier troubleshooting session used a direct UNC path to `192.168.10.10`, whereas the current screenshot reports `192.168.158.128` for `HYDRA-DC`. Do not assume these are the same host/interface or that the network was changed without confirming the configuration.
+
+## Verified AD domain controller identity — PowerShell screenshot, 2026-11-20
+
+```powershell
+Get-ADDomainController -Identity HYDRA-DC |
+    Select-Object HostName, Domain, IPv4Address, IsGlobalCatalog
+```
+
+| Returned property | Value |
+| --- | --- |
+| HostName | `HYDRA-DC.MARVEL.local` |
+| Domain | `MARVEL.local` |
+| IPv4Address | `192.168.158.128` |
+| IsGlobalCatalog | `True` |
+
+**Interpretation:** The successful query establishes that Active Directory recognises `HYDRA-DC` as a domain controller with the Global Catalog flag enabled. It is not a substitute for client DNS, logon or service-health testing. Evidence screenshot remains in the chat pending redacted upload.
 
 ## Verified connection from earlier troubleshooting
 
@@ -51,8 +67,8 @@ No connections are drawn until their configuration is confirmed.
 ## Details to confirm
 
 1. Installed operating systems and purposes for each of the three VMs.
-2. Which machine runs Active Directory Domain Services.
-3. Domain name and domain settings (publish only if safe).
+2. Which additional domain controller services are functioning (AD controller identity is verified).
+3. Additional domain configuration and DNS health (domain identified as `MARVEL.local`; publish only if safe).
 4. VMware adapter types (NAT, host-only, custom VMnet, etc.).
 5. IP addresses, subnet mask, gateway and DNS server settings.
 6. Which hosts are domain-joined and how this was checked.
