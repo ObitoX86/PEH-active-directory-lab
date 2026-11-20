@@ -24,9 +24,15 @@ Each phase remains **not verified** until relevant lab evidence is recorded.
 - [x] Confirm domain controller discovery from SPIDERMAN using `nltest /dsgetdc:MARVEL.local` (returned HYDRA-DC at `192.168.158.128`, 2026-11-20).
 - [x] Run SPIDERMAN computer secure-channel diagnostic: `Test-ComputerSecureChannel -Verbose` returned **False** with a broken-channel message (2026-11-20).
 - [x] Run `nltest /sc_query:MARVEL.local` on SPIDERMAN: last-used Netlogon channel reports `0x0 NERR_Success` with HYDRA-DC (2026-11-20).
-- [ ] Re-run `Test-ComputerSecureChannel -Verbose` in explicitly elevated PowerShell to resolve contradictory diagnostic observations; root cause and current health remain unknown.
+- [x] User repeated `Test-ComputerSecureChannel -Verbose` in elevated PowerShell; still returned **False** (user-reported, 2026-11-20).
+- [ ] Diagnose and resolve SPIDERMAN computer secure-channel issue when required; deferred, tracked in [issue #1](https://github.com/ObitoX86/PEH-active-directory-lab/issues/1). Do not mark healthy.
 - [ ] Verify computer secure-channel health and live authentication after diagnostics; domain controller discovery is not proof of either.
 - [x] Establish at least one successful client-to-server file-sharing connection by direct UNC path (observed during prior lab troubleshooting).
+
+## Transition to PEH Active Directory initial attack vectors
+- [ ] Identify authorised testing VM (e.g. Kali), verify isolation/network scope and take snapshots before attack simulation.
+- [ ] Study LLMNR/NBT-NS poisoning prerequisites and mitigations before running Responder in an isolated lab.
+- [ ] Keep SPIDERMAN trust-status anomaly separate from attack findings; investigate only if a lab depends on healthy computer trust.
 
 ## Phase 2 — Reconnaissance and enumeration
 - [ ] Document an authorised discovery and enumeration exercise.
