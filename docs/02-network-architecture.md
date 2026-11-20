@@ -506,9 +506,28 @@ The user reports moving THEPUNISHER's VMware adapter to `PEH-AD-Isolated` and re
 
 **Post-migration TCP connectivity verified on THEPUNISHER (2026-11-20):** The user ran `Test-NetConnection 192.168.158.128 -Port 389` and supplied a screenshot showing `RemoteAddress=192.168.158.128`, `RemotePort=389`, `InterfaceAlias=Ethernet0`, `SourceAddress=192.168.158.130` and `TcpTestSucceeded=True`. This confirms a successful TCP connection to the domain controller's LDAP port from the isolated Windows client, not successful LDAP authentication or full network containment.
 
-**SPIDERMAN NIC identified (2026-11-20):** Its PowerShell `Get-NetAdapter | Select-Object Name, Status, InterfaceDescription` screenshot confirms `Ethernet0` is `Up` and uses `Intel(R) 82574L Gigabit Network Connection`. **SPIDERMAN static IPv4 now verified before migration:** A subsequent `ipconfig /all` screenshot confirms hostname `SPIDERMAN`, DNS suffix `MARVEL.local`, `Ethernet0` at `192.168.158.129/24`, DHCP disabled, empty default gateway and DNS `192.168.158.128`. No VMware LAN segment migration or post-migration connectivity for SPIDERMAN has been confirmed yet. **Next:** Move the powered-off VMware adapter to `PEH-AD-Isolated`, boot and check IP/DNS and connectivity. The earlier NAT topology diagram remains historical only.
+**SPIDERMAN NIC identified (2026-11-20):** Its PowerShell `Get-NetAdapter | Select-Object Name, Status, InterfaceDescription` screenshot confirms `Ethernet0` is `Up` and uses `Intel(R) 82574L Gigabit Network Connection`. **SPIDERMAN static IPv4 now verified before migration:** A subsequent `ipconfig /all` screenshot confirms hostname `SPIDERMAN`, DNS suffix `MARVEL.local`, `Ethernet0` at `192.168.158.129/24`, DHCP disabled, empty default gateway and DNS `192.168.158.128`. SPIDERMAN's subsequent migration was user-reported and a post-boot screenshot now independently confirms its static IP/DNS persisted (see section below); no post-migration connectivity test has yet been supplied. **Next:** Check TCP 389 transport connectivity. The earlier NAT topology diagram remains historical only.
 
 **Evidence:** PowerShell screenshot supplied 2026-11-20; PNG not yet uploaded to GitHub.
+
+## SPIDERMAN post-migration network settings — IPv4 preserved (2026-11-20)
+
+The user reported switching SPIDERMAN's VMware adapter to the dedicated `PEH-AD-Isolated` LAN segment and rebooting Windows. Its fresh `ipconfig /all` screenshot shows:
+
+| Property | Post-boot value |
+| --- | --- |
+| Host name / primary DNS suffix | `SPIDERMAN` / `MARVEL.local` |
+| Adapter | `Ethernet0` |
+| IPv4 address / mask | `192.168.158.129` / `255.255.255.0` |
+| DHCP | No |
+| Default gateway | Blank |
+| DNS server | `192.168.158.128` |
+
+**Verified:** Guest addressing and DNS remain as planned after the reported migration. The migration of all four intended VMs is now **user-confirmed**, with address configurations observed afterward. The screenshot itself does not prove VMware's selected segment or current connectivity between SPIDERMAN and HYDRA-DC, and does not resolve the pre-existing computer secure-channel failure. The prior NAT diagram is historical and should not be presented as the current topology.
+
+**Next read-only test:** `Test-NetConnection 192.168.158.128 -Port 389` on SPIDERMAN, followed by controlled DNS and network isolation checks.
+
+**Evidence:** SPIDERMAN post-boot `ipconfig /all` screenshot received 2026-11-20; redacted PNG pending GitHub upload.
 
 ## Details to confirm
 
