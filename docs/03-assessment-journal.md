@@ -18,6 +18,8 @@ This log captures **observed** work, not just planned tutorials. Dates should re
 
 ## 2026-11-20 — Server network configuration baseline
 
+**Screenshot evidence:** [2026-11-20_02-hydra-dc-ipconfig.png](../evidence/2026-11-20_02-hydra-dc-ipconfig.png).
+
 **Task:** Record the Windows Server network configuration using `ipconfig /all` in the existing VMware lab.
 
 **Evidence:** Chat-supplied screenshot showing the command output (not yet uploaded to GitHub).
@@ -32,6 +34,8 @@ This log captures **observed** work, not just planned tutorials. Dates should re
 
 ## 2026-11-20 — Domain controller identity and Global Catalog verification
 
+**Screenshot evidence:** [2026-11-20_03-hydra-dc-ad-identity.png](../evidence/2026-11-20_03-hydra-dc-ad-identity.png).
+
 **Task:** Verify the server's domain controller identity from Windows PowerShell.
 
 **Command:**
@@ -41,7 +45,7 @@ Get-ADDomainController -Identity HYDRA-DC |
     Select-Object HostName, Domain, IPv4Address, IsGlobalCatalog
 ```
 
-**Evidence:** Screenshot supplied in the chat on 2026-11-20; repository image upload pending redaction.
+**Evidence:** Screenshot linked above.
 
 **Observed result:**
 
@@ -58,6 +62,8 @@ HYDRA-DC.MARVEL.local   MARVEL.local  192.168.158.128    True
 
 ## 2026-11-20 — THEPUNISHER network configuration baseline
 
+**Screenshot evidence:** [2026-11-20_04-thepunisher-ipconfig.png](../evidence/2026-11-20_04-thepunisher-ipconfig.png).
+
 **Task:** Review `ipconfig /all` output from the THEPUNISHER Windows VM.
 
 **Evidence:** Screenshot supplied in the chat on 2026-11-20; redacted copy has not been uploaded to GitHub. The local user profile path and hardware identifiers are deliberately omitted from this journal entry.
@@ -71,6 +77,8 @@ HYDRA-DC.MARVEL.local   MARVEL.local  192.168.158.128    True
 ---
 
 ## 2026-11-20 — THEPUNISHER domain membership verification
+
+**Screenshot evidence:** [2026-11-20_05-thepunisher-domain-membership.png](../evidence/2026-11-20_05-thepunisher-domain-membership.png).
 
 **Task:** Confirm whether the Windows client is joined to the Active Directory domain.
 
@@ -98,9 +106,11 @@ THEPUNISHER   MARVEL.local  True
 
 ## 2026-11-20 — SPIDERMAN network configuration baseline
 
+**Screenshot evidence:** [2026-11-20_06-spiderman-ipconfig.png](../evidence/2026-11-20_06-spiderman-ipconfig.png).
+
 **Task:** Record the third VM's `ipconfig /all` settings and compare them with the two existing lab machines.
 
-**Evidence:** Screenshot supplied in the chat on 2026-11-20; a redacted copy has not yet been uploaded to the repository. Local user-profile path, interface MAC, and DHCP client identifiers are not reproduced here.
+**Evidence:** Screenshot supplied in the chat on 2026-11-20; a redacted copy is linked above. Local user-profile path, interface MAC, and DHCP client identifiers are not reproduced here.
 
 **Observed result:** Host name `SPIDERMAN`; primary DNS suffix `MARVEL.local`; IPv4 `192.168.158.129` with mask `255.255.255.0`; DHCP enabled with server `192.168.158.254`; default gateway `192.168.158.2`; DNS server `192.168.158.128`; connection-specific DNS suffix `localdomain`.
 
@@ -112,6 +122,8 @@ THEPUNISHER   MARVEL.local  True
 
 ## 2026-11-20 — SPIDERMAN domain membership verification
 
+**Screenshot evidence:** [2026-11-20_07-spiderman-domain-membership.png](../evidence/2026-11-20_07-spiderman-domain-membership.png).
+
 **Task:** Verify whether the SPIDERMAN Windows client reports membership of the Active Directory domain.
 
 **Command:**
@@ -121,7 +133,7 @@ Get-CimInstance Win32_ComputerSystem |
     Select-Object Name, Domain, PartOfDomain
 ```
 
-**Evidence:** User-supplied PowerShell screenshot in the chat on 2026-11-20; no screenshot file committed to the repository yet.
+**Evidence:** User-supplied PowerShell screenshot in the chat on 2026-11-20; image linked above.
 
 **Observed result:**
 
@@ -137,6 +149,8 @@ SPIDERMAN   MARVEL.local  True
 ---
 
 ## 2026-11-20 — HYDRA-DC VMware network adapter mode
+
+**Screenshot evidence:** [2026-11-20_08-hydra-dc-vmware-nat.png](../evidence/2026-11-20_08-hydra-dc-vmware-nat.png).
 
 **Task:** Inspect the VMware Workstation VM Settings > Hardware > Network Adapter page for the Windows Server 2022 VM.
 
@@ -166,6 +180,8 @@ SPIDERMAN   MARVEL.local  True
 
 ## 2026-11-20 — THEPUNISHER resolves domain controller hostname
 
+**Screenshot evidence:** [2026-11-20_09-thepunisher-dns-lookup.png](../evidence/2026-11-20_09-thepunisher-dns-lookup.png).
+
 **Task:** Validate DNS name resolution from a domain-joined Windows client.
 
 **Command (THEPUNISHER):**
@@ -174,7 +190,7 @@ SPIDERMAN   MARVEL.local  True
 Resolve-DnsName HYDRA-DC.MARVEL.local
 ```
 
-**Evidence:** User-supplied screenshot in the project conversation on 2026-11-20; screenshot itself has not been committed to GitHub.
+**Evidence:** User-supplied screenshot in the project conversation on 2026-11-20; screenshot linked above.
 
 **Observed result:**
 
@@ -191,6 +207,8 @@ HYDRA-DC.MARVEL.local   A     3600  Answer   192.168.158.128
 
 ## 2026-11-20 — THEPUNISHER TCP connectivity to domain controller LDAP port
 
+**Screenshot evidence:** [2026-11-20_10-thepunisher-ldap-tcp389.png](../evidence/2026-11-20_10-thepunisher-ldap-tcp389.png).
+
 **Task:** Determine whether a domain-joined Windows client can open a TCP connection to the domain controller on the usual LDAP port (389).
 
 **Command (on THEPUNISHER):**
@@ -199,7 +217,7 @@ HYDRA-DC.MARVEL.local   A     3600  Answer   192.168.158.128
 Test-NetConnection HYDRA-DC.MARVEL.local -Port 389
 ```
 
-**Evidence:** User-provided PowerShell screenshot in the conversation on 2026-11-20; screenshot not yet uploaded to GitHub.
+**Evidence:** User-provided PowerShell screenshot in the conversation on 2026-11-20; screenshot linked above.
 
 **Observed result:**
 
@@ -220,6 +238,8 @@ TcpTestSucceeded : True
 
 ## 2026-11-20 — SPIDERMAN TCP connectivity to domain controller LDAP port
 
+**Screenshot evidence:** [2026-11-20_11-spiderman-ldap-tcp389.png](../evidence/2026-11-20_11-spiderman-ldap-tcp389.png).
+
 **Task:** Confirm SPIDERMAN can reach the same domain controller LDAP TCP port as THEPUNISHER.
 
 **Command (SPIDERMAN):**
@@ -228,7 +248,7 @@ TcpTestSucceeded : True
 Test-NetConnection HYDRA-DC.MARVEL.local -Port 389
 ```
 
-**Evidence:** User-provided PowerShell screenshot in the conversation on 2026-11-20; image not yet committed to GitHub.
+**Evidence:** User-provided PowerShell screenshot in the conversation on 2026-11-20; image linked above.
 
 **Observed result:**
 
@@ -249,6 +269,8 @@ TcpTestSucceeded : True
 
 ## 2026-11-20 — SPIDERMAN domain controller discovery
 
+**Screenshot evidence:** [2026-11-20_12-spiderman-dc-discovery.png](../evidence/2026-11-20_12-spiderman-dc-discovery.png).
+
 **Task:** Locate an Active Directory domain controller for `MARVEL.local` from SPIDERMAN using the Windows `nltest` utility.
 
 **Command:**
@@ -257,7 +279,7 @@ TcpTestSucceeded : True
 nltest /dsgetdc:MARVEL.local
 ```
 
-**Evidence:** Screenshot supplied in the conversation on 2026-11-20; no screenshot image uploaded to GitHub.
+**Evidence:** Screenshot linked above.
 
 **Observed result:** The command completed successfully, showing `\\\\HYDRA-DC.MARVEL.local` at `192.168.158.128`; the domain and forest names were `MARVEL.local`, both sites were `Default-First-Site-Name`, and flags included `PDC`, `GC`, `LDAP`, `KDC`, `WRITABLE`, and `DNS_DC`.
 
@@ -269,6 +291,8 @@ nltest /dsgetdc:MARVEL.local
 
 ## 2026-11-20 — SPIDERMAN secure-channel test reports failure
 
+**Screenshot evidence:** [2026-11-20_13-spiderman-secure-channel-failure.png](../evidence/2026-11-20_13-spiderman-secure-channel-failure.png).
+
 **Task:** Check whether SPIDERMAN's computer account secure channel to the `MARVEL.local` domain is healthy.
 
 **Command run on SPIDERMAN:**
@@ -277,7 +301,7 @@ nltest /dsgetdc:MARVEL.local
 Test-ComputerSecureChannel -Verbose
 ```
 
-**Evidence:** User-supplied PowerShell screenshot in the conversation on 2026-11-20; no image uploaded to GitHub.
+**Evidence:** User-supplied PowerShell screenshot in the conversation on 2026-11-20; image linked above.
 
 **Observed result:**
 
@@ -297,6 +321,8 @@ VERBOSE: The secure channel between the local computer and the domain MARVEL.loc
 
 ## 2026-11-20 — SPIDERMAN Netlogon secure-channel status query
 
+**Screenshot evidence:** [2026-11-20_14-spiderman-netlogon-sc-query.png](../evidence/2026-11-20_14-spiderman-netlogon-sc-query.png).
+
 **Task:** Inspect the secure channel's last-used state after `Test-ComputerSecureChannel` returned `False`.
 
 **Command (SPIDERMAN):**
@@ -305,7 +331,7 @@ VERBOSE: The secure channel between the local computer and the domain MARVEL.loc
 nltest /sc_query:MARVEL.local
 ```
 
-**Evidence:** User-supplied screenshot in the conversation on 2026-11-20; screenshot not yet uploaded to GitHub.
+**Evidence:** User-supplied screenshot in the conversation on 2026-11-20; screenshot linked above.
 
 **Observed output:**
 
