@@ -521,7 +521,21 @@ eth0   UP       192.168.158.131/24  fe80::5e29:65cd:2a93:70b9/64
 
 **Evidence:** Kali terminal screenshot supplied in the conversation on 2026-11-20. Not yet uploaded as a redacted PNG to GitHub.
 
-**Next action:** Inspect the Kali VM's VMware Network Adapter setting, then validate that the environment is contained before snapshots or any active network attack simulation.
+**Next action:** Kali's Network Adapter screenshot subsequently confirmed NAT (see next entry). Inspect the VMware virtual network editor to determine NAT segment identity and boundaries.
+
+---
+
+## 2026-11-20 — Kali VMware NAT adapter verification
+
+**Task:** Verify the Linux tester's VMware Workstation network connection mode and adapter status.
+
+**Evidence:** Screenshot supplied in the conversation on 2026-11-20; image not yet committed to GitHub.
+
+**Observed result:** `NAT: Used to share the host's IP address` selected; `Connected` checked; `Connect at power on` checked. Screenshot also shows 8 GB memory and 4 processors allocated to the VM.
+
+**Analysis:** Kali is configured for NAT and `eth0` was previously observed at `192.168.158.131/24`. The other three Windows guests are also set to NAT (server screenshot; two clients user-confirmed). These settings do not establish that every VM shares the exact same VMnet or that LLMNR/NBT-NS traffic stays contained. NAT can allow outbound access. No tests, attacks or VM network setting changes were performed.
+
+**Next step:** Review the VMware Virtual Network Editor for the actual NAT virtual network and verify boundaries before setting up a segregated offensive-testing segment or running Responder. Preserve VM snapshots first.
 
 ---
 
