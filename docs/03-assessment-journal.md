@@ -26,7 +26,33 @@ This log captures **observed** work, not just planned tutorials. Dates should re
 
 **Analysis:** This establishes a network-configuration baseline for the server VM and suggests local DNS resolution is intended. It does not establish the operational status of Active Directory Domain Services.
 
-**Follow-up:** Verify AD DS role and the server's domain controller status; then inventory the client machines' IP/DNS settings.
+**Follow-up:** Domain controller identity verified in the next entry; client machines' IP/DNS settings remain to be collected.
+
+---
+
+## 2026-11-20 — Domain controller identity and Global Catalog verification
+
+**Task:** Verify the server's domain controller identity from Windows PowerShell.
+
+**Command:**
+
+```powershell
+Get-ADDomainController -Identity HYDRA-DC |
+    Select-Object HostName, Domain, IPv4Address, IsGlobalCatalog
+```
+
+**Evidence:** Screenshot supplied in the chat on 2026-11-20; repository image upload pending redaction.
+
+**Observed result:**
+
+```text
+HostName               Domain        IPv4Address       IsGlobalCatalog
+HYDRA-DC.MARVEL.local   MARVEL.local  192.168.158.128    True
+```
+
+**Analysis:** Active Directory identified HYDRA-DC as a domain controller in `MARVEL.local`; Global Catalog flag is enabled. The IPv4 value agrees with the prior `ipconfig /all` screenshot. Individual DNS/Kerberos services, client domain membership and connectivity have not yet been independently verified.
+
+**Follow-up:** Inventory network and domain configuration on THEPUNISHER and SPIDERMAN.
 
 ---
 
