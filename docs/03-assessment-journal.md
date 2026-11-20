@@ -579,7 +579,21 @@ eth0   UP       192.168.158.131/24  fe80::5e29:65cd:2a93:70b9/64
 
 **Analysis:** Baseline snapshots are now user-confirmed for Kali and HYDRA-DC. The two domain-joined Windows clients still need recovery points. Domain controller snapshots are not a substitute for supported AD backups; avoid restoring an old DC in isolation while the rest of a functioning domain has continued to change.
 
-**Next step:** Shut down THEPUNISHER cleanly and create a snapshot called `PEH-THEPUNISHER-Baseline-Before-Attacks`; then preserve SPIDERMAN.
+**Next step:** User confirmed THEPUNISHER snapshot in the following entry. Preserve SPIDERMAN next.
+
+---
+
+## 2026-11-20 — THEPUNISHER baseline snapshot user-confirmed
+
+**Task:** Preserve a pre-attack recovery point for the Windows domain client THEPUNISHER.
+
+**Requested procedure:** Shut down Windows cleanly; while the VM is powered off, take a VMware Workstation snapshot named `PEH-THEPUNISHER-Baseline-Before-Attacks`.
+
+**Reported result:** User replied **Done** to these steps. Snapshot creation is user-confirmed but has not been independently verified using VMware Snapshot Manager or a screenshot.
+
+**Analysis:** The user has now confirmed baseline snapshots for Kali Linux, HYDRA-DC and THEPUNISHER. SPIDERMAN remains pending. The snapshot captures the client as configured, and separate trust diagnostics found SPIDERMAN's secure-channel status unresolved. Do not treat snapshots as backups of Active Directory.
+
+**Next step:** Create a powered-off baseline snapshot for SPIDERMAN and inspect all four snapshots in Snapshot Manager before configuring a safe testing environment.
 
 ---
 
