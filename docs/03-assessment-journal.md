@@ -1147,13 +1147,32 @@ The command completed successfully
 
 **Evidence:** SPIDERMAN PowerShell screenshot provided in this PEH conversation on 2026-11-20; redacted PNG not yet committed to the repository.
 
-**Next step:** Confirm Kali's IPv4 and IPv6 route tables on the isolated lab before any traffic-poisoning exercises:
+**Next step:** Kali's IPv4/IPv6 route tables were verified in the subsequent entry; continue confirming containment and intended VMware adapter scoping. No offensive exercise performed.
+
+---
+
+## 2026-11-20 — Kali IPv4 and IPv6 routing reviewed for LAN containment
+
+**Task:** Inspect Kali's post-migration IPv4 and IPv6 routing tables without generating network traffic.
+
+**Read-only command:**
 
 ```bash
 ip -4 route && ip -6 route
 ```
 
-Then check intended VM network adapter scoping. No offensive exercise performed.
+**Screenshot-verified output:**
+
+```text
+192.168.158.0/24 dev eth0 proto kernel scope link src 192.168.158.131 metric 100
+fe80::/64 dev eth0 proto kernel metric 1024 pref medium
+```
+
+**Interpretation:** The only displayed IPv4 route is the directly connected `192.168.158.0/24` segment via `eth0`, sourced from `192.168.158.131`. The only displayed IPv6 route is link-local `fe80::/64` via `eth0`. Neither IPv4 nor IPv6 table contains a default route. These observations are consistent with an offline/private VMware LAN segment, but **do not independently establish that the host, other network adapters or all VMs are isolated**. No traffic or attack was generated.
+
+**Evidence:** Kali terminal screenshot provided in conversation on 2026-11-20; no redacted PNG uploaded to GitHub yet.
+
+**Next step:** Run `ip -4 route get 1.1.1.1` on Kali. This queries the kernel's decision for an external IPv4 destination without transmitting packets; expected result is `Network is unreachable`. Continue with confirming no unintended virtual NIC or bridging before running Responder.
 
 ---
 
