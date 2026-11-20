@@ -97,18 +97,36 @@ Get-ADGroupMember -Identity "Domain Admins" |
 
 **Interpretation:** The named accounts are direct members of `Domain Admins`, a highly privileged AD group. This result does **not** show the accounts' `SamAccountName` values, their actual usage, whether they are enabled, group nesting elsewhere, active logons, or any service principal names (SPNs).
 
-**Security observation — requires investigation:** An account named `SQL Service` has direct membership of `Domain Admins`. If it is indeed being used by a SQL Server service, this may represent excessive privilege. The name alone does not prove it is a service account. Kerberoasting applicability would require verifying an SPN and other relevant conditions. Do not label this a confirmed vulnerability or exploitation outcome based solely on the output.
+**Security observation — intentional lab configuration:** The account named `SQL Service` is a direct member of `Domain Admins`. The user confirmed this was **deliberately configured for PEH attack practice**, rather than an accidental production misconfiguration. The separate SPN query below establishes that an SPN is registered; neither the name nor SPN establishes that an actual SQL Server service is running. No attack has been performed or proven successful.
 
 **Evidence:** PowerShell screenshot supplied in the PEH project conversation on 2026-11-20; a redacted image copy is not yet in GitHub.
 
-## Next read-only verification — SQL Service account properties
+## SQL Service account — SPN registration verified (2026-11-20)
+
+**Command run on HYDRA-DC:**
 
 ```powershell
 Get-ADUser -Filter 'Name -eq "SQL Service"' -Properties ServicePrincipalName |
     Select-Object Name, SamAccountName, ServicePrincipalName
 ```
 
-This inspects the named account's logon name and any registered SPNs, without changing account settings. No passwords or authentication material are requested.
+**Observed output:**
+
+| Attribute | Value |
+| --- | --- |
+| Name | `SQL Service` |
+| SamAccountName | `SQLService` |
+| ServicePrincipalName | `HYDRA-DC/SQLService.MARVEL.local:60111` |
+
+**Interpretation:** The account has an SPN, which associates a service identifier with an account for Kerberos service ticket requests. This is a lab **Kerberoasting setup condition** because a conventional domain user with a registered SPN can be targeted for a Kerberos service ticket request. With this account's membership of `Domain Admins`, successful credential compromise could have serious domain impact.
+
+The SPN string is not the usual `MSSQLSvc/` format; **it does not prove Microsoft SQL Server is running**. We have not verified a service process, enabled status, password strength, ticket-request success, or credential recovery. No Kerberoasting attack has been conducted yet.
+
+**Intent and classification:** The user deliberately configured this account for the TCM Security PEH practice lab. Record as an **intentional high-impact lab weakness / attack prerequisite**, not as an unintentional discovered vulnerability or a completed compromise.
+
+**General defensive lesson:** Service accounts should not be domain administrators without an exceptional documented requirement. Prefer least-privileged accounts or gMSAs where supported and monitor inappropriate SPN/service-account privilege combinations.
+
+**Evidence:** Screenshot supplied in the PEH project conversation on 2026-11-20. A redacted PNG has not yet been committed.
 
 ## Screenshot evidence
 
