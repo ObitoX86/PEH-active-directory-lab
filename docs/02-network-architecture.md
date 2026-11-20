@@ -148,6 +148,29 @@ Resolve-DnsName HYDRA-DC.MARVEL.local
 
 **Interpretation:** The client successfully resolved HYDRA-DC's fully qualified hostname to the domain controller's previously recorded IPv4 address. The client was configured to use `192.168.158.128` as DNS in the earlier `ipconfig /all` output. This demonstrates successful name resolution for this record but does not independently verify Kerberos/LDAP operation, current domain authentication, or connectivity to every server service. The screenshot was provided in the conversation; an image copy has not been committed.
 
+## Verified TCP connectivity to LDAP port — THEPUNISHER (PowerShell screenshot, 2026-11-20)
+
+**Command run on THEPUNISHER:**
+
+```powershell
+Test-NetConnection HYDRA-DC.MARVEL.local -Port 389
+```
+
+**Observed output:**
+
+```text
+ComputerName     : HYDRA-DC.MARVEL.local
+RemoteAddress    : 192.168.158.128
+RemotePort       : 389
+InterfaceAlias   : Ethernet0
+SourceAddress    : 192.168.158.130
+TcpTestSucceeded : True
+```
+
+**Interpretation:** TCP connection from `192.168.158.130` to `192.168.158.128:389` succeeded. Port 389 is commonly associated with LDAP. This confirms reachability to a TCP listener on that port, but does not prove an LDAP bind, directory query, user authentication, or the health of every Active Directory service. Evidence is currently in the conversation; no screenshot file has been uploaded to the repository.
+
+**Next check:** Verify the same client-to-domain-controller TCP connection from SPIDERMAN.
+
 ## Verified connection from earlier troubleshooting
 
 A Windows client referred to as **Punisher** accessed a lab Windows server using a direct UNC path by private IP. This is evidence of that specific connection; it does not verify all three VMware entries, the domain setup, or network discovery settings. The exact relationship between the previously reported client and **THEPUNISHER** is to be confirmed.
@@ -169,7 +192,8 @@ A Windows client referred to as **Punisher** accessed a lab Windows server using
 
    All three IPv4 settings fall within 192.168.158.0/24.
    Diagram reflects configuration plus one successful DNS lookup.
-   LDAP/Kerberos connectivity has NOT been tested.
+   TCP 389 connection from THEPUNISHER to HYDRA-DC: SUCCESS.
+   Authenticated LDAP binding and Kerberos remain untested.
    All three VMs: NAT (server screenshot; clients user report).
    Virtual NAT switch identity and actual connectivity: TO VERIFY.
 ```
@@ -182,7 +206,7 @@ No connections are drawn until their configuration is confirmed.
 2. Which additional domain controller services are functioning (AD controller identity is verified).
 3. Additional domain configuration and DNS health (domain identified as `MARVEL.local`; publish only if safe).
 4. Screenshot evidence for client NAT configuration if needed (their NAT settings are user-confirmed).
-5. Test live TCP service connectivity (THEPUNISHER DNS A-record resolution succeeded; SPIDERMAN DNS not tested).
+5. Test live TCP 389 connectivity from SPIDERMAN (THEPUNISHER DNS A-record resolution and TCP 389 connection succeeded).
 6. Live domain controller discovery/authentication and name-resolution tests; both client memberships are verified via `Win32_ComputerSystem`.
 7. Redacted screenshot evidence for architecture and configuration.
 
