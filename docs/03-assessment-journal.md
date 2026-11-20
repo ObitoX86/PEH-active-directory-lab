@@ -705,6 +705,31 @@ lo                  lo
 
 ---
 
+## 2026-11-20 — Kali static IPv4 profile modification user-confirmed
+
+**Task:** Prepare Kali's saved NetworkManager connection for the dedicated LAN segment while leaving the current adapter attachment unchanged.
+
+**Command provided and confirmed executed by user:**
+
+```bash
+sudo nmcli connection modify "Wired connection 1" \
+  ipv4.method manual \
+  ipv4.addresses "192.168.158.131/24" \
+  ipv4.gateway "" \
+  ipv4.dns "192.168.158.128" \
+  ipv4.never-default yes
+```
+
+**Reported result:** User replied **Done**. No terminal output, explicit success status or saved-profile readback has yet been supplied, so the command is **user-confirmed as run** rather than independently validated as persisted or applied.
+
+**Intended settings:** manual address `192.168.158.131/24`, DNS `192.168.158.128`, no IPv4 gateway and no default route.
+
+**Analysis:** A `nmcli connection modify` operation changes the stored profile; this step does not establish that the active connection has been reactivated or that Kali was moved onto the isolated VMware LAN segment. No connection, route or DNS test is yet verified.
+
+**Next step:** Query the saved connection profile using `nmcli -f ipv4.method,ipv4.addresses,ipv4.gateway,ipv4.dns,ipv4.never-default connection show "Wired connection 1"`. Do not switch the VM adapter until the settings are checked.
+
+---
+
 ## New entry template
 
 **Date:** YYYY-MM-DD  
