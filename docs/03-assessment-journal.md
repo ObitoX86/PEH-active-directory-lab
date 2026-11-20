@@ -1172,7 +1172,33 @@ fe80::/64 dev eth0 proto kernel metric 1024 pref medium
 
 **Evidence:** Kali terminal screenshot provided in conversation on 2026-11-20; no redacted PNG uploaded to GitHub yet.
 
-**Next step:** Run `ip -4 route get 1.1.1.1` on Kali. This queries the kernel's decision for an external IPv4 destination without transmitting packets; expected result is `Network is unreachable`. Continue with confirming no unintended virtual NIC or bridging before running Responder.
+**Next step:** The user's external IPv4 route lookup returned `Network is unreachable`; see the next entry. Audit VMware adapter selection and extra NICs before using Responder.
+
+---
+
+## 2026-11-20 — Kali external IPv4 route lookup confirms unreachable
+
+**Task:** Test the Linux kernel's routing decision for a destination outside the isolated lab subnet without transmitting packets.
+
+**Command:**
+
+```bash
+ip -4 route get 1.1.1.1
+```
+
+**Screenshot-verified output:**
+
+```text
+RTNETLINK answers: Network is unreachable
+```
+
+**Interpretation:** At the time of the test, Kali had no usable IPv4 route to external address `1.1.1.1`. This is consistent with the already verified local-only IPv4 routing table, absent default gateway and user-reported attachment to the private `PEH-AD-Isolated` VMware LAN segment. The command performs a kernel route lookup and **sends no traffic to the destination**.
+
+**Limits:** One unreachable destination does not independently rule out other routes, another NIC, VMware bridging, host connection mechanisms or accidental attachment to an unscoped network. The full hypervisor configuration still needs inspection before poisoning traffic is generated.
+
+**Evidence:** Kali screenshot supplied in the PEH conversation on 2026-11-20. A redacted PNG has not yet been committed to GitHub.
+
+**Next step:** Inspect the VMware Workstation hardware/network adapter settings for the four intended VMs, verifying that each uses the `PEH-AD-Isolated` LAN Segment and no extra NAT, bridged or host-only adapters are connected. Continue one guest at a time, without changing settings. No attack executed.
 
 ---
 
