@@ -1114,7 +1114,46 @@ IPAddress : 192.168.158.128
 
 **Evidence:** SPIDERMAN PowerShell screenshot supplied in the project conversation on 2026-11-20; redacted PNG not yet committed to `evidence/`.
 
-**Next step:** Test Windows DC Locator using `nltest /dsgetdc:MARVEL.local /force` from SPIDERMAN. This read-only diagnostic requests fresh DC discovery; even success would not resolve the earlier `Test-ComputerSecureChannel` failure. Continue with lab containment checks before active attack simulations.
+**Next step:** DC Locator subsequently succeeded; see next entry. Verify lab containment and revisit secure-channel health separately if an exercise requires it.
+
+---
+
+## 2026-11-20 — SPIDERMAN forced Windows DC Locator succeeded
+
+**Task:** Verify that Windows can freshly discover the MARVEL.local domain controller over the user-reported isolated lab segment.
+
+**Command on SPIDERMAN:**
+
+```powershell
+nltest /dsgetdc:MARVEL.local /force
+```
+
+**Screenshot-verified key fields:**
+
+```text
+DC:              \\HYDRA-DC.MARVEL.local
+Address:         \\192.168.158.128
+Dom Name:        MARVEL.local
+Forest Name:     MARVEL.local
+Dc Site Name:    Default-First-Site-Name
+Our Site Name:   Default-First-Site-Name
+Dc Site Flags:   PDC GC DS LDAP KDC TIMESERV GTIMESERV WRITABLE DNS_DC DNS_DOMAIN DNS_FOREST CLOSE_SITE FULL_SECRET WS DS_8 DS_9 DS_10 KEYLIST
+The command completed successfully
+```
+
+**Interpretation:** Windows DC Locator reports finding HYDRA-DC at `192.168.158.128` and identifies the domain, forest, AD site and advertised capabilities, including LDAP, KDC, Global Catalog and writable DC support. This confirms a successful domain-controller discovery operation, but does **not** prove authenticated LDAP access, Kerberos ticket issuance, correct machine-account trust, successful domain logon or full external network isolation.
+
+**Known outstanding issue:** An earlier elevated `Test-ComputerSecureChannel -Verbose` on SPIDERMAN returned `False`. Successful discovery is not a secure-channel repair; [GitHub issue #1](https://github.com/ObitoX86/PEH-active-directory-lab/issues/1) remains unresolved.
+
+**Evidence:** SPIDERMAN PowerShell screenshot provided in this PEH conversation on 2026-11-20; redacted PNG not yet committed to the repository.
+
+**Next step:** Confirm Kali's IPv4 and IPv6 route tables on the isolated lab before any traffic-poisoning exercises:
+
+```bash
+ip -4 route && ip -6 route
+```
+
+Then check intended VM network adapter scoping. No offensive exercise performed.
 
 ---
 
