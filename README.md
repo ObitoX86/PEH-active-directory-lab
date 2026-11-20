@@ -12,9 +12,10 @@ This project documents the design, administration and authorised security testin
 
 | Area | Status | Evidence or next action |
 | --- | --- | --- |
-| Active Directory lab setup | In place; inventory not yet documented | Record actual machines, roles, operating systems and domain settings |
-| Windows client-to-server file-sharing connectivity | Verified during lab troubleshooting | Direct UNC access to the server by private IP worked from the client named `Punisher` |
-| Network topology diagram | To document | Confirm IPs, virtual networks and machine roles |
+| Active Directory lab inventory | Documented from supplied evidence | HYDRA-DC (192.168.158.128), SPIDERMAN (.129), THEPUNISHER (.130), all in MARVEL.local; client membership confirmed |
+| Windows client-to-server file-sharing connectivity | Previously observed in troubleshooting | Direct UNC access by private IP worked; the earlier address differs from the current server IP and needs reconciliation |
+| Network topology diagram | Documented (Mermaid) | All three machines use NAT (server screenshot, clients user-confirmed); the two clients each reached HYDRA-DC TCP/389 |
+| DNS and LDAP transport connectivity | Partially verified | THEPUNISHER resolved HYDRA-DC to 192.168.158.128; both clients established TCP connections to port 389; LDAP authentication not yet tested |
 | Initial attack vectors | To verify | Attach lab-only observations and redacted screenshots |
 | Post-compromise enumeration | To verify | Document commands, authorised scope and results |
 | Post-compromise attacks | To verify | Record only exercises personally reproduced |
@@ -25,7 +26,7 @@ This project documents the design, administration and authorised security testin
 
 - [`ROADMAP.md`](ROADMAP.md) — staged portfolio development plan.
 - [`docs/01-lab-overview.md`](docs/01-lab-overview.md) — lab purpose, scope and asset inventory.
-- [`docs/02-network-architecture.md`](docs/02-network-architecture.md) — known facts and network diagram placeholder.
+- [`docs/02-network-architecture.md`](docs/02-network-architecture.md) — IP configurations, validated client TCP paths and Mermaid topology.
 - [`docs/03-assessment-journal.md`](docs/03-assessment-journal.md) — evidence-based lab log.
 - [`docs/04-finding-template.md`](docs/04-finding-template.md) — reusable security finding template.
 - [`docs/05-mitigation-mapping.md`](docs/05-mitigation-mapping.md) — planned attack-to-defence notes.
@@ -33,7 +34,7 @@ This project documents the design, administration and authorised security testin
 
 ## Ethics and scope
 
-All offensive techniques must be performed only against systems owned or expressly authorised for this isolated training lab. No live third-party network testing, credential sharing or distribution of sensitive environment details is included here.
+All offensive techniques must be performed only against systems owned or expressly authorised for this controlled virtual lab. NAT networking is not the same as a fully isolated network. No live third-party network testing, credential sharing or distribution of sensitive environment details is included here.
 
 ## Documentation standards
 
@@ -41,4 +42,4 @@ For each exercise, capture: **objective, authorised targets, method, observed ou
 
 ## Next milestone
 
-Confirm the virtual machine inventory and build a network architecture diagram that reflects the actual environment.
+Verify domain controller discovery and the Windows client domain secure channel; authenticated operations should not be inferred from open TCP ports.
