@@ -959,6 +959,24 @@ Ethernet0  Up      Intel(R) 82574L Gigabit Network Connection
 
 ---
 
+## 2026-11-20 — SPIDERMAN manual IPv4 command user-confirmed
+
+**Task:** Prepare the final Windows client for migration to the PEH isolated LAN while retaining its known IPv4 address.
+
+**Command instructed from elevated PowerShell:**
+
+```powershell
+netsh interface ipv4 set address name="Ethernet0" static 192.168.158.129 255.255.255.0 none
+```
+
+**Reported result:** The user replied **Done**. The command is user-confirmed as performed; no command output or post-change configuration screenshot has been provided yet.
+
+**Intended result:** Manual IPv4 `192.168.158.129/24`, no default gateway. The command does not explicitly set DNS, so the earlier DNS setting `192.168.158.128` needs separate readback verification. SPIDERMAN's previously reported failed computer secure-channel test remains unresolved and should not be confused with IP configuration.
+
+**Next step:** Run `ipconfig /all` on SPIDERMAN while its VMware adapter is still on NAT, and verify IPv4, mask, DHCP state, gateway and DNS. Do not move it to `PEH-AD-Isolated` until the output is checked.
+
+---
+
 ## New entry template
 
 **Date:** YYYY-MM-DD  
