@@ -1,6 +1,6 @@
 # Screenshot Evidence Register — 20 November 2026
 
-**Status: 40/40 PNG screenshots confirmed present in GitHub `evidence/` as of 2026-11-20.** The initial batch (01–14) and subsequent batch (15–40) are uploaded; each numbered file was checked against the GitHub directory listing. The files were prepared from the project's supplied screenshots and uploaded on 2026-11-20. The technical outcomes are separately documented in [the assessment journal](../docs/03-assessment-journal.md) and [the network architecture document](../docs/02-network-architecture.md).
+**Status: 40/40 PNG screenshots confirmed present in GitHub `evidence/` as of 2026-11-20.** The initial batch (01–14) and subsequent batch (15–40) are uploaded; each numbered file was checked against the GitHub directory listing. **Images 01–21 include historical NAT-era baseline evidence; later images document migration to the reported `PEH-AD-Isolated` segment. Old NAT screenshots do not represent the current adapter setup.** The files were prepared from the project's supplied screenshots and uploaded on 2026-11-20. The technical outcomes are separately documented in [the assessment journal](../docs/03-assessment-journal.md) and [the network architecture document](../docs/02-network-architecture.md).
 
 | File | Evidence of |
 | --- | --- |

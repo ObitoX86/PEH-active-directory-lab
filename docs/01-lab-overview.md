@@ -2,52 +2,45 @@
 
 ## Objective
 
-Practise Windows Active Directory configuration, security assessment and mitigation in a controlled virtual environment as part of TCM Security's PEH course, and document evidence for a professional portfolio.
+Practise Active Directory administration, authorised security assessment and defensive mitigation in a VMware training environment, with a defensible portfolio record based on the TCM Security Practical Ethical Hacking course.
 
-## Confirmed context
+> **Configuration as of 20 November 2026:** The four guests are **user-reported** attached to the dedicated VMware LAN segment `PEH-AD-Isolated`. Their current guest IP configurations and selected internal connectivity tests are backed by screenshots. The separate VMware single-adapter audit for all four guests is user-confirmed; it is not independently screenshot-verified for every guest.
 
-- A VMware Workstation inventory screenshot supplied on **2026-11-20** shows three VM entries: **Windows Server 2022**, **THEPUNISHER**, and **SPIDERMAN**. These are VMware display names, not independent proof of the installed operating systems or domain roles.
-- During earlier lab troubleshooting, a Windows machine referred to as **Punisher** successfully accessed the lab Windows server through a direct UNC network path by private IP. The relationship between the earlier name and **THEPUNISHER** in the inventory remains to be confirmed.
-- VMware inventory screenshot, server and both client `ipconfig /all` screenshots, `Get-ADDomainController` screenshot and both clients' `Get-CimInstance` domain-membership screenshots are available in the chat as evidence; all 14 corresponding redacted PNG evidence files are now stored in [the evidence index](../evidence/INDEX.md). VMware Settings evidence provided on 2026-11-20 confirms HYDRA-DC's VM Network Adapter is set to **NAT**, with **Connected** and **Connect at power on** checked. The user separately confirmed that THEPUNISHER and SPIDERMAN also use NAT; separate VMware Settings screenshots for these clients have not been provided.
-- SPIDERMAN reports hostname `SPIDERMAN`, primary DNS suffix `MARVEL.local`, IPv4 `192.168.158.129/24`, DHCP server `192.168.158.254`, gateway `192.168.158.2`, and DNS server `192.168.158.128` (2026-11-20). A subsequent `Get-CimInstance Win32_ComputerSystem | Select-Object Name, Domain, PartOfDomain` query returned `SPIDERMAN`, `MARVEL.local`, `True` on 2026-11-20, verifying configured domain membership (not live authentication).
-- THEPUNISHER reports IPv4 `192.168.158.130/24`, configured DNS server `192.168.158.128` (HYDRA-DC), and primary DNS suffix `MARVEL.local`. A separate `Get-CimInstance Win32_ComputerSystem | Select-Object Name, Domain, PartOfDomain` query returned `THEPUNISHER`, `MARVEL.local`, `True` on 2026-11-20, confirming the local computer reports domain membership (not independent proof of current authentication or domain controller reachability).
-- The server's Windows configuration reports **host name `HYDRA-DC`** and **primary DNS suffix `MARVEL.local`**. The Active Directory PowerShell command `Get-ADDomainController -Identity HYDRA-DC` successfully returned `HYDRA-DC.MARVEL.local`, domain `MARVEL.local`, IPv4 `192.168.158.128`, and `IsGlobalCatalog=True` (2026-11-20). This verifies the directory identifies the machine as a domain controller and as a Global Catalog; individual services and client connectivity remain to be tested.
+## Current lab inventory
 
-These observations do **not** establish administrator access or success of any penetration testing technique.
-
-## VM inventory — based on VMware Workstation screenshot
-
-| VMware display name | Expected purpose — not yet verified | Installed OS / domain role | Network settings / IP | Evidence |
+| Guest | Role and domain evidence | Current observed IPv4 | Current IPv4 / DNS configuration | Evidence |
 | --- | --- | --- | --- | --- |
-| Windows Server 2022 | Domain controller (verified by AD PowerShell query) | Guest hostname `HYDRA-DC`; directory lists it as a Global Catalog | IPv4 `192.168.158.128/24`; DHCP disabled; no default gateway; DNS `::1`, `127.0.0.1`; VMware adapter **NAT** | VMware inventory, `ipconfig /all` and `Get-ADDomainController` screenshots, 2026-11-20 |
-| THEPUNISHER | Domain-joined Windows client (membership verified) | Guest hostname `THEPUNISHER`; `PartOfDomain=True` and domain `MARVEL.local` | IPv4 `192.168.158.130/24` (DHCP enabled); DNS `192.168.158.128`; gateway `192.168.158.2`; DHCP server `192.168.158.254`; VMware adapter NAT (user-confirmed) | `ipconfig /all` and `Get-CimInstance` screenshots, 2026-11-20 |
-| SPIDERMAN | Domain-joined Windows client (membership verified) | Guest hostname `SPIDERMAN`; `PartOfDomain=True`, domain `MARVEL.local` | IPv4 `192.168.158.129/24` (DHCP enabled); DNS `192.168.158.128`; gateway `192.168.158.2`; DHCP server `192.168.158.254`; VMware adapter NAT (user-confirmed) | VMware inventory, `ipconfig /all`, and `Get-CimInstance` screenshots, 2026-11-20 |
+| **HYDRA-DC** (VMware display name `Windows Server 2022`) | `Get-ADDomainController` reports DC and Global Catalog in `MARVEL.local` | `192.168.158.128/24` | DHCP disabled; no gateway; DNS `::1`, `127.0.0.1` | [DC identity](../evidence/2026-11-20_03-hydra-dc-ad-identity.png), [post-migration IP](../evidence/2026-11-20_22-hydra-dc-isolated-ipconfig.png) |
+| **SPIDERMAN** | `Win32_ComputerSystem` reports `PartOfDomain=True`, `MARVEL.local`; this is not a live trust test | `192.168.158.129/24` | DHCP disabled; no gateway; DNS `192.168.158.128` | [post-migration IP](../evidence/2026-11-20_34-spiderman-isolated-ipconfig.png), [membership](../evidence/2026-11-20_07-spiderman-domain-membership.png) |
+| **THEPUNISHER** | `Win32_ComputerSystem` reports `PartOfDomain=True`, `MARVEL.local` | `192.168.158.130/24` | DHCP disabled; no gateway; DNS `192.168.158.128` | [post-migration IP](../evidence/2026-11-20_30-thepunisher-isolated-ipconfig.png), [membership](../evidence/2026-11-20_05-thepunisher-domain-membership.png) |
+| **Kali Linux** | Authorised test machine; `eth0` live and connected within `192.168.158.0/24` | `192.168.158.131/24` | Static IP; DNS `192.168.158.128` in saved profile; no default route displayed | [VMware LAN selection](../evidence/2026-11-20_25-kali-isolated-vmware-adapter.png), [routes](../evidence/2026-11-20_39-kali-isolated-ipv4-ipv6-routes.png) |
 
-## Kali Linux tester — 2026-11-20
+The VMware inventory screenshot originally showed only three display names: `Windows Server 2022`, `THEPUNISHER` and `SPIDERMAN`. Kali was documented separately. Display names are not independent proof of installed OS versions. The guest hostname `HYDRA-DC` and AD role are verified through separate Windows/AD outputs.
 
-A later terminal screenshot from the **Kali Linux** testing environment shows `ip -br addr` returning:
+## Current verified network observations
 
-```text
-lo     UNKNOWN  127.0.0.1/8  ::1/128
-eth0   UP       192.168.158.131/24  fe80::5e29:65cd:2a93:70b9/64
-```
+- Kali → HYDRA-DC: `ping -c 4 192.168.158.128` returned **4/4 replies** ([image](../evidence/2026-11-20_27-kali-to-hydra-dc-ping.png)).
+- THEPUNISHER → HYDRA-DC: TCP port **389** connection succeeded after migration ([image](../evidence/2026-11-20_31-thepunisher-isolated-tcp389.png)).
+- SPIDERMAN → HYDRA-DC: TCP port **389** connection succeeded after migration ([image](../evidence/2026-11-20_35-spiderman-isolated-tcp389.png)).
+- SPIDERMAN resolved HYDRA-DC's DNS **A** and AD LDAP **SRV** records and completed forced Windows DC Locator ([A](../evidence/2026-11-20_36-spiderman-isolated-dns-a.png), [SRV](../evidence/2026-11-20_37-spiderman-isolated-dns-srv.png), [Locator](../evidence/2026-11-20_38-spiderman-isolated-dc-locator.png)).
+- Kali's inspected IPv4 and IPv6 routes showed **no default routes**; a lookup of `1.1.1.1` returned **Network is unreachable** ([routes](../evidence/2026-11-20_39-kali-isolated-ipv4-ipv6-routes.png), [lookup](../evidence/2026-11-20_40-kali-no-external-ipv4-route.png)).
 
-**Verified:** `eth0` is UP with IPv4 address `192.168.158.131/24`. This falls within the same calculated IPv4 subnet as the three Windows lab guests. `lo` is the loopback interface.
+These support the intended local-only lab topology but do **not** demonstrate full hypervisor/host isolation, authenticated LDAP operations, or Kerberos login. SPIDERMAN's repeated `Test-ComputerSecureChannel=False` remains unresolved despite a prior `nltest /sc_query` last-used success report; see [issue #1](https://github.com/ObitoX86/PEH-active-directory-lab/issues/1).
 
-**VMware adapter verification (2026-11-20):** VMware Workstation Settings > Network Adapter screenshot shows **NAT** selected for Kali; **Connected** and **Connect at power on** are checked. The screenshot also shows 8 GB allocated RAM and 4 processors. **Still not verified at that step:** the precise VMnet/switch identity (resolved in the subsequent Virtual Network Editor screenshot), Kali DNS/gateway, actual Kali-to-Windows connectivity, snapshots, and whether this NAT segment is suitably contained for network-poisoning exercises. This screenshot confirms the tester's OS environment, but does not show it in the earlier three-VM VMware inventory.
+## Historical NAT configuration — superseded
 
-**Virtual Network Editor verification (2026-11-20):** VMnet8 is listed as NAT with subnet address `192.168.158.0`, host connection Connected and DHCP Enabled. VMnet1 is a separate host-only network with subnet address `192.168.125.0`, host connection Connected and DHCP Enabled. All four VMs have previously reported NAT adapter modes and `192.168.158.x/24` IPs. No network settings were changed; NAT does not guarantee safe containment for poisoning tests.
+Initial 20 November screenshots captured the machines on VMware **NAT/VMnet8**, using the `192.168.158.0/24` subnet. At that earlier stage, THEPUNISHER and SPIDERMAN had **DHCP enabled**, gateway `192.168.158.2`, DHCP server `192.168.158.254`, and DNS `192.168.158.128`. HYDRA-DC already had static `.128` addressing. Kali initially had a NAT adapter. VMnet1 was separately observed as host-only on `192.168.125.0`.
 
-**Evidence:** Kali terminal, VMware Network Adapter and Virtual Network Editor screenshots supplied on 2026-11-20. Redacted images have not yet been committed to the repository. 
+Those records are **historical observations**, not today's settings. The later migration retained the same guest IP addresses on a **different, separately named LAN segment** while replacing client DHCP with static addressing and removing default gateways. See [network architecture](02-network-architecture.md) and the dated [assessment journal](03-assessment-journal.md).
 
-All observations above must be interpreted as configuration facts, not as evidence of an attack.
+An earlier file-sharing troubleshooting session found a Windows client called *Punisher* could access a lab server using a direct UNC path by private IP. Its exact relationship to `THEPUNISHER` and the earlier server IP remains unconfirmed; do not treat this as a current share or authentication test.
 
-**Screenshot references:** See [the 14-file evidence register](../evidence/INDEX.md), including server and client network settings, domain membership, NAT configuration, and connectivity diagnostics.
+## Scope and limitations
 
-## Authorised scope
+**Authorised targets:** Only the user's controlled `HYDRA-DC`, `SPIDERMAN`, `THEPUNISHER` and Kali virtual lab systems. Third-party and production systems are out of scope.
 
-The user's own isolated virtual machines and intentionally configured lab services only. Third-party networks and systems are out of scope.
+**Completed:** Configuration evidence, selected transport/DNS/DC discovery checks, initial AD OU and group enumeration, and identification of an intentionally privileged SPN-bearing service account.
 
-## Safety constraints
+**Not established:** Working end-to-end domain authentication, healthy SPIDERMAN machine trust, successful attack techniques, credential extraction, attack impact, or remediations independently retested.
 
-NAT is not a fully isolated or necessarily offline environment: verify containment before exercises that could generate disruptive traffic. Use snapshots before intrusive tests. Do not upload passwords, hash values, tickets, real user details, privileged access tokens, sensitive screenshots or unnecessary external IP addresses. Redact nonessential environment identifiers before making the portfolio public.
+**Evidence and safety:** [All 40 PNG files](../evidence/INDEX.md) have been uploaded. Preserve screenshots and dates as recorded, distinguish user confirmation from direct screen evidence, and do not publish credentials, captured hashes, tickets, private identifiers or inappropriate live-system details. The repository is currently public, so review both screenshots and commit history before sharing it further.

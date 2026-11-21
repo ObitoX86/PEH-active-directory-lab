@@ -1,5 +1,35 @@
 # Network Architecture
 
+## Current topology — after isolated-LAN migration (20 November 2026)
+
+> **Read this section for the latest documented configuration.** The sections below retain earlier NAT, migration-plan and intermediate-state evidence in chronological order. Language such as “not yet migrated” and “next step” in those older sections applies **only at that stage** and is superseded by subsequent results.
+
+All four guests were **user-reported** attached to the VMware LAN segment `PEH-AD-Isolated`, each with one NIC. Post-migration guest IP/configuration evidence and selected local connectivity tests were recorded. Kali's VMware LAN selection was photographed; the all-four-VM adapter audit was user-confirmed rather than separately screenshot-verified for every guest. No default IPv4/IPv6 route was shown on Kali; complete host/hypervisor isolation has not been independently proven.
+
+| Guest | IPv4 | Post-migration network configuration | Verified test or limitation |
+| --- | --- | --- | --- |
+| HYDRA-DC | `192.168.158.128/24` | Static; DNS loopback; **no gateway** | Directory reports DC + GC; received Kali ICMP, client TCP/389 |
+| SPIDERMAN | `192.168.158.129/24` | Static; DNS `.128`; **no gateway** | TCP/389, DNS A/SRV, forced DC Locator succeeded; secure-channel check unresolved |
+| THEPUNISHER | `192.168.158.130/24` | Static; DNS `.128`; **no gateway** | TCP/389 succeeded; authenticated LDAP not tested |
+| Kali Linux | `192.168.158.131/24` | Static; saved DNS `.128`; **no default route shown** | ICMP 4/4 to DC; external IPv4 route lookup unreachable |
+
+```mermaid
+flowchart TB
+    subgraph LAB["Reported VMware LAN Segment: PEH-AD-Isolated — 192.168.158.0/24"]
+        DC["HYDRA-DC .128 — AD DC / DNS / GC"]
+        P["THEPUNISHER .130 — Windows client"]
+        S["SPIDERMAN .129 — Windows client"]
+        K["Kali .131 — authorised tester"]
+        P -->|"TCP 389 verified"| DC
+        S -->|"TCP 389; DNS/DC Locator verified"| DC
+        K -->|"ICMP 4/4 verified"| DC
+    end
+```
+
+Arrows show **only** tested paths, not Kerberos/LDAP authentication or complete isolation. The previous VMware **NAT VMnet8** topology, DHCP servers and gateway `192.168.158.2` appear further down strictly as **historical baseline records**. See [post-migration Kali routes](../evidence/2026-11-20_39-kali-isolated-ipv4-ipv6-routes.png), [SPIDERMAN DNS SRV result](../evidence/2026-11-20_37-spiderman-isolated-dns-srv.png), and the [40-image evidence index](../evidence/INDEX.md).
+
+## Historical observations and migration journal
+
 ## Observed machines
 
 **Screenshot evidence:**
@@ -429,11 +459,11 @@ Kali is deliberately shown without a connection arrow because no Kali-to-Windows
 
 Both clients are configured to use HYDRA-DC for DNS; THEPUNISHER also has a separate successful DNS A-record lookup. DHCP for both clients is reported as `192.168.158.254`, and the configured default gateway is `192.168.158.2`. These network services are not drawn as independently verified infrastructure machines.
 
-## Planned isolated PEH LAN segment (user-confirmed creation, 2026-11-20)
+## Original isolated-LAN migration plan (historical; subsequently completed)
 
-The user reports having created a separate VMware LAN segment named `PEH-AD-Isolated`. Its creation has not been confirmed from a screenshot and no VM network adapter has yet been verified as moved.
+At this stage, the user had just reported creating the VMware LAN segment `PEH-AD-Isolated`. Creation was not yet screenshot-verified, and adapter migration was **not yet complete at this point in the journal**. Subsequent entries document the reported four-guest migration and post-change checks.
 
-**Planned addressing (not observed on the LAN segment yet):**
+**Original planned addressing (subsequently observed after migration):**
 
 | Machine | Existing / planned IPv4 | Planned method | DNS and gateway |
 | --- | --- | --- | --- |
@@ -442,7 +472,7 @@ The user reports having created a separate VMware LAN segment named `PEH-AD-Isol
 | THEPUNISHER | `192.168.158.130/24` | Set static after disconnection from NAT DHCP | DNS HYDRA-DC `.128`; no gateway |
 | Kali | `192.168.158.131/24` | Configure static on LAN segment | DNS `.128` when AD resolution needed; no gateway |
 
-VMware LAN segments do not provide DHCP automatically; the existing NAT DHCP lease behaviour cannot be relied upon after migration. The `192.168.158.0/24` address range may be reused on a **separate isolated network** because the original NICs should be moved, not connected to both networks simultaneously. Until migration and reachability checks complete, this is only a proposal—not proof of IP retention or isolation.
+VMware LAN segments do not provide DHCP automatically; the existing NAT DHCP lease behaviour cannot be relied upon after migration. The `192.168.158.0/24` address range may be reused on a **separate isolated network** because the original NICs should be moved, not connected to both networks simultaneously. At this point this was only a proposal. Later entries document IP retention and selected tested local paths after the reported migration; they do not prove full isolation.
 
 **Sequence:** With backups in place, move the powered-off HYDRA-DC VM first because its IPv4 was already static; boot to check `.128`. Then move and configure Kali and clients individually with matching static addresses and DNS, test lab-only connectivity and verify no NAT bridge/extra NIC remains. Client-to-server connectivity can be interrupted during partial migration.
 
@@ -454,7 +484,7 @@ VMware LAN segments do not provide DHCP automatically; the existing NAT DHCP lea
 
 These screenshots support the identified `Wired connection 1` profile and its saved `192.168.158.131/24`, DNS `192.168.158.128`, no-gateway configuration before Kali's isolated-LAN migration.
 
-## Current migration status — HYDRA-DC addressing preserved (2026-11-20)
+## Migration checkpoint — HYDRA-DC addressing preserved (historical intermediate state)
 
 ![HYDRA-DC isolated LAN IP configuration](../evidence/2026-11-20_22-hydra-dc-isolated-ipconfig.png)
 
@@ -471,9 +501,9 @@ The user followed the instructions to move **HYDRA-DC** to LAN segment `PEH-AD-I
 
 **Interpretation:** The server's static IPv4, absence of gateway and loopback DNS resolver settings are preserved. A command run inside the guest does not independently show the VMware network adapter's selected segment. The migration is therefore **user-reported with post-migration guest IP evidence**, not direct VMware adapter-setting screenshot evidence. Do not infer working connections or isolation based solely on the IP configuration.
 
-**Topology status:** The earlier NAT diagram above is now **historical baseline evidence** and does not represent all guests' current attachments. HYDRA-DC is reported on the isolated segment; Kali, THEPUNISHER and SPIDERMAN have not yet been confirmed migrated and may still be configured for NAT. This mixed state explains expected temporary loss of communication between guests.
+**Topology at this checkpoint:** HYDRA-DC had been reported moved, while the other guests' moves were **not yet confirmed at that time**. Later sections document their subsequent migration. The preceding NAT diagram is historical and not the current topology.
 
-**Subsequent Kali profile check (2026-11-20):** Running `nmcli -f NAME,DEVICE connection show --active` returned `Wired connection 1` on `eth0` and `lo` on `lo`. The active NetworkManager profile is identified. The user subsequently confirmed running `nmcli connection modify` to save manual IPv4 `192.168.158.131/24`, DNS `192.168.158.128` and no default gateway, and a subsequent screenshot **verified the saved profile** with `ipv4.method=manual`, `ipv4.addresses=192.168.158.131/24`, empty gateway, `ipv4.dns=192.168.158.128`, and `ipv4.never-default=yes`. These are saved settings, not evidence of current activation or movement to the private segment. **Planned next:** Move the powered-off Kali adapter to `PEH-AD-Isolated`, then verify the live interface IP, routes and lab-only connectivity. Continue the clients afterward.
+**Subsequent Kali profile check (2026-11-20):** Running `nmcli -f NAME,DEVICE connection show --active` returned `Wired connection 1` on `eth0` and `lo` on `lo`. The active NetworkManager profile is identified. The user subsequently confirmed running `nmcli connection modify` to save manual IPv4 `192.168.158.131/24`, DNS `192.168.158.128` and no default gateway, and a subsequent screenshot **verified the saved profile** with `ipv4.method=manual`, `ipv4.addresses=192.168.158.131/24`, empty gateway, `ipv4.dns=192.168.158.128`, and `ipv4.never-default=yes`. These are saved settings, not evidence of current activation or movement to the private segment. **Planned next at this checkpoint:** Move Kali to `PEH-AD-Isolated`, verify IP/routes and connectivity, then migrate clients. The subsequent sections document completion of these steps.
 
 **Evidence:** GitHub PNG `2026-11-20_22-hydra-dc-isolated-ipconfig.png` is uploaded and embedded above.
 
@@ -505,9 +535,9 @@ eth0     UP       192.168.158.131/24  fe80::5e29:65cd:2a93:70b9/64
 
 **Conclusion:** Kali (`.131`) successfully reaches the domain controller (`.128`) using ICMP after the user-reported/screenshot-supported isolated-LAN migration. These results validate one network path, **not** DNS, LDAP authentication, Kerberos, complete network isolation, or external connectivity restrictions.
 
-**Evidence:** Kali terminal screenshot supplied 2026-11-20, pending redacted PNG upload.
+**Evidence:** Kali terminal screenshot from 2026-11-20 is now uploaded and linked above.
 
-**THEPUNISHER NIC identified (2026-11-20):** The user ran `Get-NetAdapter | Select-Object Name, Status, InterfaceDescription`, returning `Ethernet0` / `Up` / `Intel(R) 82574L Gigabit Network Connection`. This identifies the intended interface for its forthcoming DHCP-to-static change; the next screenshot verifies its new static IP configuration, but **LAN segment attachment is not yet verified**. **Static IPv4 baseline verified:** The user supplied post-change `ipconfig /all` on THEPUNISHER showing hostname `THEPUNISHER`, primary suffix `MARVEL.local`, adapter `Ethernet0`, `DHCP Enabled: No`, `192.168.158.130/24`, blank default gateway and DNS `192.168.158.128`. This preserves its IPv4 and DNS settings without a further DNS change. **Next:** Move the powered-off VM adapter to `PEH-AD-Isolated`, boot, and validate post-migration settings and DC connectivity.
+**THEPUNISHER NIC identified (2026-11-20):** The user ran `Get-NetAdapter | Select-Object Name, Status, InterfaceDescription`, returning `Ethernet0` / `Up` / `Intel(R) 82574L Gigabit Network Connection`. This identifies the intended interface for its forthcoming DHCP-to-static change; the next screenshot verifies its new static IP configuration, but **LAN segment attachment is not yet verified**. **Static IPv4 baseline verified:** The user supplied post-change `ipconfig /all` on THEPUNISHER showing hostname `THEPUNISHER`, primary suffix `MARVEL.local`, adapter `Ethernet0`, `DHCP Enabled: No`, `192.168.158.130/24`, blank default gateway and DNS `192.168.158.128`. This preserves its IPv4 and DNS settings without a further DNS change. **Next at this checkpoint (since completed):** Move THEPUNISHER to `PEH-AD-Isolated`, boot, and validate guest settings and DC connectivity; see the post-migration section below.
 
 ### Kali post-migration live IP and route
 
@@ -616,14 +646,13 @@ Neither protocol had a displayed default route. IPv6's `fe80::/64` is link-local
 
 **Evidence:** GitHub PNG `2026-11-20_34-spiderman-isolated-ipconfig.png` is uploaded and embedded in the SPIDERMAN migration section.
 
-## Details to confirm
+## Remaining checks — current as of 21 November 2026
 
-1. Installed operating systems and purposes for each of the three VMs.
-2. Which additional domain controller services are functioning (AD controller identity is verified).
-3. Additional domain configuration and DNS health (domain identified as `MARVEL.local`; publish only if safe).
-4. VMnet8 has been identified as NAT with subnet address 192.168.158.0. Verify actual Kali-to-Windows connectivity, NAT egress/containment and other attached systems before active network-interception exercises.
-5. Validate other services and authenticated domain operations (both clients succeeded on TCP 389; THEPUNISHER also succeeded in a separate DNS lookup).
-6. SPIDERMAN elevated secure-channel check repeated and still False; root cause and impact on computer-authenticated exercises remain unresolved. See issue #1; do not assume authenticated domain operations are healthy.
-7. Redacted screenshot evidence for architecture and configuration.
+1. Confirm the installed OS editions, any additional services, and each VM's role beyond the captured evidence.
+2. Verify authenticated AD operations independently; a TCP 389 connection or DNS/DC Locator response does **not** establish an authenticated bind or logon.
+3. Investigate SPIDERMAN's repeated `Test-ComputerSecureChannel=False` and keep [issue #1](https://github.com/ObitoX86/PEH-active-directory-lab/issues/1) open until resolved.
+4. Where needed before active network-poisoning tests, independently corroborate VMware adapter selection and host isolation on all VMs. Four-guest single-NIC LAN attachment is currently **user-confirmed**, not screenshot-verified for every machine.
+5. Review the 40 screenshots and the repository's public visibility for sensitive information.
+6. Extend the **current** diagram only when additional network or authenticated service paths are tested.
 
-This diagram is grounded in supplied settings and successful TCP tests. Expand it only when subsequent tests verify additional paths.
+The original NAT network is no longer the reported attachment for these guests. Do not treat the NAT-baseline connectivity statements elsewhere in this file as tests of the present isolated segment.

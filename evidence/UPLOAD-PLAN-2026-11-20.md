@@ -2,7 +2,7 @@
 
 **Status: completed.** The first 14 screenshots and the additional 26 screenshots (15–40) were verified present in the GitHub `evidence/` directory on 2026-11-20. All 40 have descriptive filenames and are included in the [inline screenshot gallery](INDEX.md).
 
-| Filename to upload into `evidence/` | Screenshot evidence |
+| Uploaded filename in `evidence/` | Screenshot evidence |
 | --- | --- |
 | `2026-11-20_15-ad-organizational-units.png` | OU enumeration |
 | `2026-11-20_16-ad-group-inventory.png` | 20 AD groups |
@@ -31,13 +31,15 @@
 | `2026-11-20_39-kali-isolated-ipv4-ipv6-routes.png` | Kali IPv4 and IPv6 routes |
 | `2026-11-20_40-kali-no-external-ipv4-route.png` | Kali unreachable external IPv4 route |
 
-## Upload instructions (completed)
+## Completed upload procedure (historical record)
+
+These are preserved steps from the completed 20 November upload; **no additional upload is needed** for these 26 files.
 
 1. Extract the prepared batch ZIP from this conversation.
 2. In its `upload-to-evidence/` folder, select the **26 PNG files** (not the ZIP or Markdown files).
 3. Open [GitHub evidence directory](https://github.com/ObitoX86/PEH-active-directory-lab/tree/main/evidence) and choose **Add file → Upload files**.
 4. Drag all 26 PNG files, then commit with message `Add 26 PEH lab screenshots (15-40)`.
-5. Once GitHub shows those files, update `evidence/INDEX.md` with inline `![description](filename.png)` embeds, and place relevant relative-image links beside corresponding findings in `docs/02-network-architecture.md`, `docs/03-assessment-journal.md` and `docs/06-active-directory-structure.md`.
+5. The evidence register and relevant inline image placements in `docs/02-network-architecture.md`, `docs/03-assessment-journal.md` and `docs/06-active-directory-structure.md` were then updated to reflect the uploaded files.
 
 ## Quality and privacy
 
