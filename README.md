@@ -1,78 +1,70 @@
 # PEH Active Directory Penetration Testing Lab
 
-A hands-on Active Directory security assessment portfolio project based on the **Practical Ethical Hacking (PEH)** course from **TCM Security**, taught by **Heath Adams**.
+A hands-on Active Directory security-assessment portfolio project based on TCM Security's **Practical Ethical Hacking (PEH)** course, taught by Heath Adams.
 
-> **Project status:** In progress. This repository distinguishes verified lab observations from planned exercises. Completing a course video is not proof that an attack or defence was reproduced.
+> **Status — reviewed 21 November 2026:** Lab configuration and baseline enumeration are documented. **No initial attack, credential compromise or post-compromise technique has been demonstrated in this repository.** Course progress is not independent evidence of technical execution.
 
 ## Overview
 
-This project documents the design, administration and authorised security testing of a small, virtualised Windows Active Directory environment. The aim is to demonstrate practical methodology, evidence-based observations, professional reporting and defensive mitigation.
+This repository documents the design, administration and authorised assessment of a small Windows Active Directory training environment. It separates **screenshot-verified observations**, **user-confirmed actions**, **historical configurations** and **planned work**. The dated [assessment journal](docs/03-assessment-journal.md) preserves the sequence of changes.
+
+## Current lab configuration
+
+The four guests were **reported migrated** from an earlier VMware NAT configuration to the dedicated LAN segment `PEH-AD-Isolated` on **20 November 2026**. Guest address and connectivity evidence supports the resulting local lab configuration. The all-VM, single-adapter VMware audit was **user-confirmed**, not independently screenshot-verified for every guest.
+
+| Guest | Role / domain | Current observed IPv4 | Current settings / evidence |
+| --- | --- | --- | --- |
+| **HYDRA-DC** | AD domain controller and Global Catalog; `MARVEL.local` | `192.168.158.128/24` | Static IP; no gateway; DNS loopback. AD role confirmed through `Get-ADDomainController`. |
+| **SPIDERMAN** | Windows client; locally reports membership in `MARVEL.local` | `192.168.158.129/24` | Static IP; DNS `.128`; no gateway. TCP 389, DNS A/SRV and forced DC Locator tested. **Computer secure-channel check remains unresolved.** |
+| **THEPUNISHER** | Windows client; locally reports membership in `MARVEL.local` | `192.168.158.130/24` | Static IP; DNS `.128`; no gateway. TCP 389 tested. |
+| **Kali Linux** | Authorised lab tester | `192.168.158.131/24` | Static IPv4; DNS `.128`; no default IPv4/IPv6 route shown. ICMP to HYDRA-DC succeeded. |
+
+The original **NAT/VMnet8**, DHCP and gateway observations are retained as historical evidence in [network architecture](docs/02-network-architecture.md). They **must not** be read as the current guest configuration. Verified local paths and the absence of a default route on Kali support containment, but **do not prove absolute isolation of the host or hypervisor**.
 
 ## Progress snapshot
 
-| Area | Status | Evidence or next action |
+| Area | Status | What the evidence establishes |
 | --- | --- | --- |
-| Active Directory lab inventory | Windows hosts documented; Kali interface captured | HYDRA-DC (.128), SPIDERMAN (.129), THEPUNISHER (.130) in MARVEL.local; Kali Linux eth0 (.131/24). Kali NAT adapter screenshot-verified; VMware VMnet8 NAT subnet identified as 192.168.158.0; connectivity and containment still to verify |
-| Windows client-to-server file-sharing connectivity | Previously observed in troubleshooting | Direct UNC access by private IP worked; the earlier address differs from the current server IP and needs reconciliation |
-| Network topology diagram | Documented (Mermaid) | All four VMs are configured for NAT; VMnet8 is identified as NAT subnet 192.168.158.0; Windows clients reached HYDRA-DC TCP/389 |
-| DNS, LDAP transport and DC discovery | Verified for tested functions | THEPUNISHER resolved HYDRA-DC; both clients reached TCP 389; SPIDERMAN successfully located HYDRA-DC with `nltest /dsgetdc`; subsequent `Test-ComputerSecureChannel` returned **False**; LDAP authentication not yet tested |
-| SPIDERMAN secure-channel diagnostics | Mixed results — investigation pending | `Test-ComputerSecureChannel` remained `False` when repeated elevated (user-reported); `nltest /sc_query` previously showed last-used `NERR_Success`. Unresolved, deferred; see [issue #1](https://github.com/ObitoX86/PEH-active-directory-lab/issues/1) |
-| Active Directory OU and group inventory | Partially documented | Two OUs identified; 20 groups found directly under `Groups`; `Domain Admins` has 3 verified direct user members (`Administrator`, `Tony Stark`, `SQL Service`). Other memberships and GPOs pending |
-| Intentional service-account attack setup | Prerequisite documented | `SQLService` is a direct member of `Domain Admins` and has SPN `HYDRA-DC/SQLService.MARVEL.local:60111`, deliberately configured for the PEH lab. No Kerberoasting execution verified |
-| Initial attack vectors | To verify | Attach lab-only observations and redacted screenshots |
-| Post-compromise enumeration | To verify | Document commands, authorised scope and results |
-| Post-compromise attacks | To verify | Record only exercises personally reproduced |
-| Detection, hardening and mitigation | Planned | Map each verified finding to appropriate controls |
-| Final penetration testing report | Planned | Summarise scope, methodology, evidence, impact and remediation |
+| VMware and Windows/AD inventory | Baseline documented | HYDRA-DC role and configured domain membership of both Windows clients; OS editions and individual services require separate checks |
+| Isolated LAN migration | User-confirmed, with supporting screenshots | Four guest IP configurations, Kali routes and selected connectivity tests |
+| Network and AD discovery | Verified for specified tests | Kali → HYDRA-DC ICMP; both clients → HYDRA-DC TCP/389; SPIDERMAN AD DNS A/SRV and DC Locator |
+| Active Directory structure | Partially enumerated | Two OUs; 20 direct groups in `OU=Groups`; three direct members of `Domain Admins` |
+| Intentionally vulnerable service account | Prerequisite verified; attack **not** executed | `SQLService` is a direct `Domain Admins` member with SPN `HYDRA-DC/SQLService.MARVEL.local:60111` |
+| SPIDERMAN machine trust | **Unresolved** | Repeated `Test-ComputerSecureChannel=False`; `nltest /sc_query` previously reported last-used success. Track in [issue #1](https://github.com/ObitoX86/PEH-active-directory-lab/issues/1) |
+| Initial attacks and post-compromise testing | **Not yet verified** | No attack results or recovered credentials documented |
+| Defensive validation and final report | Planned | Findings require individually observed outcomes and evidence |
 
-## Repository contents
+**Important distinction:** Reaching TCP/389 and locating the domain controller do **not** establish a successful authenticated LDAP bind, domain logon, or healthy computer secure channel.
 
-- [`ROADMAP.md`](ROADMAP.md) — staged portfolio development plan.
-- [`docs/01-lab-overview.md`](docs/01-lab-overview.md) — lab purpose, scope and asset inventory.
-- [`docs/02-network-architecture.md`](docs/02-network-architecture.md) — IP configurations, validated client TCP paths and Mermaid topology.
-- [`docs/03-assessment-journal.md`](docs/03-assessment-journal.md) — evidence-based lab log.
-- [`docs/04-finding-template.md`](docs/04-finding-template.md) — reusable security finding template.
-- [`docs/05-mitigation-mapping.md`](docs/05-mitigation-mapping.md) — planned attack-to-defence notes.
-- [`docs/06-active-directory-structure.md`](docs/06-active-directory-structure.md) — OU inventory and directory-structure evidence.
-- [`evidence/README.md`](evidence/README.md) — safe evidence-capture and redaction conventions.
-- [`evidence/INDEX.md`](evidence/INDEX.md) — verified index of all 14 uploaded, redacted lab screenshots, each linked to its corresponding PNG.
+## Repository guide
 
-## Screenshot evidence
+- [ROADMAP.md](ROADMAP.md) — completed milestones, outstanding tasks and PEH learning phases.
+- [docs/01-lab-overview.md](docs/01-lab-overview.md) — current scope, verified hosts and historical baseline.
+- [docs/02-network-architecture.md](docs/02-network-architecture.md) — **current** topology, historical NAT diagram and migration evidence.
+- [docs/03-assessment-journal.md](docs/03-assessment-journal.md) — chronological evidence-backed lab journal; older statements are historical.
+- [docs/04-finding-template.md](docs/04-finding-template.md) — template for an independently verified security finding.
+- [docs/05-mitigation-mapping.md](docs/05-mitigation-mapping.md) — PEH study topics and defence hypotheses, not claims of attacks completed.
+- [docs/06-active-directory-structure.md](docs/06-active-directory-structure.md) — OU, group, privileged membership and SPN evidence.
+- [evidence/INDEX.md](evidence/INDEX.md) — **40 uploaded PNGs** with an inline gallery.
+- [evidence/README.md](evidence/README.md) — evidence handling and publication checks.
+- [evidence/UPLOAD-PLAN-2026-11-20.md](evidence/UPLOAD-PLAN-2026-11-20.md) — completed batch-2 upload manifest (historical).
 
-**All 40 lab screenshots have been uploaded and verified in GitHub.** The original 14 and the 26 additional AD, VMware, isolation and connectivity screenshots are organised in the [40-image inline evidence gallery](evidence/INDEX.md). The [network architecture](docs/02-network-architecture.md), [AD structure](docs/06-active-directory-structure.md) and [assessment journal](docs/03-assessment-journal.md) now embed the relevant images beside their results. Selected examples are shown below.
+## Selected evidence
 
-### Virtual machines
+| Lab configuration | Discovery | Containment check |
+| --- | --- | --- |
+| ![Kali selected PEH isolated LAN](evidence/2026-11-20_25-kali-isolated-vmware-adapter.png) | ![SPIDERMAN AD DNS SRV lookup](evidence/2026-11-20_37-spiderman-isolated-dns-srv.png) | ![Kali route lookup returned unreachable](evidence/2026-11-20_40-kali-no-external-ipv4-route.png) |
 
-![VMware Workstation inventory](evidence/2026-11-20_01-vmware-inventory.png)
+For all screenshots and their limitations, see the [evidence index](evidence/INDEX.md). Image presence does not certify that every screenshot has been checked for disclosure risk.
 
-### Domain controller verification
+## Scope, ethics and evidence standards
 
-![HYDRA-DC Active Directory identity](evidence/2026-11-20_03-hydra-dc-ad-identity.png)
+Testing is restricted to owned or expressly authorised lab machines and services. Never direct poisoning, credential capture or intrusive assessments at NAT, bridged, third-party or production networks. Preserve snapshots and confirm network scope before active work.
 
-### Client connectivity verification
+For each exercise record the **objective, authorised targets, method, output, interpretation, limitations, defensive controls and evidence**. Distinguish screenshots from user confirmations. Do not publish passwords, hashes, tickets, tokens or real personal data.
 
-![SPIDERMAN TCP 389 test](evidence/2026-11-20_11-spiderman-ldap-tcp389.png)
-
-### Outstanding secure-channel check
-
-![SPIDERMAN secure-channel check reported False](evidence/2026-11-20_13-spiderman-secure-channel-failure.png)
-
-### Isolated Active Directory lab: final verification
-
-![Kali on the private VMware LAN segment](evidence/2026-11-20_25-kali-isolated-vmware-adapter.png)
-
-![SPIDERMAN Active Directory DNS SRV discovery](evidence/2026-11-20_37-spiderman-isolated-dns-srv.png)
-
-![Kali external IPv4 route check](evidence/2026-11-20_40-kali-no-external-ipv4-route.png)
-
-## Ethics and scope
-
-All offensive techniques must be performed only against systems owned or expressly authorised for this controlled virtual lab. NAT networking is not the same as a fully isolated network. No live third-party network testing, credential sharing or distribution of sensitive environment details is included here.
-
-## Documentation standards
-
-For each exercise, capture: **objective, authorised targets, method, observed output, interpretation, mitigation and evidence reference**. Course completion indicators are evidence of course progress, not independent verification of a technical result.
+**Publication note:** GitHub currently reports this repository as **public**. Check screenshots and Git history for information that should not be published; a `.gitignore` does not remove data already committed.
 
 ## Next milestone
 
-VMnet8 NAT is identified; all four baseline snapshots (Kali, HYDRA-DC, THEPUNISHER, SPIDERMAN) are user-confirmed. All four recovery-point names have been checked in VMware Snapshot Manager (user-confirmed). The dedicated LAN segment `PEH-AD-Isolated` is user-confirmed as created. HYDRA-DC was user-reported moved there, and a fresh `ipconfig /all` screenshot confirms its static 192.168.158.128/24, no gateway, and loopback DNS settings were preserved. Kali is now shown configured for the isolated LAN segment with post-boot `eth0` at 192.168.158.131/24 and no IPv4 default route (screenshot-verified). ICMP from Kali to HYDRA-DC is now verified (4/4 successful pings, 0% loss). THEPUNISHER was user-reported moved to `PEH-AD-Isolated`; a new post-boot screenshot confirms static `192.168.158.130/24`, no gateway, and DNS `192.168.158.128` remain intact. Its TCP connectivity to HYDRA-DC is now verified again on the isolated LAN (`TcpTestSucceeded=True`, source .130, destination .128:389). SPIDERMAN was user-reported moved to the same LAN segment; its post-boot `ipconfig /all` screenshot confirms the original static `192.168.158.129/24`, empty gateway and DNS `192.168.158.128` persist. All four VMs are now reported migrated; SPIDERMAN-to-DC TCP 389 has since passed (`TcpTestSucceeded=True`, source .129, destination .128). Both Windows clients have confirmed TCP 389 reachability and Kali has confirmed ICMP reachability to HYDRA-DC. SPIDERMAN successfully resolved `HYDRA-DC.MARVEL.local` to `192.168.158.128` via HYDRA-DC's DNS service (A record, TTL 3600). AD LDAP SRV records have now been screenshot-verified on SPIDERMAN: `_ldap._tcp.dc._msdcs.MARVEL.local` resolves to `hydra-dc.marvel.local:389` with additional A `192.168.158.128`. SPIDERMAN's forced Windows DC Locator (`nltest /dsgetdc:MARVEL.local /force`) now succeeded and found HYDRA-DC at .128 with LDAP/KDC/GC and other advertised DC flags. Kali's isolated-LAN IPv4 and IPv6 route tables have now been screenshot-verified: only `192.168.158.0/24` and IPv6 link-local `fe80::/64`, with no default routes. Kali's external route lookup `ip -4 route get 1.1.1.1` returned `Network is unreachable`, confirming no usable IPv4 route to that destination. The user confirmed a VMware adapter audit: all four guests have a single NIC set to `PEH-AD-Isolated` and no additional NAT/Bridged/Host-only adapters. Begin the PEH Responder learning exercise with help and passive observation before any active poisoning; SPIDERMAN's existing secure-channel issue remains unresolved. The deliberately privileged, SPN-bearing `SQLService` account is documented as a lab prerequisite, not as a completed compromise. SPIDERMAN's unresolved secure-channel result is tracked in [issue #1](https://github.com/ObitoX86/PEH-active-directory-lab/issues/1) and will be revisited if an exercise depends on it.
+Continue with a **non-invasive Responder help/readiness check** and passive observation in the authorised lab before considering any active demonstration. Keep [SPIDERMAN's secure-channel issue](https://github.com/ObitoX86/PEH-active-directory-lab/issues/1) open until independently resolved. Any new security finding must be supported by its own reproduction and redacted evidence.
