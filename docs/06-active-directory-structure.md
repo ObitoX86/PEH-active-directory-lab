@@ -134,7 +134,7 @@ The SPN string is not the usual `MSSQLSvc/` format; **it does not prove Microsof
 
 **General defensive lesson:** Service accounts should not be domain administrators without an exceptional documented requirement. Prefer least-privileged accounts or gMSAs where supported and monitor inappropriate SPN/service-account privilege combinations.
 
-**Evidence:** Screenshot supplied in the PEH project conversation on 2026-11-20. A redacted PNG has not yet been committed.
+**Evidence:** Screenshot supplied on 2026-11-20 and uploaded as [evidence file 18](../evidence/2026-11-20_18-sqlservice-spn.png). The image shows the SPN and account attributes; it does not establish that a Kerberoasting attempt succeeded.
 
 ## Screenshot evidence
 
