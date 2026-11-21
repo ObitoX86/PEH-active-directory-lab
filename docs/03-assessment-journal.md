@@ -4,9 +4,11 @@
 
 ![VMware inventory](../evidence/2026-11-20_01-vmware-inventory.png)
 
-All 14 screenshot files are listed in the [evidence register](../evidence/INDEX.md).
+All **40 uploaded PNG screenshots** are listed in the [evidence register](../evidence/INDEX.md).
 
 This log captures **observed** work, not just planned tutorials. Dates should reflect actual lab work when known.
+
+> **How to read this journal:** Entries are chronological snapshots of what was known **at that point in the workflow**. Older phrases such as “NAT”, “DHCP enabled”, “not yet uploaded” and “next step” are retained as historical observations, **not** descriptions of the final configuration. For the current reported four-VM `PEH-AD-Isolated` LAN, static IPs, verified paths and outstanding secure-channel issue, see the [current topology](02-network-architecture.md#current-topology--after-isolated-lan-migration-20-november-2026) and [README](../README.md).
 
 ## Prior activity — date to confirm
 
